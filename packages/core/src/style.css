@@ -1,0 +1,35 @@
+/*
+ * Tema base compartido por todas las invitaciones (Editorial Blanco & Negro).
+ * Cada sitio importa este archivo y puede sobrescribir cualquier token
+ * redefiniendo el mismo `@theme` en su propio src/style.css.
+ */
+
+@theme {
+  --color-paper: #f0ece4;
+  --color-ink: #1a1a1a;
+  --color-charcoal: #2b2b2b;
+  --color-muted: #a8a29a;
+  --color-line: #1a1a1a26;
+
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+body {
+  /* Números tabulares: la cuenta regresiva no "baila" al cambiar de segundo. */
+  font-feature-settings: 'tnum' 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

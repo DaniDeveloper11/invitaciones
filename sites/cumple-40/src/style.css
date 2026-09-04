@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+@import '@invitaciones/core/style.css';
+
+@source '../index.html';
+@source './**/*.js';
+
+/*
+ * Paleta propia de esta invitación: descomenta y cambia los tonos que quieras.
+ * Sobrescriben al tema compartido de @invitaciones/core.
+ */
+/*
+@theme {
+  --color-paper: #f4efe9;
+  --color-ink: #23201c;
+  --color-charcoal: #2f2a24;
+  --color-muted: #a99f92;
+}
+*/

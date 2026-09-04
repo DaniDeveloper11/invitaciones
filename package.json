@@ -1,0 +1,22 @@
+{
+  "name": "invitaciones",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Monorepo de invitaciones digitales. Cada sitio en sites/ se construye y despliega por separado.",
+  "workspaces": [
+    "packages/*",
+    "sites/*"
+  ],
+  "scripts": {
+    "new": "node scripts/new-invitation.mjs",
+    "list": "node scripts/list-sites.mjs",
+    "build": "npm run build --workspaces --if-present",
+    "build:pages": "node scripts/build-pages.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.2.2"
+  }
+}
