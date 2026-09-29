@@ -118,6 +118,33 @@ es construir desde la raíz del repo (para que npm workspaces resuelva `@invitac
 - **Construir desde el repo de una invitación (sin el monorepo) no funciona:**
   `@invitaciones/core` es un paquete del workspace, es privado y no está en npm, así
   que `npm install` dentro de `sites/<slug>/` responde `404 @invitaciones/core`.
+
+### Un dominio propio por invitación
+
+`.github/workflows/deploy-sites.yml` construye cada invitación en la raíz
+(`BASE_PATH=/`) y empuja el resultado a la rama `gh-pages` **del repo de esa
+invitación**, para que cada una se sirva en su propio dominio:
+
+    sites/<slug>  →  github.com/<owner>/<slug>@gh-pages  →  https://<dominio>/
+
+El dominio sale de `VITE_SITE_URL` en `sites/<slug>/.env` — la misma variable que
+alimenta las etiquetas Open Graph, así que no hay dos sitios donde equivocarse. De
+ahí se deriva el archivo `CNAME` que Pages necesita (sin él, cada publicación
+borraría el dominio configurado en Settings).
+
+Alta de un dominio, una sola vez por invitación:
+
+1. **DNS:** un registro `CNAME` de `<subdominio>` → `<owner>.github.io`.
+2. **`.env`:** `VITE_SITE_URL=https://<subdominio>/` (absoluta y terminada en `/`).
+3. **Token:** un PAT con permiso de escritura sobre los repos de las invitaciones,
+   guardado como secreto `SITES_DEPLOY_TOKEN` en el repo del monorepo.
+4. **Push a `main`:** el workflow publica la rama `gh-pages`.
+5. **En el repo de la invitación:** *Settings → Pages → Source: Deploy from a
+   branch → `gh-pages` / `(root)`*, y activa *Enforce HTTPS* cuando el
+   certificado esté listo (tarda unos minutos).
+
+Probar el build sin publicar: `node scripts/deploy-sites.mjs --dry-run`.
+
 - **GitHub Pages:** el workflow `.github/workflows/pages.yml` publica *todas* las
   invitaciones juntas en `/<repo>/<slug>/` con un índice; hace `checkout` con
   `submodules: recursive`, y para repos privados necesita un token con acceso a ellos.
