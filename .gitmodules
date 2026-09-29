@@ -1,9 +1,3 @@
-[submodule "sites/boda-demo"]
-	path = sites/boda-demo
-	url = https://github.com/DaniDeveloper11/boda-demo.git
-[submodule "sites/cumple-40"]
-	path = sites/cumple-40
-	url = https://github.com/DaniDeveloper11/cumple-40.git
 [submodule "sites/first-comunion-victoria"]
 	path = sites/first-comunion-victoria
 	url = https://github.com/DaniDeveloper11/first-comunion-victoria.git
