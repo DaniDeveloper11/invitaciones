@@ -1,46 +1,32 @@
 # Invitaciones
 
 Monorepo para crear invitaciones digitales (cumpleaños, bodas, XV, aniversarios…).
-Cada invitación vive en `sites/<slug>/`, es un **proyecto Vite independiente con su
-propio repositorio** (un submódulo de este) y se despliega por separado, pero todas
-comparten los mismos componentes y el mismo tema.
+Cada invitación vive en `sites/<slug>/`, es un proyecto Vite independiente y se
+publica en su propio dominio, pero todas comparten los mismos componentes y el
+mismo tema.
 
-**Stack:** Vite · Alpine.js · Tailwind CSS v4 · npm workspaces · submódulos de git.
+**Stack:** Vite · Alpine.js · Tailwind CSS v4 · npm workspaces · Cloudflare Pages.
 
 ```
 invitaciones/
 ├── packages/core/          Componentes Alpine, tema Tailwind y config de Vite compartidos
 ├── templates/base/         Plantilla que se copia al crear una invitación nueva
-├── sites/                  Cada subcarpeta es un submódulo (repo propio)
-│   ├── cumple-40/          Una invitación (proyecto Vite independiente)
-│   └── boda-demo/          Otra invitación
-└── scripts/                Generador de invitaciones y build para GitHub Pages
+├── sites/                  Una carpeta por invitación (proyecto Vite independiente)
+│   └── first-comunion-victoria/
+└── scripts/                Generador de invitaciones
 ```
 
 ## Empezar
 
 ```bash
-git clone --recurse-submodules <url-del-repo>   # sin esto, sites/ llega vacío
+git clone <url-del-repo>
 npm install
-npm run dev -w cumple-40      # http://localhost:5173
+npm run dev -w first-comunion-victoria      # http://localhost:5173
 ```
 
-Si ya clonaste sin submódulos: `git submodule update --init --recursive`.
-
-## Trabajar con los submódulos
-
-La raíz no guarda los archivos de cada invitación, sólo un puntero al commit del repo
-de esa invitación. Así que un cambio en un sitio se commitea **dos veces**:
-
-```bash
-git -C sites/<slug> commit -am "Fecha y lugar definitivos"
-git -C sites/<slug> push
-git commit -am "sites/<slug>: fecha y lugar"   # en la raíz, mueve el puntero
-```
-
-Comandos útiles: `git submodule status` (en qué commit está cada invitación),
-`git submodule update --remote` (traer lo último de cada repo),
-`git submodule foreach git status -s` (ver cambios sin commitear en todas).
+Todo se corre **desde la raíz** (`-w <slug>`): es lo que hace que npm workspaces
+resuelva `@invitaciones/core`. Dentro de `sites/<slug>/` un `npm install` falla,
+porque ese paquete es privado y no está publicado en npm.
 
 ## Crear una invitación nueva
 
@@ -50,11 +36,8 @@ npm install                   # enlaza el nuevo workspace
 npm run dev -w boda-ana-y-luis
 ```
 
-El generador crea la carpeta, inicializa su repositorio (rama `main`, primer commit,
-`origin` en `https://github.com/DaniDeveloper11/<slug>.git`) y lo registra como
-submódulo. El repo remoto hay que crearlo a mano en GitHub y después:
-`git -C sites/<slug> push -u origin main`. Para otro dueño de los repos:
-`--owner <cuenta>` o la variable `REPOS_OWNER`.
+Copia `templates/base/` en `sites/<slug>/`. Es una carpeta más del repo: para
+publicarla, crea un proyecto de Cloudflare Pages que apunte a ella (ver más abajo).
 
 Después sólo hay dos cosas que tocar:
 
@@ -95,60 +78,36 @@ no hay reproductor.
 
 ## Desplegar una invitación
 
-Cada sitio se publica por separado. La receta que funciona en cualquier plataforma
-es construir desde la raíz del repo (para que npm workspaces resuelva `@invitaciones/core`):
+Cada invitación se publica como un **proyecto de Cloudflare Pages** apuntando a
+este mismo repositorio. Varios proyectos pueden compartir el repo: lo que cambia
+entre ellos es el build y la carpeta de salida.
 
-| Ajuste             | Valor                      |
-| ------------------ | -------------------------- |
-| Install command    | `npm ci`                   |
-| Build command      | `npm run build -w <slug>`  |
-| Output / publish   | `sites/<slug>/dist`        |
+| Ajuste                  | Valor                                  |
+| ----------------------- | -------------------------------------- |
+| Root directory          | *(vacío: la raíz del repo)*            |
+| Build command           | `npm run build -w <slug>`              |
+| Build output directory  | `sites/<slug>/dist`                    |
 
-- **Vercel:** deja *Root Directory* en la raíz y usa esos comandos. Un proyecto de
-  Vercel por invitación, todos apuntando a este repo; activa la opción de submódulos
-  para que `sites/` se descargue (o apunta el proyecto al repo de la invitación).
-- **Netlify:** *Base directory* vacío, *Build command* `npm run build -w <slug>`,
-  *Publish directory* `sites/<slug>/dist`.
-- **Subdirectorio** (cuando la invitación no vive en la raíz del dominio):
-  `BASE_PATH=/mi-invitacion/ npm run build -w <slug>`.
-- **Submódulos:** el build tiene que clonarlos (`git clone --recursive`, o la opción
-  de submódulos de la plataforma). Si uno de los repos de `.gitmodules` no existe o
-  no es accesible, `git submodule update --init` aborta y el build falla *antes* de
-  llegar a npm. Mantén `.gitmodules` sólo con repos que existan y sean alcanzables.
-- **Construir desde el repo de una invitación (sin el monorepo) no funciona:**
-  `@invitaciones/core` es un paquete del workspace, es privado y no está en npm, así
-  que `npm install` dentro de `sites/<slug>/` responde `404 @invitaciones/core`.
+El *root directory* tiene que ser la raíz **del repo**, no `sites/<slug>/`: es lo
+que permite que npm workspaces resuelva `@invitaciones/core`. Apuntarlo a la
+carpeta de la invitación da `404 @invitaciones/core`, porque ese paquete es
+privado y no está publicado en npm.
 
-### Un dominio propio por invitación
+Alta de una invitación, una sola vez:
 
-`.github/workflows/deploy-sites.yml` construye cada invitación en la raíz
-(`BASE_PATH=/`) y empuja el resultado a la rama `gh-pages` **del repo de esa
-invitación**, para que cada una se sirva en su propio dominio:
+1. **Proyecto:** en Cloudflare Pages, *Create* → *Connect to Git* → este repo, con
+   los ajustes de la tabla. Cada proyecto necesita un nombre distinto.
+2. **Sólo reconstruir lo que cambió** (opcional, recomendado cuando hay varias):
+   en *Settings → Build → Build watch paths*, incluye `sites/<slug>/*`,
+   `packages/*` y `package.json`.
+3. **Dominio:** *Custom domains* → *Set up a domain* → `<subdominio>.evento.casa`.
+   Como el DNS vive en Cloudflare, el registro y el certificado se crean solos.
+4. **`.env`:** pon esa misma dirección en `sites/<slug>/.env` (`VITE_SITE_URL`),
+   que es de donde salen las etiquetas Open Graph de la vista previa de WhatsApp.
 
-    sites/<slug>  →  github.com/<owner>/<slug>@gh-pages  →  https://<dominio>/
+A partir de ahí, cada push a `main` republica las invitaciones afectadas.
 
-El dominio sale de `VITE_SITE_URL` en `sites/<slug>/.env` — la misma variable que
-alimenta las etiquetas Open Graph, así que no hay dos sitios donde equivocarse. De
-ahí se deriva el archivo `CNAME` que Pages necesita (sin él, cada publicación
-borraría el dominio configurado en Settings).
-
-Alta de un dominio, una sola vez por invitación:
-
-1. **DNS:** un registro `CNAME` de `<subdominio>` → `<owner>.github.io`.
-2. **`.env`:** `VITE_SITE_URL=https://<subdominio>/` (absoluta y terminada en `/`).
-3. **Token:** un PAT con permiso de escritura sobre los repos de las invitaciones,
-   guardado como secreto `SITES_DEPLOY_TOKEN` en el repo del monorepo.
-4. **Push a `main`:** el workflow publica la rama `gh-pages`.
-5. **En el repo de la invitación:** *Settings → Pages → Source: Deploy from a
-   branch → `gh-pages` / `(root)`*, y activa *Enforce HTTPS* cuando el
-   certificado esté listo (tarda unos minutos).
-
-Probar el build sin publicar: `node scripts/deploy-sites.mjs --dry-run`.
-
-- **GitHub Pages:** el workflow `.github/workflows/pages.yml` publica *todas* las
-  invitaciones juntas en `/<repo>/<slug>/` con un índice; hace `checkout` con
-  `submodules: recursive`, y para repos privados necesita un token con acceso a ellos.
-  Localmente: `npm run build:pages`.
+La versión de Node la fija `.node-version` en la raíz.
 
 ## Notas
 

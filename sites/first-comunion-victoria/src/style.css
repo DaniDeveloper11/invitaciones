@@ -1,0 +1,34 @@
+@import 'tailwindcss';
+@import '@invitaciones/core/style.css';
+
+@source '../index.html';
+@source './**/*.js';
+
+/*
+ * Paleta propia de esta invitación: acuarela crema, rosa palo y dorado,
+ * tomada de la invitación impresa. Sobrescribe al tema de @invitaciones/core.
+ */
+@theme {
+  --color-paper: #fbf3ec;
+  --color-ink: #6b4f3a;
+  --color-charcoal: #f3e4d8;
+  --color-muted: #b08d6a;
+  --color-line: #6b4f3a26;
+
+  /* Acentos */
+  --color-gold: #b9803c;
+  --color-rose: #e9b8b4;
+
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', serif;
+  --font-sans: 'Cormorant Garamond', Georgia, serif;
+  --font-script: 'Great Vibes', cursive;
+}
+
+/* Fondo acuarela suave para las secciones claras. */
+.bg-acuarela {
+  background-color: var(--color-paper);
+  background-image:
+    radial-gradient(60% 40% at 12% 0%, #f7e2d2 0%, transparent 60%),
+    radial-gradient(55% 45% at 90% 15%, #f6ded6 0%, transparent 65%),
+    radial-gradient(70% 50% at 50% 100%, #f5e6d6 0%, transparent 70%);
+}

@@ -11,8 +11,7 @@
   "scripts": {
     "new": "node scripts/new-invitation.mjs",
     "list": "node scripts/list-sites.mjs",
-    "build": "npm run build --workspaces --if-present",
-    "build:pages": "node scripts/build-pages.mjs"
+    "build": "npm run build --workspaces --if-present"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
