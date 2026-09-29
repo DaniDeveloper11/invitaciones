@@ -111,6 +111,13 @@ es construir desde la raíz del repo (para que npm workspaces resuelva `@invitac
   *Publish directory* `sites/<slug>/dist`.
 - **Subdirectorio** (cuando la invitación no vive en la raíz del dominio):
   `BASE_PATH=/mi-invitacion/ npm run build -w <slug>`.
+- **Submódulos:** el build tiene que clonarlos (`git clone --recursive`, o la opción
+  de submódulos de la plataforma). Si uno de los repos de `.gitmodules` no existe o
+  no es accesible, `git submodule update --init` aborta y el build falla *antes* de
+  llegar a npm. Mantén `.gitmodules` sólo con repos que existan y sean alcanzables.
+- **Construir desde el repo de una invitación (sin el monorepo) no funciona:**
+  `@invitaciones/core` es un paquete del workspace, es privado y no está en npm, así
+  que `npm install` dentro de `sites/<slug>/` responde `404 @invitaciones/core`.
 - **GitHub Pages:** el workflow `.github/workflows/pages.yml` publica *todas* las
   invitaciones juntas en `/<repo>/<slug>/` con un índice; hace `checkout` con
   `submodules: recursive`, y para repos privados necesita un token con acceso a ellos.
