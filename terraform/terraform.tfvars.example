@@ -1,0 +1,25 @@
+# Plantilla de valores. Cópiala a terraform.tfvars y rellena:
+#
+#   cp terraform.tfvars.example terraform.tfvars
+#
+# terraform.tfvars está en .gitignore: nunca se commitea.
+#
+# El API token NO va aquí: exportarlo como variable de entorno es lo seguro.
+#   export CLOUDFLARE_API_TOKEN="..."
+# (si aun así lo quieres en tfvars, descomenta cloudflare_api_token abajo).
+
+# ID de tu cuenta de Cloudflare (dashboard → Overview, o en la URL).
+cloudflare_account_id = "PEGA_AQUI_TU_ACCOUNT_ID"
+
+# Dominio raíz que ya tienes activo en Cloudflare.
+zone_name = "evento.casa"
+
+# Dueño y nombre del monorepo en GitHub.
+github_owner = "DaniDeveloper11"
+github_repo  = "invitaciones"
+
+# Rama de producción.
+production_branch = "main"
+
+# Opcional: API token en tfvars en vez de variable de entorno.
+# cloudflare_api_token = "..."

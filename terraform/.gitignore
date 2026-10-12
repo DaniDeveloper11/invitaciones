@@ -1,0 +1,25 @@
+# Estado de Terraform (local; nunca se commitea)
+*.tfstate
+*.tfstate.*
+terraform.tfstate.backup
+crash.log
+crash.*.log
+
+# Cache de providers/plugins descargados por `terraform init`
+.terraform/
+
+# Valores locales: el account_id es específico de tu cuenta y el token
+# va por variable de entorno, así que terraform.tfvars no se commitea.
+terraform.tfvars
+*.auto.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Token local en archivo (cárgalo con `source .env.local`); nunca se commitea.
+# La raíz ya ignora *.local; esto lo deja explícito para la carpeta terraform/.
+.env.local
+.env.*.local
+
+# Nota: .terraform.lock.hcl SÍ se commitea (fija las versiones de providers).
