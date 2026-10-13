@@ -1,0 +1,36 @@
+// Worker de fotos de invitados: https://api.evento.casa
+//
+// La base D1 y el bucket R2 los crea Terraform (terraform/fotos.tf); el
+// database_id sale de `terraform output d1_database_id`. Este archivo sólo
+// los enlaza al Worker.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fotos-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-01",
+
+  // wrangler crea el registro DNS y el certificado de api.evento.casa.
+  "routes": [{ "pattern": "api.evento.casa", "custom_domain": true }],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "invitaciones",
+      "database_id": "38c1c055-f510-436f-8c5b-54cbfe9a8913",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "r2_buckets": [{ "binding": "BUCKET", "bucket_name": "invitaciones-fotos" }],
+
+  // Límite de subidas por IP y evento: 20 fotos por minuto.
+  "ratelimits": [
+    {
+      "name": "SUBIDAS",
+      "namespace_id": "1001",
+      "simple": { "limit": 20, "period": 60 }
+    }
+  ],
+
+  "observability": { "enabled": true }
+}
