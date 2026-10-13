@@ -224,7 +224,7 @@ Invitado ── <subdominio>.evento.casa/fotos/?c=CODIGO   (página de la invita
 ```bash
 npm install --prefix workers/fotos     # wrangler
 cd workers/fotos
-npx wrangler login                     # o CLOUDFLARE_API_TOKEN con permisos de Workers
+source ../../terraform/.env.local      # mismo token que Terraform + CLOUDFLARE_ACCOUNT_ID
 npm run db:migrate                     # crea las tablas en la D1 de producción
 npm run deploy                         # publica el Worker en api.evento.casa
 ```

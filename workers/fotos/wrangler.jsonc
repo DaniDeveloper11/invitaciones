@@ -11,6 +11,9 @@
 
   // wrangler crea el registro DNS y el certificado de api.evento.casa.
   "routes": [{ "pattern": "api.evento.casa", "custom_domain": true }],
+  // Sólo en api.evento.casa: sin la dirección *.workers.dev ni URLs de preview.
+  "workers_dev": false,
+  "preview_urls": false,
 
   "d1_databases": [
     {
