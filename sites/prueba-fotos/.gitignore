@@ -1,0 +1,20 @@
+# Cada invitación es un repositorio propio (submódulo), así que no hereda
+# el .gitignore de la raíz: lo que se ignora aquí hay que declararlo aquí.
+node_modules
+dist
+dist-ssr
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / SO
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.sw?
+
+# QR de fotos de invitados (npm run fotos:alta): lleva el código del evento.
+assets-origen/qr-fotos.png

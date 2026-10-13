@@ -27,13 +27,10 @@ locals {
       project_name = "invitaciones"
     }
 
-    # Ejemplos de futuras invitaciones (project_name opcional; por defecto = slug):
-    # "boda-ana-y-luis" = {
-    #   subdominio = "ana-y-luis"
-    # }
-    # "xv-maria" = {
-    #   subdominio = "maria"
-    # }
+    "prueba-fotos" = {
+      subdominio  = "prueba"
+      watch_paths = ["sites/prueba-fotos/**", "packages/**", "package.json", "package-lock.json"]
+    }
   }
 }
 
