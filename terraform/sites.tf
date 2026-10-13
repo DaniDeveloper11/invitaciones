@@ -27,11 +27,6 @@ locals {
       project_name = "invitaciones"
       watch_paths  = ["sites/first-comunion-victoria/**", "packages/**", "package.json", "package-lock.json"]
     }
-
-    "prueba-fotos" = {
-      subdominio  = "prueba"
-      watch_paths = ["sites/prueba-fotos/**", "packages/**", "package.json", "package-lock.json"]
-    }
   }
 }
 
