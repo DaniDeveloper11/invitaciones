@@ -25,6 +25,7 @@ locals {
       # Este sitio ya estaba desplegado a mano en el proyecto "invitaciones";
       # lo adoptamos tal cual (import) en vez de crear un proyecto nuevo.
       project_name = "invitaciones"
+      watch_paths  = ["sites/first-comunion-victoria/**", "packages/**", "package.json", "package-lock.json"]
     }
 
     "prueba-fotos" = {
