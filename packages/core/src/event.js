@@ -66,6 +66,17 @@ const DEFAULTS = {
     src: 'audio/song.mp3',
     autoplay: true,
   },
+  // Fotos de invitados: página /fotos/ (ver workers/fotos y README).
+  // `habilitado` sólo muestra el botón en la invitación; la página existe igual.
+  fotosInvitados: {
+    habilitado: false,
+    api: 'https://api.evento.casa',
+    slug: '', // por defecto, el nombre de la carpeta en sites/
+    boton: 'Comparte tus fotos',
+    eyebrow: 'Comparte tus fotos',
+    titulo: 'Nuestro álbum',
+    nota: 'Toma o elige fotos del evento: se compartirán con los festejados y con los demás invitados.',
+  },
   footer: '',
 }
 
@@ -117,6 +128,15 @@ export function normalizeEvent(config = {}) {
   event.tieneGaleria = event.galeria.fotos.length > 0
   event.tieneDresscode = Boolean(event.dresscode.titulo)
   event.tieneRsvp = Boolean(event.rsvp.whatsapp) && event.rsvp.opciones.length > 0
+
+  // VITE_FOTOS_API permite apuntar a `wrangler dev` en local sin tocar el config.
+  const fotos = event.fotosInvitados
+  fotos.api = import.meta.env.VITE_FOTOS_API || fotos.api
+  fotos.slug = fotos.slug || import.meta.env.VITE_INVITACION_SLUG || ''
+  fotos.locale = event.locale
+  fotos.url = asset('fotos/')
+  fotos.inicio = asset('')
+  event.tieneFotosInvitados = Boolean(fotos.habilitado && fotos.slug)
 
   return event
 }

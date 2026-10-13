@@ -93,5 +93,10 @@ export default {
     autoplay: true,
   },
 
+  // Fotos de invitados (/fotos/). `habilitado` muestra el botón en la invitación.
+  fotosInvitados: {
+    habilitado: false,
+  },
+
   footer: 'Con amor, Victoria 🕊️',
 }

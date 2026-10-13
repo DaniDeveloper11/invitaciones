@@ -46,6 +46,8 @@ export async function verEvento({ request, env, url, evento }) {
     slug: evento.slug,
     nombre: evento.nombre,
     rol,
+    // Los festejados lo usan para compartir el enlace de invitados.
+    ...(rol === 'admin' && { codigo: evento.codigo }),
     subida: estadoSubida(evento),
     abre_en: evento.abre_en,
     cierra_en: evento.cierra_en,

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Crea una invitación nueva copiando templates/base en sites/<slug>.
-// Es una carpeta más del monorepo: se publica creando un proyecto de
-// Cloudflare Pages que apunte a ella (ver README).
+// Es una carpeta más del monorepo: se publica añadiéndola a
+// terraform/sites.tf (ver README).
 //
 //   npm run new -- boda-ana-y-luis --titulo "Ana & Luis"
 //
@@ -41,6 +41,7 @@ const reemplazos = [
   ['package.json', { __SLUG__: slug }],
   ['src/event.config.js', { __TITULO__: titulo || slug }],
   ['index.html', { '<title>Invitación</title>': `<title>${titulo || slug}</title>`, __TITULO__: titulo || slug }],
+  ['fotos/index.html', { __TITULO__: titulo || slug }],
 ]
 
 for (const [archivo, pares] of reemplazos) {
@@ -60,8 +61,7 @@ console.log(`
   4. Pon su dirección definitiva en sites/${slug}/.env (VITE_SITE_URL):
      de ahí salen las etiquetas Open Graph de la vista previa de WhatsApp.
 
-  Para publicarla, crea un proyecto en Cloudflare Pages apuntando a este repo:
-     Build command      npm run build -w ${slug}
-     Build output       sites/${slug}/dist
-     Root directory     (vacío: la raíz del repo)
+  Para publicarla, añádela a terraform/sites.tf y aplica:
+     "${slug}" = { subdominio = "..." }
+     cd terraform && source .env.local && terraform apply
 `)

@@ -422,6 +422,21 @@
         </section>
       </template>
 
+      <!-- Fotos de invitados: enlace a /fotos/ (fotosInvitados.habilitado) -->
+      <template x-if="$store.event.tieneFotosInvitados">
+        <section class="w-full bg-paper px-6 py-20 text-center">
+          <p x-reveal class="uppercase tracking-[0.25em] text-xs text-ink/50 mb-3" x-text="$store.event.fotosInvitados.eyebrow"></p>
+          <p x-reveal.delay-150 class="font-serif text-3xl sm:text-4xl mb-6" x-text="$store.event.fotosInvitados.titulo"></p>
+          <p x-reveal.delay-300 class="text-sm text-ink/70 max-w-xs mx-auto mb-8" x-text="$store.event.fotosInvitados.nota"></p>
+          <a
+            x-reveal.delay-500
+            :href="$store.event.fotosInvitados.url"
+            class="inline-block text-xs uppercase tracking-[0.2em] border border-ink/40 px-5 py-2.5 hover:bg-ink hover:text-paper transition-colors"
+            x-text="$store.event.fotosInvitados.boton"
+          ></a>
+        </section>
+      </template>
+
       <!-- RSVP por WhatsApp -->
       <template x-if="$store.event.tieneRsvp">
         <section class="w-full bg-charcoal text-paper px-6 py-24 border-t border-paper/15">

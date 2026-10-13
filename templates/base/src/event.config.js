@@ -72,5 +72,16 @@ export default {
     autoplay: true,
   },
 
+  // Fotos de invitados: los invitados suben fotos durante el evento desde
+  // /fotos/ (con el código del QR). Antes, da de alta el evento con
+  // `npm run fotos:alta -- <slug>` (ver README). `habilitado` muestra el botón
+  // en la invitación.
+  fotosInvitados: {
+    habilitado: false,
+    // boton: 'Comparte tus fotos',
+    // titulo: 'Nuestro álbum',
+    // nota: 'Toma o elige fotos del evento: se compartirán con los festejados y con los demás invitados.',
+  },
+
   footer: 'Nos vemos ahí',
 }

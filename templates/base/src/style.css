@@ -2,6 +2,7 @@
 @import '@invitaciones/core/style.css';
 
 @source '../index.html';
+@source '../fotos/index.html';
 @source './**/*.js';
 
 /*
