@@ -12,6 +12,7 @@
     "new": "node scripts/new-invitation.mjs",
     "list": "node scripts/list-sites.mjs",
     "fotos:alta": "node scripts/fotos-alta.mjs",
+    "fotos:borrar": "node scripts/fotos-borrar.mjs",
     "build": "npm run build --workspaces --if-present"
   },
   "devDependencies": {

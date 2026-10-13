@@ -287,13 +287,16 @@ intenta usar `api.evento.casa`. Las fotos de prueba se guardan en
 
 - Los festejados descargan las fotos visibles en ZIP desde su enlace.
 - Para borrar las fotos de un evento: elimínalas una por una desde el panel de
-  festejados, o borra todo el evento de una vez:
+  festejados, o borra todo el evento de una vez (archivos en R2 y filas en D1):
   ```bash
-  cd workers/fotos
-  npx wrangler d1 execute invitaciones --remote --command "DELETE FROM fotos WHERE slug = 'boda-ana-y-luis'"
+  npm run fotos:borrar -- boda-ana-y-luis --simular     # sólo muestra qué borraría
+  npm run fotos:borrar -- boda-ana-y-luis               # pide escribir el slug para confirmar
+  npm run fotos:borrar -- boda-ana-y-luis --solo-fotos  # conserva el evento, su código y su QR
   ```
-  y después la carpeta `boda-ana-y-luis/` del bucket `invitaciones-fotos` desde el
-  dashboard de R2 (wrangler no borra por carpeta).
+  Usa el token de `terraform/.env.local` (no hace falta `source`). `--local`
+  trabaja con la base de `wrangler dev`. No toca el sitio: para dar de baja la
+  invitación, quita su entrada de `terraform/sites.tf`, `terraform apply` y
+  `git rm -r sites/<slug>`.
 
 ## Notas
 
