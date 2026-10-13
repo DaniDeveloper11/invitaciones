@@ -11,6 +11,8 @@
 #   Account → Cloudflare Pages → Edit
 #   Zone    → DNS              → Edit   (limitado al zone evento.casa)
 #   Zone    → Zone             → Read   (limitado al zone evento.casa)
+#   Account → D1               → Edit   (fotos de invitados, ver fotos.tf)
+#   Account → Workers R2 Storage → Edit (fotos de invitados, ver fotos.tf)
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }

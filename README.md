@@ -109,7 +109,8 @@ terraform init
 
 El token se crea en Cloudflare → *My Profile* → *API Tokens*, con estos permisos:
 *Account → Cloudflare Pages → Edit*, *Zone → DNS → Edit* y *Zone → Zone → Read*
-(limitados al zone `evento.casa`).
+(limitados al zone `evento.casa`). Para las fotos de invitados añade además
+*Account → D1 → Edit* y *Account → Workers R2 Storage → Edit*.
 
 ### Alta de una invitación
 
