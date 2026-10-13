@@ -67,7 +67,7 @@ const DEFAULTS = {
     autoplay: true,
   },
   // Fotos de invitados: página /fotos/ (ver workers/fotos y README).
-  // `habilitado` sólo muestra el botón en la invitación; la página existe igual.
+  // `habilitado` es el interruptor: publica la página y muestra el botón.
   fotosInvitados: {
     habilitado: false,
     api: 'https://api.evento.casa',

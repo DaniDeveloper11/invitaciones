@@ -39,7 +39,7 @@ export function fotosAdmin(config) {
   }
 
   return {
-    estado: 'cargando', // cargando · sin_acceso · listo · error
+    estado: 'cargando', // cargando · deshabilitado · sin_acceso · listo · error
     error: '',
     evento: null,
     fotos: [],
@@ -50,6 +50,10 @@ export function fotosAdmin(config) {
     zip: { activo: false, hechas: 0, total: 0 },
 
     async init() {
+      if (!config.habilitado) {
+        this.estado = 'deshabilitado'
+        return
+      }
       if (!token) {
         this.estado = 'sin_acceso'
         return

@@ -4,15 +4,11 @@ import { countdown } from './components/countdown.js'
 import { gallery } from './components/gallery.js'
 import { audioPlayer } from './components/audio-player.js'
 import { rsvp } from './components/rsvp.js'
-import { camara } from './components/camara.js'
-import { fotosInvitados } from './components/fotos-invitados.js'
-import { fotosAdmin, tokenAdmin } from './components/fotos-admin.js'
 import { registerReveal } from './directives/reveal.js'
 import { registerScrollStore } from './stores/scroll.js'
 
 export { asset, photos, normalizeEvent } from './event.js'
-export { countdown, gallery, audioPlayer, rsvp, camara, fotosInvitados, fotosAdmin, tokenAdmin }
-export { registerReveal, registerScrollStore }
+export { countdown, gallery, audioPlayer, rsvp, registerReveal, registerScrollStore }
 export { Alpine }
 
 /**
@@ -45,11 +41,6 @@ export function createInvitation(config, { setup } = {}) {
   Alpine.data('lugar', () => ({ ...event.lugar }))
   Alpine.data('audioPlayer', () => audioPlayer(event.musica))
   Alpine.data('rsvp', () => rsvp(event.rsvp))
-  Alpine.data('camara', camara)
-  Alpine.data('fotosInvitados', () => fotosInvitados(event.fotosInvitados))
-  Alpine.data('fotosAdmin', () => fotosAdmin(event.fotosInvitados))
-  // En /fotos/: true si se abrió con el enlace de los festejados (#admin=…).
-  Alpine.store('esAdmin', Boolean(tokenAdmin()))
 
   registerReveal(Alpine)
   registerScrollStore(Alpine)
@@ -59,7 +50,16 @@ export function createInvitation(config, { setup } = {}) {
   }
 
   setup?.(Alpine, event)
-  Alpine.start()
+
+  // La página /fotos/ (<body data-pagina="fotos">) carga sus componentes aparte.
+  if (document.body.dataset.pagina === 'fotos') {
+    import('./fotos/registrar.js')
+      .then(({ registrarFotos }) => registrarFotos(Alpine, event))
+      .catch((err) => console.error('[invitación] No se pudieron cargar las fotos', err))
+      .finally(() => Alpine.start())
+  } else {
+    Alpine.start()
+  }
 
   return { Alpine, event }
 }

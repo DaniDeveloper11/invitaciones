@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs'
 import path from 'node:path'
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
+import { fotosHabilitadas } from './fotos-config.js'
 
 /**
  * Configuración base de Vite para cada invitación.
@@ -12,8 +13,9 @@ import tailwindcss from '@tailwindcss/vite'
  * `base` se toma de la variable de entorno BASE_PATH cuando existe, para poder
  * publicar el sitio en un subdirectorio (ej. GitHub Pages: /mi-invitacion/).
  *
- * Si el sitio tiene `fotos/index.html` (fotos de invitados), se construye como
- * segunda página junto a `index.html`.
+ * La página de fotos de invitados (`fotos/index.html`) sólo se publica si
+ * `fotosInvitados.habilitado` es true en src/event.config.js. En `vite dev` se
+ * sirve igual, pero la página avisa que el evento no tiene álbum.
  *
  * @param {import('vite').UserConfig} [overrides] Ajustes propios del sitio.
  */
@@ -33,11 +35,12 @@ export function defineInvitationConfig(overrides = {}) {
     build: {
       target: 'es2020',
       assetsInlineLimit: 0,
-      ...(existsSync(paginaFotos) && {
-        rolldownOptions: {
-          input: { main: path.join(raiz, 'index.html'), fotos: paginaFotos },
-        },
-      }),
+      ...(existsSync(paginaFotos) &&
+        fotosHabilitadas(raiz) && {
+          rolldownOptions: {
+            input: { main: path.join(raiz, 'index.html'), fotos: paginaFotos },
+          },
+        }),
     },
     ...rest,
   })

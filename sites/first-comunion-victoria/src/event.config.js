@@ -93,7 +93,7 @@ export default {
     autoplay: true,
   },
 
-  // Fotos de invitados (/fotos/). `habilitado` muestra el botón en la invitación.
+  // Fotos de invitados: `habilitado: true` publica /fotos/ y muestra el botón.
   fotosInvitados: {
     habilitado: false,
   },

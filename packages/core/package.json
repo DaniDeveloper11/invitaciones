@@ -8,11 +8,13 @@
   "exports": {
     ".": "./src/index.js",
     "./style.css": "./src/style.css",
-    "./vite": "./vite.js"
+    "./vite": "./vite.js",
+    "./fotos-config": "./fotos-config.js"
   },
   "files": [
     "src",
-    "vite.js"
+    "vite.js",
+    "fotos-config.js"
   ],
   "dependencies": {
     "alpinejs": "^3.16.3",

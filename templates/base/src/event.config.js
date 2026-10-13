@@ -74,8 +74,8 @@ export default {
 
   // Fotos de invitados: los invitados suben fotos durante el evento desde
   // /fotos/ (con el código del QR). Antes, da de alta el evento con
-  // `npm run fotos:alta -- <slug>` (ver README). `habilitado` muestra el botón
-  // en la invitación.
+  // `npm run fotos:alta -- <slug>` (ver README). Con `habilitado: true` se
+  // publica la página /fotos/ y aparece el botón en la invitación.
   fotosInvitados: {
     habilitado: false,
     // boton: 'Comparte tus fotos',

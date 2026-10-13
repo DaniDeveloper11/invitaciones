@@ -22,6 +22,7 @@ import { mkdir, readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import QRCode from 'qrcode'
+import { fotosHabilitadas } from '@invitaciones/core/fotos-config'
 
 const ZONA = 'America/Mexico_City'
 const DIAS_ABIERTA = 3
@@ -190,6 +191,11 @@ console.log(`
   Festejados — mándales este enlace; NO se puede recuperar después:
     ${urlFestejados}
 ${existente ? '\n  ⚠ El código y el enlace de festejados anteriores ya no sirven. Las fotos se conservan.\n' : ''}
-  Para que el botón aparezca en la invitación: fotosInvitados.habilitado = true
-  en sites/${slug}/src/event.config.js.
-`)
+${
+  fotosHabilitadas(sitioDir)
+    ? ''
+    : `  ⚠ fotosInvitados.habilitado está en false en sites/${slug}/src/event.config.js:
+    la página /fotos/ NO se publica y el QR llevaría a una página inexistente.
+    Ponlo en true y haz push antes de imprimir el QR.
+`
+}`)

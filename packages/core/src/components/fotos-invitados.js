@@ -19,7 +19,7 @@ export function fotosInvitados(config) {
   return {
     ...gallery(),
 
-    estado: 'cargando', // cargando · sin_codigo · listo · error
+    estado: 'cargando', // cargando · deshabilitado · sin_codigo · listo · error
     error: '',
     codigo: '',
     codigoManual: '',
@@ -32,6 +32,10 @@ export function fotosInvitados(config) {
     procesando: false,
 
     init() {
+      if (!config.habilitado) {
+        this.estado = 'deshabilitado'
+        return
+      }
       api = crearApi(config, () => ({ 'X-Codigo': this.codigo }))
       const enUrl = new URLSearchParams(location.search).get('c')
       this.codigo = (enUrl || almacen.leer(claveCodigo)).trim().toUpperCase()

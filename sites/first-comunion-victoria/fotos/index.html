@@ -15,7 +15,7 @@
     />
     <title>Fotos · Primera Comunión de Victoria</title>
   </head>
-  <body class="bg-acuarela text-ink font-sans antialiased">
+  <body data-pagina="fotos" class="bg-acuarela text-ink font-sans antialiased">
     <!--
       Fotos de invitados. La lógica vive en @invitaciones/core:
         camara          botones de cámara y galería (emite `fotos-elegidas`)
@@ -43,6 +43,11 @@
 
           <!-- Cargando -->
           <p x-show="estado === 'cargando'" class="text-center text-sm text-ink/50">Cargando…</p>
+
+          <!-- Evento sin álbum (fotosInvitados.habilitado = false) -->
+          <p x-show="estado === 'deshabilitado'" x-cloak class="text-center text-ink/70">
+            Esta invitación no tiene álbum de fotos.
+          </p>
 
           <!-- Sin código: hay que escanear el QR (o escribir el código) -->
           <section x-show="estado === 'sin_codigo'" x-cloak class="mx-auto max-w-sm text-center">
@@ -216,6 +221,9 @@
           </header>
 
           <p x-show="estado === 'cargando'" class="text-center text-sm text-ink/50">Cargando…</p>
+          <p x-show="estado === 'deshabilitado'" x-cloak class="text-center text-ink/70">
+            Esta invitación no tiene álbum de fotos.
+          </p>
           <p x-show="estado === 'sin_acceso'" x-cloak class="text-center text-ink/70">
             Este enlace de festejados no es válido. Revisa que lo hayas copiado completo.
           </p>
