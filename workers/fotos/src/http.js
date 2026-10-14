@@ -18,7 +18,8 @@ export function json(data, status = 200) {
 
 // Las invitaciones (*.evento.casa) y el desarrollo local, incluido el teléfono
 // en la misma red (vite --host). CORS no es la barrera de seguridad: sin el
-// código del evento o el token de los festejados, la API no responde nada útil.
+// código del evento, el de un pase o el token de los festejados, la API no
+// responde nada útil.
 const ORIGEN_PERMITIDO =
   /^(https:\/\/([a-z0-9-]+\.)*evento\.casa|https?:\/\/(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+)(:\d+)?)$/
 
@@ -27,8 +28,8 @@ export function corsHeaders(request) {
   if (!origin || !ORIGEN_PERMITIDO.test(origin)) return {}
   return {
     'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Codigo',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Codigo, X-Pase',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
   }

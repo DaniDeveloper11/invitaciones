@@ -14,6 +14,14 @@ export async function cargarEvento(env, slug) {
   return evento
 }
 
+/** Envuelve un handler de fotos: un evento dado de alta sólo para RSVP no tiene fotos. */
+export const conFotos = (handler) => (ctx) => {
+  if (!ctx.evento.fotos) {
+    throw new HttpError(404, 'Este evento no tiene fotos de invitados', { codigo: 'sin_evento' })
+  }
+  return handler(ctx)
+}
+
 function estadoSubida(evento, ahora = new Date().toISOString()) {
   if (evento.abre_en && ahora < evento.abre_en) return 'aun_no_abre'
   if (evento.cierra_en && ahora >= evento.cierra_en) return 'cerrada'

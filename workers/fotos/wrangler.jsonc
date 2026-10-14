@@ -1,4 +1,4 @@
-// Worker de fotos de invitados: https://api.evento.casa
+// Worker de las invitaciones (fotos de invitados y RSVP): https://api.evento.casa
 //
 // La base D1 y el bucket R2 los crea Terraform (terraform/fotos.tf); el
 // database_id sale de `terraform output d1_database_id`. Este archivo sólo
@@ -26,12 +26,19 @@
 
   "r2_buckets": [{ "binding": "BUCKET", "bucket_name": "invitaciones-fotos" }],
 
-  // Límite de subidas por IP y evento: 20 fotos por minuto.
+  // Fotos: subidas por IP y evento, 20 por minuto.
   "ratelimits": [
     {
       "name": "SUBIDAS",
       "namespace_id": "1001",
       "simple": { "limit": 20, "period": 60 }
+    },
+    // RSVP: peticiones por IP y evento, para que no se puedan adivinar los
+    // códigos de los pases probando uno tras otro.
+    {
+      "name": "INTENTOS",
+      "namespace_id": "1002",
+      "simple": { "limit": 60, "period": 60 }
     }
   ],
 
