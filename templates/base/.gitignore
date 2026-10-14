@@ -17,4 +17,7 @@ npm-debug.log*
 *.sw?
 
 # QR de fotos de invitados (npm run fotos:alta): lleva el código del evento.
-assets-origen/qr-fotos.png
+assets-origen/qr-fotos*.png
+
+# Lista de invitados y enlaces del RSVP (npm run rsvp:alta): datos personales.
+assets-origen/*.csv

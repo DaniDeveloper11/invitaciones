@@ -13,6 +13,7 @@
     "list": "node scripts/list-sites.mjs",
     "fotos:alta": "node scripts/fotos-alta.mjs",
     "fotos:borrar": "node scripts/fotos-borrar.mjs",
+    "rsvp:alta": "node scripts/rsvp-alta.mjs",
     "build": "npm run build --workspaces --if-present"
   },
   "devDependencies": {
