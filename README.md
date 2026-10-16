@@ -13,8 +13,8 @@ invitaciones/
 ├── templates/base/         Plantilla que se copia al crear una invitación nueva
 ├── sites/                  Una carpeta por invitación (proyecto Vite independiente)
 │   └── first-comunion-victoria/
-├── workers/fotos/          API de fotos de invitados (Worker + D1 + R2), compartida por todas
-├── scripts/                Generador de invitaciones y alta de fotos de invitados
+├── workers/fotos/          API de fotos de invitados y RSVP (Worker + D1 + R2), compartida por todas
+├── scripts/                Generador de invitaciones, alta de fotos y de la lista del RSVP
 └── terraform/              Infraestructura en Cloudflare (Pages, DNS, dominios, D1, R2)
 ```
 
@@ -41,7 +41,7 @@ Resumen de punta a punta; cada paso remite a su sección. Ejemplo: una boda.
    ```
 2. **Datos del cliente:**
    - `src/event.config.js` — nombres, fecha y hora (ISO), mensaje, lugar y enlace
-     de Maps, dress code, WhatsApp de confirmación, música, pie.
+     de Maps, dress code, confirmación (WhatsApp o pases), música, pie.
    - `.env` — `VITE_SITE_URL=https://ana-y-luis.evento.casa/` (vista previa de
      WhatsApp; `fotos:alta` también la usa).
    - `index.html` — descripción con fecha y lugar en `description` y
@@ -55,11 +55,15 @@ Resumen de punta a punta; cada paso remite a su sección. Ejemplo: una boda.
 7. **Publicar en su dominio:** entrada en `terraform/sites.tf` (con `watch_paths`)
    y `terraform apply` (ver *Desplegar una invitación*). Revisa la URL y pega el
    enlace en WhatsApp para comprobar la vista previa.
-8. **Fotos de invitados** (si el cliente las quiere): `fotosInvitados.habilitado:
+8. **Confirmación con pases** (si el cliente tiene lista de invitados):
+   `rsvp.modo: 'pases'`, push y `npm run rsvp:alta -- boda-ana-y-luis
+   invitados.csv`. Manda a cada invitado su enlace y a los festejados el de su
+   panel (ver *RSVP con pases*).
+9. **Fotos de invitados** (si el cliente las quiere): `fotosInvitados.habilitado:
    true`, push y `npm run fotos:alta -- boda-ana-y-luis`. Imprime el QR para las
    mesas y manda a los festejados su enlace (ver *Fotos de invitados*).
-9. **Después del evento:** los festejados descargan su ZIP; luego puedes borrar
-   las fotos del evento (ver *Fotos de invitados → Después del evento*).
+10. **Después del evento:** los festejados descargan su ZIP y su lista; luego
+    puedes borrar el evento (ver *Fotos de invitados → Después del evento*).
 
 ## Crear una invitación nueva
 
@@ -94,11 +98,13 @@ Comandos por invitación (`-w <slug>`): `dev`, `build`, `preview`.
 
 Portada con parallax · cuenta regresiva en vivo · fecha y hora formateadas solas ·
 mensaje personal · lugar con enlace a Google Maps · dress code con paleta y visor de
-ejemplos · galería con lightbox · confirmación de asistencia por WhatsApp ·
-música de fondo · animaciones al hacer scroll (`x-reveal`) · fotos de invitados
-durante el evento (opcional, ver *Fotos de invitados*).
+ejemplos · galería con lightbox · confirmación de asistencia por WhatsApp o con pases
+personales (ver *RSVP con pases*) · música de fondo · animaciones al hacer scroll
+(`x-reveal`) · fotos de invitados durante el evento (opcional, ver *Fotos de
+invitados*).
 
-Las secciones se ocultan solas cuando no las configuras: sin `whatsapp` no hay RSVP,
+Las secciones se ocultan solas cuando no las configuras: en modo WhatsApp, sin
+`whatsapp` no hay RSVP;
 sin fotos no hay galería, sin `dresscode.titulo` no hay dress code, sin `musica.src`
 no hay reproductor.
 
@@ -229,6 +235,10 @@ npm run db:migrate                     # crea las tablas en la D1 de producción
 npm run deploy                         # publica el Worker en api.evento.casa
 ```
 
+Lo mismo cada vez que cambie el Worker: primero `db:migrate` (sólo aplica las
+migraciones nuevas de `migrations/`) y después `deploy`, para que el código
+nuevo nunca corra sin sus tablas. El Worker también atiende el RSVP.
+
 El token de wrangler necesita, además de D1 y R2, *Account → Workers Scripts →
 Edit* y *Zone → Workers Routes → Edit* (para el dominio `api.evento.casa`).
 
@@ -291,12 +301,99 @@ intenta usar `api.evento.casa`. Las fotos de prueba se guardan en
   ```bash
   npm run fotos:borrar -- boda-ana-y-luis --simular     # sólo muestra qué borraría
   npm run fotos:borrar -- boda-ana-y-luis               # pide escribir el slug para confirmar
-  npm run fotos:borrar -- boda-ana-y-luis --solo-fotos  # conserva el evento, su código y su QR
+  npm run fotos:borrar -- boda-ana-y-luis --solo-fotos  # conserva el evento, su código, su QR y sus pases
   ```
+  Sin `--solo-fotos` borra el evento completo, incluidos los pases del RSVP y sus
+  respuestas (el resumen los muestra antes de confirmar).
   Usa el token de `terraform/.env.local` (no hace falta `source`). `--local`
   trabaja con la base de `wrangler dev`. No toca el sitio: para dar de baja la
   invitación, quita su entrada de `terraform/sites.tf`, `terraform apply` y
   `git rm -r sites/<slug>`.
+
+## RSVP con pases
+
+La confirmación de asistencia tiene dos modos (`rsvp.modo` en `event.config.js`):
+
+- **`'whatsapp'`** (por defecto): cada opción abre WhatsApp con el mensaje escrito.
+- **`'pases'`**: los festejados definen la lista de invitados y cada pase
+  ("Familia Pérez") recibe **su propio enlace**. Al abrirlo, la invitación muestra
+  a las personas de su pase y el invitado **marca quién asiste**; no puede agregar
+  a nadie. Los festejados ven las respuestas en su panel.
+
+```
+Invitado ── <subdominio>.evento.casa/?i=CODIGO ──► api.evento.casa ──► D1 (pases, personas)
+Festejados ─ <subdominio>.evento.casa/rsvp/#admin=TOKEN ─┘
+```
+
+- **Pases:** cada uno tiene sus personas, marcadas como adulto o niño, y puede
+  tener lugares libres ("+ acompañante") cuyo nombre escribe el invitado.
+- **Cambios:** el invitado puede cambiar su respuesta con el mismo enlace hasta la
+  fecha límite (`rsvp.cierra`). La invitación recuerda su pase y quita el código
+  de la barra de direcciones.
+- **Sin enlace personal:** quien abra la invitación general ve "abre el enlace
+  personal que te enviamos" y, si hay `whatsapp`, los botones de siempre.
+- **Panel de festejados** (`/rsvp/#admin=…`, el mismo token que las fotos):
+  adultos y niños que asisten, pases sin responder, filtros y búsqueda,
+  recordatorio por WhatsApp para los pendientes, enlace de cada pase y CSV con
+  una fila por persona para el salón.
+- **Seguridad:** el código de 8 caracteres sólo abre su pase; la API limita a 60
+  peticiones por minuto por persona para que no se puedan adivinar.
+
+### Activarlo en un evento
+
+1. En `sites/<slug>/src/event.config.js`:
+   ```js
+   rsvp: {
+     modo: 'pases',
+     cierra: '2026-11-20',   // fecha límite (hasta el final de ese día)
+     // whatsapp: '52…',     // opcional: respaldo para quien no tenga enlace
+   },
+   ```
+   Commit y push: la invitación muestra la confirmación con pases y se publica
+   `/rsvp/`.
+2. Arma la lista en Excel o Google Sheets y expórtala como CSV, **una fila por
+   persona**; las filas con el mismo `pase` forman un pase:
+   ```csv
+   pase,nombre,nino,telefono
+   Familia Pérez,Luis Pérez,,3312345678
+   Familia Pérez,María López,,
+   Familia Pérez,Sofía Pérez,sí,
+   Juan Gómez,Juan Gómez,,3311112222
+   Juan Gómez,+ acompañante,,
+   ```
+   `nino` acepta `sí`, `x` o `1`; un nombre que empieza con `+` es un lugar
+   libre; el teléfono basta en una fila del pase (10 dígitos → se antepone 52).
+   Guárdala en `sites/<slug>/assets-origen/` (los CSV están en `.gitignore`).
+3. Carga la lista:
+   ```bash
+   npm run rsvp:alta -- boda-ana-y-luis sites/boda-ana-y-luis/assets-origen/invitados.csv
+   ```
+   - Si el evento no existe, lo da de alta sólo para RSVP e imprime el **enlace
+     de festejados, que no se puede recuperar** (si ya existía por las fotos, es
+     el mismo enlace cambiando `/fotos/` por `/rsvp/`).
+   - Genera `assets-origen/rsvp-enlaces.csv` con el enlace de cada pase y un
+     enlace de WhatsApp con la invitación ya escrita: un clic por invitado.
+   - Se puede volver a correr con la lista actualizada: agrega los pases nuevos y
+     no toca los existentes (sus enlaces ya se enviaron).
+   - `--cierra 2026-11-20` cambia la fecha límite sin tocar el config.
+
+Si el evento también lleva fotos, `npm run fotos:alta` las activa conservando el
+enlace de festejados.
+
+### Probar en local
+
+Con el Worker local corriendo (ver *Fotos de invitados → Probar en local*), en un
+sitio con `modo: 'pases'` sin commitear:
+
+```bash
+npm run rsvp:alta -- <slug> lista.csv --local      # escribe rsvp-enlaces.local.csv
+VITE_FOTOS_API=http://localhost:8787 npm run dev -w <slug>
+```
+
+Abre `http://localhost:5173/?i=<código>` con los códigos del CSV. Para el panel,
+el token se imprime al dar de alta el evento. `seed.local.sql` trae además pases
+de prueba en el evento `demo` (`PEREZ234`, `ROSA2345`, `JUAN2345`) con el token
+`demo-admin-token`.
 
 ## Notas
 
@@ -307,4 +404,5 @@ intenta usar `api.evento.casa`. Las fotos de prueba se guardan en
 - `terraform/terraform.tfvars`, `terraform/.env.local` (el token) y el estado de
   Terraform están en `.gitignore`: nunca se commitean.
 - Las fotos de los invitados no viven en el repo sino en R2, y sólo se ven con el
-  código del evento.
+  código del evento. La lista de invitados del RSVP vive en D1; los CSV con
+  nombres y teléfonos (`assets-origen/*.csv`) nunca se commitean.
