@@ -9,10 +9,11 @@ export default {
   titulo: 'Camila XV',
 
   hero: {
+    eyebrow: 'Acompáñame',
+    subtitulo: 'a celebrar mis XV años',
     titulo: 'Camila',
-    subtitulo: 'Mis XV años',
-    // Flores de las esquinas del hero (arriba a la izquierda; abajo se giran).
-    imagen: 'images/flores.svg',
+    // Tarjeta en acuarela sin texto: public/images/hero.webp
+    imagen: 'images/hero.webp',
   },
 
   cuentaRegresiva: {

@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Camila XV" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#dd6eab" />
 
     <!--
       Vista previa al compartir (WhatsApp, Facebook, Telegram, iMessage…).
@@ -76,53 +76,65 @@
         </div>
       </template>
 
-      <!-- Hero: fondo claro con flores en las esquinas y el nombre -->
+      <!--
+        Hero: tarjeta en acuarela con flores a la derecha y marco dorado.
+        En el celular la tarjeta ocupa toda la pantalla; en pantallas grandes
+        se muestra completa, centrada sobre un fondo fucsia.
+      -->
       <section
         x-data="{ show: false }"
         x-init="setTimeout(() => (show = true), 150)"
-        class="relative h-[100svh] min-h-[100svh] w-full overflow-hidden bg-white"
+        class="relative flex h-[100svh] min-h-[100svh] w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#b4518f] via-[#d77bb6] to-[#b4518f]"
       >
-        <!-- Flores: public/images/flores.svg (arriba a la izquierda y, giradas, abajo a la derecha) -->
-        <img
-          :src="$store.event.hero.imagen"
-          alt=""
-          aria-hidden="true"
-          fetchpriority="high"
-          decoding="async"
-          class="pointer-events-none absolute -left-10 -top-10 w-[85%] max-w-[520px] transition-opacity duration-[1500ms] ease-out"
-          :class="show ? 'opacity-100' : 'opacity-0'"
-          :style="`transform: translate3d(0, ${$store.scroll.y * -0.15}px, 0)`"
-        />
-        <img
-          :src="$store.event.hero.imagen"
-          alt=""
-          aria-hidden="true"
-          decoding="async"
-          class="pointer-events-none absolute -bottom-10 -right-10 w-[85%] max-w-[520px] rotate-180 transition-opacity duration-[1500ms] ease-out delay-300"
-          :class="show ? 'opacity-100' : 'opacity-0'"
-        />
-
         <div
-          class="relative z-10 flex h-full flex-col items-center justify-center px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-[max(3rem,env(safe-area-inset-bottom))]"
-          :style="`transform: translate3d(0, ${$store.scroll.y * 0.4}px, 0); opacity: ${Math.max(1 - $store.scroll.y / 400, 0)}`"
+          class="absolute inset-0 overflow-hidden bg-white md:relative md:inset-auto md:h-[92svh] md:aspect-[1886/2718] md:shadow-2xl"
         >
-          <div class="flex flex-col items-end">
-            <h1
+          <!-- public/images/hero.webp — tarjeta sin texto (1200x1729px) -->
+          <img
+            :src="$store.event.hero.imagen"
+            alt=""
+            fetchpriority="high"
+            decoding="async"
+            class="absolute inset-0 h-full w-full object-cover object-[35%_center] transition-opacity duration-1000 md:object-center"
+            :class="show ? 'opacity-100' : 'opacity-0'"
+          />
+          <!-- Marco dorado -->
+          <div
+            class="pointer-events-none absolute inset-[max(0.75rem,env(safe-area-inset-top))] border-2 border-[#c9a24a] shadow-[inset_0_0_0_1px_#e7cf8e]"
+          ></div>
+
+          <div
+            class="relative z-10 flex h-full w-[62%] flex-col items-center justify-between pl-[7%] pr-2 pt-[22svh] pb-[13svh] text-center text-cocoa md:w-[58%] md:pt-[18%] md:pb-[14%]"
+            :style="`transform: translate3d(0, ${$store.scroll.y * 0.35}px, 0); opacity: ${Math.max(1 - $store.scroll.y / 400, 0)}`"
+          >
+            <div
               x-show="show"
-              x-transition:enter="transition ease-out duration-1000"
-              x-transition:enter-start="opacity-0 translate-y-6 blur-sm"
-              x-transition:enter-end="opacity-100 translate-y-0 blur-none"
-              class="font-script text-blush text-[5.5rem] leading-none sm:text-[9rem]"
-              x-text="$store.event.hero.titulo"
-            ></h1>
-            <p
-              x-show="show"
-              x-transition:enter="transition ease-out duration-1000 delay-500"
+              x-transition:enter="transition ease-out duration-1000 delay-300"
               x-transition:enter-start="opacity-0 translate-y-3"
               x-transition:enter-end="opacity-100 translate-y-0"
-              class="-mt-2 mr-1 uppercase tracking-[0.35em] text-sm sm:text-lg text-rose"
-              x-text="$store.event.hero.subtitulo"
-            ></p>
+            >
+              <p class="font-script text-4xl sm:text-5xl" x-text="$store.event.hero.eyebrow"></p>
+              <p class="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.15em] font-medium" x-text="$store.event.hero.subtitulo"></p>
+            </div>
+
+            <h1
+              x-show="show"
+              x-transition:enter="transition ease-out duration-1000 delay-500"
+              x-transition:enter-start="opacity-0 translate-y-6 blur-sm"
+              x-transition:enter-end="opacity-100 translate-y-0 blur-none"
+              class="font-serif text-6xl sm:text-7xl leading-none"
+              x-text="$store.event.hero.titulo"
+            ></h1>
+
+            <div
+              x-show="show"
+              x-transition:enter="transition ease-out duration-1000 delay-700"
+              x-transition:enter-start="opacity-0 translate-y-3"
+              x-transition:enter-end="opacity-100 translate-y-0"
+            >
+              <p class="mb-2 font-serif italic text-[11px] sm:text-sm font-semibold tracking-[0.08em] text-balance" x-text="$store.event.fechaTexto"></p>
+              <p class="font-script text-4xl sm:text-5xl leading-tight" x-text="$store.event.guardaLaFecha"></p>
+            </div>
           </div>
         </div>
       </section>

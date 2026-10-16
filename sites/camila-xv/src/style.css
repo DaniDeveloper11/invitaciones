@@ -17,7 +17,8 @@
   --color-muted: #e3c58a; /* dorado claro: acentos sobre fondo oscuro */
   --color-line: #6e3a4426;
   --color-blush: #eda3b3; /* rosa del nombre en el hero */
-  --color-rose: #c9737f; /* rosa medio: "Mis XV años" y etiquetas */
+  --color-rose: #c9737f; /* rosa medio: etiquetas */
+  --color-cocoa: #3e2119; /* café oscuro: textos del hero */
 
   --font-script: 'Great Vibes', cursive;
 }
