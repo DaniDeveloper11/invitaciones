@@ -145,6 +145,7 @@ export function normalizeEvent(config = {}) {
   rsvp.api = fotos.api
   rsvp.slug = fotos.slug
   rsvp.locale = event.locale
+  rsvp.inicio = asset('')
   rsvp.conWhatsapp = Boolean(rsvp.whatsapp) && rsvp.opciones.length > 0
   rsvp.nota ||=
     rsvp.modo === 'pases'

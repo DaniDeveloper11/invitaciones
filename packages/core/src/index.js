@@ -12,6 +12,14 @@ export { asset, photos, normalizeEvent } from './event.js'
 export { countdown, gallery, audioPlayer, rsvp, rsvpPases, registerReveal, registerScrollStore }
 export { Alpine }
 
+const PAGINAS = {
+  // /fotos/: cámara, muro de invitados y panel de festejados.
+  fotos: (Alpine, event) => import('./fotos/registrar.js').then((m) => m.registrarFotos(Alpine, event)),
+  // /rsvp/: panel de festejados del RSVP con pases.
+  rsvp: (Alpine, event) =>
+    import('./components/rsvp-admin.js').then((m) => Alpine.data('rsvpAdmin', () => m.rsvpAdmin(event))),
+}
+
 /**
  * Arranca una invitación: registra los componentes, deja el evento disponible
  * como `$store.event` en la plantilla e inicia Alpine.
@@ -53,11 +61,12 @@ export function createInvitation(config, { setup } = {}) {
 
   setup?.(Alpine, event)
 
-  // La página /fotos/ (<body data-pagina="fotos">) carga sus componentes aparte.
-  if (document.body.dataset.pagina === 'fotos') {
-    import('./fotos/registrar.js')
-      .then(({ registrarFotos }) => registrarFotos(Alpine, event))
-      .catch((err) => console.error('[invitación] No se pudieron cargar las fotos', err))
+  // Las páginas aparte (<body data-pagina="…">) cargan sus componentes por
+  // separado, para que no pesen en la invitación.
+  const cargarPagina = PAGINAS[document.body.dataset.pagina]
+  if (cargarPagina) {
+    cargarPagina(Alpine, event)
+      .catch((err) => console.error('[invitación] No se pudo cargar la página', err))
       .finally(() => Alpine.start())
   } else {
     Alpine.start()

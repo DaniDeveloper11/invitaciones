@@ -62,6 +62,15 @@ export function crearApi({ api, slug }, cabeceras) {
   }
 }
 
+/**
+ * Token de los festejados (#admin=<token>). Va después de `#`, así que nunca se
+ * envía al servidor de Pages ni queda en sus logs; los paneles (fotos y RSVP)
+ * lo mandan a la API como Authorization: Bearer.
+ */
+export function tokenAdmin() {
+  return new URLSearchParams(location.hash.slice(1)).get('admin') || ''
+}
+
 /** localStorage puede no estar disponible (modo privado); nunca debe romper la página. */
 export const almacen = {
   leer(clave) {

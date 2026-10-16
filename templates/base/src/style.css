@@ -3,6 +3,7 @@
 
 @source '../index.html';
 @source '../fotos/index.html';
+@source '../rsvp/index.html';
 @source './**/*.js';
 
 /*

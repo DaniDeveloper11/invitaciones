@@ -31,6 +31,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
+import { rsvpConPases } from '@invitaciones/core/fotos-config'
 import {
   DIA_MS,
   SLUG_VALIDO,
@@ -242,7 +243,7 @@ await writeFile(salida, `﻿${lineas.map((l) => l.map(csvCampo).join(',')).join(
 
 const personasNuevas = nuevos.reduce((total, [, p]) => total + p.personas.length, 0)
 const plural = (n, palabra) => `${n} ${palabra}${n === 1 ? '' : 's'}`
-const modoPases = /rsvp\s*:\s*\{[^}]*?\bmodo\s*:\s*'pases'/.test(sitio.config)
+const modoPases = rsvpConPases(sitio.dir)
 
 console.log(`
 ✓ RSVP de ${nombreEvento}${local ? '  (base LOCAL)' : ''}

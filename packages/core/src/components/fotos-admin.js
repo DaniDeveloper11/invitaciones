@@ -4,14 +4,12 @@
 // queda en sus logs; la página lo manda a la API como Authorization: Bearer.
 // Las imágenes se piden con fetch (para poder mandar el token, también las
 // ocultas) y se muestran como object URLs.
-import { crearApi, formatearFechaHora } from '../fotos/api.js'
+import { crearApi, formatearFechaHora, tokenAdmin } from '../fotos/api.js'
+
+export { tokenAdmin }
 
 const CADA_MS = 30_000
 const MINIATURAS_A_LA_VEZ = 6
-
-export function tokenAdmin() {
-  return new URLSearchParams(location.hash.slice(1)).get('admin') || ''
-}
 
 function nombreArchivo(texto) {
   return (

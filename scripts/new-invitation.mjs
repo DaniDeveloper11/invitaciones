@@ -42,6 +42,7 @@ const reemplazos = [
   ['src/event.config.js', { __TITULO__: titulo || slug }],
   ['index.html', { '<title>Invitación</title>': `<title>${titulo || slug}</title>`, __TITULO__: titulo || slug }],
   ['fotos/index.html', { __TITULO__: titulo || slug }],
+  ['rsvp/index.html', { __TITULO__: titulo || slug }],
 ]
 
 for (const [archivo, pares] of reemplazos) {
