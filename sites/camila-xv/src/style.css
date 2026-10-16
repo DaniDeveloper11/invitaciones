@@ -33,3 +33,76 @@ body {
 #app {
   background: var(--color-paper) url('/images/papel.svg');
 }
+
+/*
+ * Humo rosa: nubes difusas que flotan lento detrás del contenido. La capa es
+ * fija (acompaña al scroll) y #app aísla el apilado para que quede encima del
+ * papel pero debajo de textos y fotos.
+ */
+#app {
+  isolation: isolate;
+}
+.humo {
+  position: fixed;
+  inset: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 480px;
+  transform: translateX(-50%);
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.humo span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  will-change: transform;
+  animation: humo-flotar var(--d, 28s) ease-in-out infinite alternate;
+}
+.humo span:nth-child(1) {
+  --d: 26s;
+  top: -10%;
+  left: -30%;
+  width: 90%;
+  height: 45%;
+  background: radial-gradient(closest-side, #f4b6c8aa, transparent);
+}
+.humo span:nth-child(2) {
+  --d: 34s;
+  top: 30%;
+  right: -35%;
+  width: 95%;
+  height: 50%;
+  background: radial-gradient(closest-side, #eda1b999, transparent);
+  animation-delay: -8s;
+}
+.humo span:nth-child(3) {
+  --d: 30s;
+  bottom: -15%;
+  left: -20%;
+  width: 100%;
+  height: 45%;
+  background: radial-gradient(closest-side, #f7c9d6b3, transparent);
+  animation-delay: -15s;
+}
+.humo span:nth-child(4) {
+  --d: 40s;
+  top: 10%;
+  left: 25%;
+  width: 70%;
+  height: 35%;
+  background: radial-gradient(closest-side, #f9d7e080, transparent);
+  animation-delay: -22s;
+}
+@keyframes humo-flotar {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(12%, -8%, 0) scale(1.15) rotate(8deg);
+  }
+  100% {
+    transform: translate3d(-10%, 10%, 0) scale(0.95) rotate(-6deg);
+  }
+}

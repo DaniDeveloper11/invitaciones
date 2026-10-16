@@ -42,7 +42,10 @@
       con `$store.event`. Para cambiar textos, fotos o colores edita ese archivo.
       Para cambiar el diseño, edita este HTML libremente.
     -->
-    <div id="app" x-data class="relative mx-auto flex min-h-screen w-full max-w-[480px] flex-col md:shadow-2xl">
+    <div id="app" x-data class="relative mx-auto flex min-h-screen w-full max-w-[480px] flex-col overflow-x-clip md:shadow-2xl">
+      <!-- Humo rosa de fondo (estilos .humo en src/style.css) -->
+      <div class="humo" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
       <!-- Música de fondo (public/audio/song.mp3) -->
       <template x-if="$store.event.tieneMusica">
         <div x-data="audioPlayer" class="fixed bottom-5 right-5 z-40">
@@ -569,32 +572,32 @@
       </template>
 
       <!-- Sugerencia de regalos (regalos.texto vacío lo oculta) -->
-      <template x-if="$store.event.regalos?.texto">
-        <section x-data="{ copiado: false }" class="relative w-full px-8 py-12 text-center">
-          <span x-reveal class="mx-auto block h-11 w-11 text-green" x-html="$icono('regalo')"></span>
-          <p x-reveal class="mt-1 font-script text-4xl text-gold">Sugerencia de regalos</p>
-          <p
-            x-reveal.delay-150
-            class="mx-auto mt-3 max-w-[19rem] text-[13px] font-semibold uppercase leading-relaxed tracking-[0.03em]"
-            x-text="$store.event.regalos.texto"
-          ></p>
-          <template x-if="$store.event.regalos.datos?.length">
-            <div x-reveal.lg class="mt-6">
-              <span class="mx-auto block h-10 w-10 text-green" x-html="$icono('tarjeta')"></span>
-              <template x-for="linea in $store.event.regalos.datos" :key="linea">
-                <p class="text-[13px] font-bold uppercase leading-snug tracking-[0.05em]" x-text="linea"></p>
-              </template>
-              <button
-                x-show="$store.event.regalos.copiar"
-                type="button"
-                @click="navigator.clipboard?.writeText($store.event.regalos.copiar); copiado = true; setTimeout(() => (copiado = false), 2000)"
-                class="mt-4 rounded-md border border-gold px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-gold transition-colors hover:bg-gold hover:text-paper"
-                x-text="copiado ? '¡Copiado!' : 'Copiar cuenta'"
-              ></button>
-            </div>
-          </template>
-        </section>
-      </template>
+      <!-- <template x-if="$store.event.regalos?.texto"> -->
+      <!--   <section x-data="{ copiado: false }" class="relative w-full px-8 py-12 text-center"> -->
+      <!--     <span x-reveal class="mx-auto block h-11 w-11 text-green" x-html="$icono('regalo')"></span> -->
+      <!--     <p x-reveal class="mt-1 font-script text-4xl text-gold">Sugerencia de regalos</p> -->
+      <!--     <p -->
+      <!--       x-reveal.delay-150 -->
+      <!--       class="mx-auto mt-3 max-w-[19rem] text-[13px] font-semibold uppercase leading-relaxed tracking-[0.03em]" -->
+      <!--       x-text="$store.event.regalos.texto" -->
+      <!--     ></p> -->
+      <!--     <template x-if="$store.event.regalos.datos?.length"> -->
+      <!--       <div x-reveal.lg class="mt-6"> -->
+      <!--         <span class="mx-auto block h-10 w-10 text-green" x-html="$icono('tarjeta')"></span> -->
+      <!--         <template x-for="linea in $store.event.regalos.datos" :key="linea"> -->
+      <!--           <p class="text-[13px] font-bold uppercase leading-snug tracking-[0.05em]" x-text="linea"></p> -->
+      <!--         </template> -->
+      <!--         <button -->
+      <!--           x-show="$store.event.regalos.copiar" -->
+      <!--           type="button" -->
+      <!--           @click="navigator.clipboard?.writeText($store.event.regalos.copiar); copiado = true; setTimeout(() => (copiado = false), 2000)" -->
+      <!--           class="mt-4 rounded-md border border-gold px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-gold transition-colors hover:bg-gold hover:text-paper" -->
+      <!--           x-text="copiado ? '¡Copiado!' : 'Copiar cuenta'" -->
+      <!--         ></button> -->
+      <!--       </div> -->
+      <!--     </template> -->
+      <!--   </section> -->
+      <!-- </template> -->
 
       <!-- Fotos de invitados: enlace a /fotos/ (fotosInvitados.habilitado) -->
       <template x-if="$store.event.tieneFotosInvitados">

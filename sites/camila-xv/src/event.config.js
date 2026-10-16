@@ -135,7 +135,7 @@ export default {
     // 'whatsapp': cada opción abre WhatsApp con el mensaje ya escrito.
     // 'pases': cada invitado confirma con su enlace personal marcando quién
     //          asiste. La lista se carga con `npm run rsvp:alta` (ver README).
-    modo: 'whatsapp',
+    modo: 'pases',
     // Sólo con pases: fecha límite para confirmar (hasta el final de ese día).
     // cierra: '2026-11-20',
     titulo: 'Confirmar asistencia',
