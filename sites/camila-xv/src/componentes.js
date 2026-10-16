@@ -85,3 +85,32 @@ export function calendario(event) {
     ],
   }
 }
+
+/**
+ * Íconos de línea para ceremonias e itinerario. Se usan con
+ * `x-html="$icono('iglesia')"`; heredan el color del texto (currentColor).
+ */
+const svg = (cuerpo, relleno = false) =>
+  `<svg viewBox="0 0 48 48" class="h-full w-full" fill="${relleno ? 'currentColor' : 'none'}" stroke="${relleno ? 'none' : 'currentColor'}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${cuerpo}</svg>`
+
+export const ICONOS = {
+  iglesia: svg(
+    '<path d="M24 4v8M20.5 7.5h7"/><path d="M12 22 24 12l12 10"/><path d="M14 20v22h20V20"/><path d="M8 42h32"/><path d="M21 42v-8a3 3 0 0 1 6 0v8"/><path d="M19 25h2v4h-2zM27 25h2v4h-2z"/>',
+  ),
+  copas: svg(
+    '<path d="M11 8h10l-1.5 11a3.5 3.5 0 0 1-7 0z" transform="rotate(-14 16 14)"/><path d="M27 8h10l-1.5 11a3.5 3.5 0 0 1-7 0z" transform="rotate(14 32 14)"/><path d="M17.5 23 20 38M30.5 23 28 38M15 39h9M24 39h9"/><path d="M24 2v4M19 4l1.5 2.5M29 4l-1.5 2.5"/>',
+  ),
+  corona: svg(
+    '<path d="M8 34c10-2.5 22-2.5 32 0"/><path d="M8.5 33 11 21l6 6 3.5-10L24 9l3.5 8L31 27l6-6 2.5 12"/><circle cx="24" cy="8" r="1.5"/><circle cx="11" cy="20" r="1.2"/><circle cx="37" cy="20" r="1.2"/>',
+  ),
+  vals: svg(
+    '<circle cx="18" cy="8" r="3.2"/><path d="M18 11.5c-2 1-3 3.5-3 6l-1 6 5-1 3-6 5-4"/><path d="M15 23 8 42h20l-6-17"/><circle cx="31" cy="7" r="3.2"/><path d="M31 10.5v12M27 14l4 1.5 2-1M31 22.5l-2 19.5M31 22.5l3 19.5"/>',
+  ),
+  camara: svg(
+    '<rect x="5" y="13" width="38" height="26" rx="3"/><path d="M16 13l3-5h10l3 5"/><circle cx="24" cy="26" r="7"/><circle cx="24" cy="26" r="3"/><path d="M37 18h2"/>',
+  ),
+  disco: svg(
+    '<path d="M24 2v6"/><circle cx="24" cy="25" r="16"/><path d="M8 25h32M10 17h28M10 33h28M24 9v32"/><path d="M24 9c-6 4.5-6 27.5 0 32M24 9c6 4.5 6 27.5 0 32"/>',
+  ),
+  reloj: svg('<circle cx="24" cy="24" r="18"/><path d="M24 12v12l8 5"/>'),
+}

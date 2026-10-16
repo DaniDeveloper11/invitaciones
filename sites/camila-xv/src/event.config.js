@@ -43,12 +43,38 @@ export default {
     cierre: 'A festejar mis',
   },
 
-  lugar: {
-    etiqueta: 'Lugar',
-    nombre: 'Nombre del salón',
-    direccion: 'Calle y número, Ciudad',
-    mapsUrl: '',
-  },
+  // Misa y recepción. `icono`: iglesia, copas, corona, vals, camara, disco o
+  // reloj. Sin `mapsUrl` no aparece el botón "Ver ubicación".
+  ceremonias: [
+    {
+      icono: 'iglesia',
+      titulo: 'Misa de Agradecimiento',
+      hora: '6:00 PM',
+      lugar: 'Nombre de la iglesia',
+      direccion: 'Calle y número, Ciudad',
+      mapsUrl: 'https://maps.google.com/',
+    },
+    {
+      icono: 'copas',
+      titulo: 'Recepción',
+      hora: '8:00 PM',
+      lugar: 'Nombre del salón',
+      direccion: 'Calle y número, Ciudad',
+      mapsUrl: 'https://maps.google.com/',
+    },
+  ],
+
+  // Foto grande con bordes de papel rasgado (vertical, ~1000x1250px).
+  fotoDestacada: 'images/foto-1.webp',
+
+  // Línea de tiempo; mismos íconos que en `ceremonias`.
+  itinerario: [
+    { hora: '8:00 PM', actividad: 'Llegada', icono: 'corona' },
+    { hora: '8:30 PM', actividad: 'Vals', icono: 'vals' },
+    { hora: '9:00 PM', actividad: 'Sesión de fotos', icono: 'camara' },
+    { hora: '10:30 PM', actividad: 'Fiesta', icono: 'disco' },
+    { hora: '2:00 AM', actividad: 'Despedida', icono: 'reloj' },
+  ],
 
   dresscode: {
     // Deja `titulo` vacío para ocultar toda la sección.
