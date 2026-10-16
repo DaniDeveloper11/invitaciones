@@ -188,6 +188,26 @@
         </section>
       </template>
 
+      <!-- Padres y padrinos (familia.grupos; sin grupos se oculta) -->
+      <template x-if="$store.event.familia?.grupos?.length">
+        <section class="w-full bg-white px-6 py-20 flex flex-col items-center text-center">
+          <p
+            x-reveal
+            class="font-script text-4xl sm:text-5xl text-rose max-w-sm leading-tight text-balance"
+            x-text="$store.event.familia.titulo"
+          ></p>
+          <template x-for="(grupo, i) in $store.event.familia.grupos" :key="grupo.titulo">
+            <div x-reveal.lg class="mt-10 flex flex-col items-center">
+              <div x-show="i > 0" class="mb-10 h-px w-10 bg-[#c9a24a]"></div>
+              <p class="uppercase tracking-[0.25em] text-xs text-rose mb-4" x-text="grupo.titulo"></p>
+              <template x-for="nombre in grupo.nombres" :key="nombre">
+                <p class="font-serif text-xl sm:text-2xl leading-snug" x-text="nombre"></p>
+              </template>
+            </div>
+          </template>
+        </section>
+      </template>
+
       <!-- Detalles: lugar -->
       <section class="w-full bg-charcoal text-paper px-6 py-20">
         <p

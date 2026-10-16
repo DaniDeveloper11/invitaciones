@@ -32,6 +32,16 @@ export default {
     texto: 'Escribe aquí tu mensaje personal.\nLos saltos de línea se respetan.',
   },
 
+  // Padres y padrinos. Agrega o quita grupos libremente; con `grupos: []`
+  // la sección desaparece.
+  familia: {
+    titulo: 'Con la bendición de Dios y el cariño de',
+    grupos: [
+      { titulo: 'Mis padres', nombres: ['Nombre del papá', 'Nombre de la mamá'] },
+      { titulo: 'Mis padrinos', nombres: ['Nombre del padrino', 'Nombre de la madrina'] },
+    ],
+  },
+
   lugar: {
     etiqueta: 'Lugar',
     nombre: 'Nombre del salón',
