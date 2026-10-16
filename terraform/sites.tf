@@ -32,6 +32,12 @@ locals {
       subdominio  = "prueba-rsvp"
       watch_paths = ["sites/prueba-rsvp/**", "packages/**", "package.json", "package-lock.json"]
     }
+
+ "camila-xv" = {
+    subdominio  = "camila"
+    watch_paths = ["sites/camila-xv/**", "packages/**", "package.json",
+  "package-lock.json"]
+  }
   }
 }
 
