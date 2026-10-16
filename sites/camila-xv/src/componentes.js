@@ -128,6 +128,9 @@ export const ICONOS = {
   tarjeta: svg(
     '<rect x="4" y="10" width="40" height="28" rx="2"/><path d="M4 30h40M18 10v28"/><path d="M18 22c-4-6-10-5-8-1s8 1 8 1zM18 22c4-6 10-5 8-1s-8 1-8 1z"/><path d="M14 30l4-8 4 8"/>',
   ),
+  hotel: svg(
+    '<path d="M6 40V14M6 30h36v10M6 24h10a4 4 0 0 1 4 4v2"/><circle cx="12" cy="20" r="3"/><path d="M20 30v-6h16a6 6 0 0 1 6 6"/><path d="M4 40h4M40 40h4"/>',
+  ),
   confirmar: svg(
     '<rect x="6" y="9" width="36" height="34" rx="3"/><path d="M6 17h36M15 5v8M33 5v8"/><path d="M24 37s-8-4.5-8-9.5a4 4 0 0 1 8-1.5 4 4 0 0 1 8 1.5c0 5-8 9.5-8 9.5z"/>',
   ),

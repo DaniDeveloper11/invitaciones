@@ -81,6 +81,33 @@ export default {
     { hora: '2:00 AM', actividad: 'Despedida', icono: 'reloj' },
   ],
 
+  // Hoteles cercanos para invitados de fuera. Cada botón (Llamar, Ubicación,
+  // Reservar) aparece sólo si llenas `telefono`, `mapsUrl` o `url`.
+  // Con `lista: []` la sección desaparece.
+  hoteles: {
+    nota: 'Para nuestros invitados que vienen de fuera, te recomendamos estas opciones cerca del salón.',
+    lista: [
+      {
+        nombre: 'Nombre del hotel',
+        direccion: 'Calle y número, Ciudad',
+        distancia: 'A 5 minutos del salón',
+        telefono: '',
+        codigo: '',
+        mapsUrl: 'https://maps.google.com/',
+        url: '',
+      },
+      {
+        nombre: 'Nombre del hotel',
+        direccion: 'Calle y número, Ciudad',
+        distancia: 'A 10 minutos del salón',
+        telefono: '',
+        codigo: '',
+        mapsUrl: 'https://maps.google.com/',
+        url: '',
+      },
+    ],
+  },
+
   dresscode: {
     // Deja `titulo` vacío para ocultar toda la sección.
     titulo: 'Etiqueta',
