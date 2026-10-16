@@ -43,6 +43,70 @@
       Para cambiar el diseño, edita este HTML libremente.
     -->
     <div id="app" x-data class="relative mx-auto flex min-h-screen w-full max-w-[480px] flex-col overflow-x-clip md:shadow-2xl">
+      <!--
+        Apertura tipo sobre: tapa la invitación hasta que el invitado lo toca.
+        La solapa se abre, la carta sube y la pantalla se desvanece.
+      -->
+      <div
+        x-data="sobre"
+        x-show="!abierto"
+        x-transition:leave="transition-opacity duration-700 ease-in"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden bg-paper bg-[url('/images/papel.svg')] px-6"
+      >
+        <div class="humo" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+        <p
+          class="mb-10 font-script text-4xl text-gold transition-opacity duration-500"
+          :class="abriendo && 'opacity-0'"
+        >Tienes una invitación</p>
+
+        <button
+          type="button"
+          @click="abrir()"
+          class="relative aspect-[10/7] w-[86vw] max-w-[360px] cursor-pointer [perspective:1200px]"
+          aria-label="Abrir la invitación"
+        >
+          <!-- Fondo del sobre -->
+          <div class="absolute inset-0 rounded-sm bg-[#e3c3bb] shadow-2xl"></div>
+
+          <!-- Carta: sube al abrir -->
+          <div
+            class="absolute inset-x-[7%] top-[6%] bottom-[6%] z-10 flex flex-col items-center border border-gold/60 bg-paper pt-[6%] text-center shadow-md transition-transform delay-500 duration-1000 ease-out"
+            :class="abriendo && '-translate-y-[58%]'"
+          >
+            <p class="whitespace-pre-line font-script text-3xl leading-[0.9] text-green" x-text="$store.event.hero.eyebrow"></p>
+            <p class="mt-1 font-script text-4xl text-gold" x-text="$store.event.hero.titulo"></p>
+          </div>
+
+          <!-- Bolsillo delantero (deja ver la carta por arriba) -->
+          <div
+            class="absolute inset-0 z-20 rounded-sm bg-gradient-to-b from-[#f2e0da] to-[#ead0c8] [clip-path:polygon(0_0,50%_56%,100%_0,100%_100%,0_100%)]"
+          ></div>
+          <div class="absolute inset-0 z-20 [clip-path:polygon(0_100%,50%_52%,100%_100%)] bg-[#efd8d1]"></div>
+
+          <!-- Solapa -->
+          <div
+            class="absolute inset-x-0 top-0 h-[58%] origin-top bg-gradient-to-b from-[#ecd2ca] to-[#e2bfb6] transition-transform duration-700 ease-in-out [clip-path:polygon(0_0,100%_0,50%_100%)]"
+            :class="[abriendo ? '[transform:rotateX(180deg)]' : '', solapaAtras ? 'z-0' : 'z-30']"
+          ></div>
+
+          <!-- Sello de lacre con la inicial -->
+          <div
+            class="absolute left-1/2 top-[58%] z-40 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[radial-gradient(circle_at_35%_30%,#d9b878,#a8843f_70%)] shadow-lg ring-2 ring-[#c9a45c]/60 ring-offset-2 ring-offset-[#e2bfb6] transition duration-300"
+            :class="abriendo && 'scale-50 opacity-0'"
+          >
+            <span class="font-script text-4xl leading-none text-paper" x-text="$store.event.hero.titulo.charAt(0)"></span>
+          </div>
+        </button>
+
+        <p
+          class="mt-10 animate-pulse text-xs font-semibold uppercase tracking-[0.3em] text-ink/70 transition-opacity duration-500"
+          :class="abriendo && 'opacity-0'"
+        >Toca para abrir</p>
+      </div>
+
       <!-- Humo rosa de fondo (estilos .humo en src/style.css) -->
       <div class="humo" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
@@ -86,7 +150,7 @@
       -->
       <section
         x-data="{ show: false }"
-        x-init="setTimeout(() => (show = true), 150)"
+        @sobre-abierto.window="setTimeout(() => (show = true), 100)"
         class="relative w-full overflow-hidden px-6 pb-16 text-center"
       >
         <!-- public/images/decoracion/arco.webp — arco de bugambilias que enmarca "Mis XV Años" -->

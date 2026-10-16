@@ -169,3 +169,34 @@ export function carrusel(intervalo = 5000) {
     },
   }
 }
+
+/**
+ * Apertura tipo sobre: cubre la invitación hasta que el invitado lo toca.
+ * Al abrir avisa con el evento `sobre-abierto` (la portada empieza su
+ * animación) y arranca la música, que ya puede sonar tras el toque.
+ */
+export function sobre() {
+  return {
+    abriendo: false,
+    solapaAtras: false,
+    abierto: false,
+
+    init() {
+      document.documentElement.style.overflow = 'hidden'
+      window.scrollTo(0, 0)
+    },
+
+    abrir() {
+      if (this.abriendo) return
+      this.abriendo = true
+      document.getElementById('musica')?.play().catch(() => {})
+      // A media vuelta la solapa pasa detrás de la carta.
+      setTimeout(() => (this.solapaAtras = true), 350)
+      setTimeout(() => {
+        this.abierto = true
+        document.documentElement.style.overflow = ''
+        window.dispatchEvent(new CustomEvent('sobre-abierto'))
+      }, 1900)
+    },
+  }
+}
