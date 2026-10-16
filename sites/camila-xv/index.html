@@ -86,16 +86,18 @@
         x-init="setTimeout(() => (show = true), 150)"
         class="relative w-full overflow-hidden px-6 pb-16 text-center"
       >
-        <!-- public/images/decoracion/arco.webp — arco de flores (PNG/WebP transparente, ~1000px de ancho) -->
+        <!-- public/images/decoracion/arco.webp — arco de bugambilias que enmarca "Mis XV Años" -->
         <img
           src="/images/decoracion/arco.webp"
           alt=""
           aria-hidden="true"
+          fetchpriority="high"
           onerror="this.remove()"
-          class="pointer-events-none absolute inset-x-0 top-0 w-full"
+          class="pointer-events-none absolute inset-x-0 top-0 w-full transition-opacity duration-1000"
+          :class="show ? 'opacity-100' : 'opacity-0'"
         />
 
-        <div class="relative pt-[max(5.5rem,env(safe-area-inset-top))]">
+        <div class="relative pt-[30vw] min-[480px]:pt-36">
           <h2
             x-show="show"
             x-transition:enter="transition ease-out duration-1000"
