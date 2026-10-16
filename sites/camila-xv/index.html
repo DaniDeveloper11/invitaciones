@@ -79,7 +79,7 @@
 
       <!--
         Portada: arco de flores, "Mis XV Años", corona, nombre, foto en arco
-        y la frase de mensaje.texto. Las acuarelas van en public/images/decoracion/.
+        y la frase de mensaje.texto. Las flores decorativas están en public/images/decoracion/.
       -->
       <section
         x-data="{ show: false }"
@@ -150,20 +150,20 @@
 
           <!-- Foto en arco: public/images/hero.webp (vertical, ~900x1200px) -->
           <div class="relative mx-auto mt-8 w-[78%] max-w-[300px]">
-            <!-- public/images/decoracion/lateral.webp — racimos colgantes a los lados -->
+            <!-- Ramas de bugambilia que asoman por los lados de la foto -->
             <img
-              src="/images/decoracion/lateral.webp"
+              src="/images/decoracion/rama-bugambilia.webp"
               alt=""
               aria-hidden="true"
-              onerror="this.remove()"
-              class="pointer-events-none absolute -left-[22%] -top-4 w-[35%]"
+              loading="lazy"
+              class="pointer-events-none absolute -left-[30%] -top-8 z-10 w-[55%]"
             />
             <img
-              src="/images/decoracion/lateral.webp"
+              src="/images/decoracion/rama-bugambilia.webp"
               alt=""
               aria-hidden="true"
-              onerror="this.remove()"
-              class="pointer-events-none absolute -right-[22%] top-1/3 w-[35%] -scale-x-100"
+              loading="lazy"
+              class="pointer-events-none absolute -right-[30%] top-[55%] z-10 w-[55%] -scale-x-100"
             />
             <div
               x-reveal.lg
@@ -188,6 +188,7 @@
             class="mx-auto mt-10 max-w-[19rem] whitespace-pre-line text-[13px] font-medium uppercase leading-relaxed tracking-[0.04em]"
             x-text="$store.event.mensaje.texto"
           ></p>
+          <img src="/images/decoracion/rosas.webp" alt="" aria-hidden="true" loading="lazy" class="mx-auto mt-8 w-3/4" />
         </div>
       </section>
 
@@ -267,9 +268,9 @@
 
       <!-- Fecha: "Marzo / SÁBADO · 14 · 2026" -->
       <section x-data="fechaGrande" class="relative w-full px-6 pt-14 pb-10 text-center">
-        <!-- public/images/decoracion/lateral.webp — racimos a los lados -->
-        <img src="/images/decoracion/lateral.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -left-4 -top-10 w-24" />
-        <img src="/images/decoracion/lateral.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -right-4 top-10 w-28 -scale-x-100" />
+        <!-- Ramas rosas a los lados -->
+        <img src="/images/decoracion/rama-rosa.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -left-20 -top-2 w-44 rotate-[25deg]" />
+        <img src="/images/decoracion/rama-rosa.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -right-24 top-36 w-44 -scale-x-100 rotate-[-25deg]" />
         <div x-reveal.lg class="relative mx-auto max-w-[320px]">
           <p class="font-script text-3xl text-ink" x-text="mes"></p>
           <div class="mt-1 flex items-center justify-center gap-3">
@@ -335,9 +336,9 @@
 
       <!-- Misa y recepción (ceremonias en event.config.js) -->
       <section class="relative w-full px-6 py-10 text-center">
-        <!-- public/images/decoracion/lateral.webp — flores a los lados -->
-        <img src="/images/decoracion/lateral.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -left-4 top-0 w-24" />
-        <img src="/images/decoracion/lateral.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -right-4 top-1/3 w-24 -scale-x-100" />
+        <!-- Ramos en acuarela en las esquinas -->
+        <img src="/images/decoracion/ramo-acuarela.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -left-14 top-2 w-36 -scale-x-100 opacity-90" />
+        <img src="/images/decoracion/ramo-acuarela.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -right-14 top-[45%] w-36 opacity-90" />
         <template x-for="c in $store.event.ceremonias" :key="c.titulo">
           <div x-reveal.lg class="relative py-8">
             <span class="mx-auto block h-11 w-11 text-green" x-html="$icono(c.icono)"></span>
@@ -375,9 +376,9 @@
             class="h-full w-full object-cover"
           />
         </div>
-        <!-- public/images/decoracion/ramo.webp — ramo sobre las esquinas -->
-        <img src="/images/decoracion/ramo.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -left-2 -top-4 w-1/2" />
-        <img src="/images/decoracion/ramo.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -bottom-6 -right-2 w-1/2 -scale-x-100" />
+        <!-- Guirnaldas de bugambilia sobre las esquinas -->
+        <img src="/images/decoracion/guirnalda-bugambilia.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -left-6 -top-8 z-10 w-2/3" />
+        <img src="/images/decoracion/guirnalda-bugambilia.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -bottom-10 -right-6 z-10 w-2/3 -scale-x-100" />
       </section>
 
       <!-- Itinerario: línea de tiempo con íconos que alternan de lado -->
@@ -439,7 +440,7 @@
           >
             <img :src="$store.event.fotos.regalos" alt="" loading="lazy" onerror="this.style.display='none'" class="h-full w-full object-cover" />
           </div>
-          <img src="/images/decoracion/ramo.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -bottom-6 -left-2 w-1/2" />
+          <img src="/images/decoracion/rosas.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -bottom-4 left-1/2 z-10 w-3/4 -translate-x-1/2" />
         </section>
       </template>
 
@@ -750,7 +751,7 @@
       </section>
       <template x-if="$store.event.fotos.final">
         <div class="relative mt-10 w-full">
-          <img src="/images/decoracion/ramo.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -right-2 -top-16 z-10 w-1/2 -scale-x-100" />
+          <img src="/images/decoracion/ramo-acuarela.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -right-8 -top-24 z-10 w-1/2" />
           <!-- Sólo el borde de arriba rasgado: la máscara se estira para esconder el de abajo -->
           <div class="aspect-[3/4] w-full bg-gradient-to-b from-[#f0dcd6] to-[#e6cdc5] [mask-image:url('/images/rasgado.svg')] [mask-size:100%_106%] [mask-position:top]">
             <img :src="$store.event.fotos.final" alt="" loading="lazy" onerror="this.style.display='none'" class="h-full w-full object-cover" />
