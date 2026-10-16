@@ -137,7 +137,7 @@ export default {
     //          asiste. La lista se carga con `npm run rsvp:alta` (ver README).
     modo: 'pases',
     // Sólo con pases: fecha límite para confirmar (hasta el final de ese día).
-    cierra: '2026-11-20',
+    cierra: '2026-11-25',
     titulo: 'Confirmar asistencia',
     nota: 'Por favor confirma tu asistencia antes del 1 de diciembre',
     // Con una sola opción se muestra un botón con este texto.
