@@ -7,18 +7,29 @@
 @source './**/*.js';
 
 /*
- * Paleta propia de esta invitación, tomada de la tarjeta del hero
- * (acuarela fucsia + marco dorado). Sobrescriben al tema de @invitaciones/core.
+ * Paleta propia de esta invitación: papel crema, dorado y verde oscuro,
+ * con acentos rosas. Sobrescriben al tema compartido de @invitaciones/core.
  */
 @theme {
-  --color-paper: #fdf4f9; /* blanco rosado de fondo */
-  --color-ink: #3e2119; /* café oscuro para textos, como en la tarjeta */
-  --color-charcoal: #8f2f74; /* secciones oscuras: fucsia profundo */
-  --color-muted: #e7cf8e; /* dorado claro: acentos sobre fondo oscuro */
-  --color-line: #3e211926;
-  --color-blush: #e6339a; /* fucsia de las flores: números y acentos */
-  --color-rose: #b04a8c; /* malva: etiquetas */
-  --color-cocoa: #3e2119; /* café oscuro: textos del hero */
+  --color-paper: #f7f3ee; /* papel crema */
+  --color-ink: #3b3631; /* textos */
+  --color-charcoal: #1f4d3a; /* secciones oscuras: verde */
+  --color-muted: #d9c79c; /* dorado claro sobre fondo oscuro */
+  --color-line: #3b363126;
+  --color-gold: #b39457; /* nombre, títulos y botones */
+  --color-green: #1f4d3a; /* "Mis XV Años", números e íconos */
+  --color-blush: #1f4d3a; /* números de la cuenta regresiva */
+  --color-rose: #b39457; /* etiquetas y títulos en cursiva */
 
-  --font-script: 'Great Vibes', cursive;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Cormorant Garamond', serif;
+  --font-script: 'Pinyon Script', cursive;
+}
+
+/* Fondo de papel: textura sutil en public/images/papel.svg */
+body {
+  background-color: #e6c9c1;
+}
+#app {
+  background: var(--color-paper) url('/images/papel.svg');
 }

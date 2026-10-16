@@ -9,10 +9,9 @@ export default {
   titulo: 'Camila XV',
 
   hero: {
-    eyebrow: 'Acompáñame',
-    subtitulo: 'a celebrar mis XV años',
+    eyebrow: 'Mis\nXV Años',
     titulo: 'Camila',
-    // Tarjeta en acuarela sin texto: public/images/hero.webp
+    // Foto vertical dentro del arco: public/images/hero.webp (~900x1200px)
     imagen: 'images/hero.webp',
   },
 
@@ -28,8 +27,8 @@ export default {
   horaTexto: '',
 
   mensaje: {
-    eyebrow: 'Un mensaje para ti',
-    texto: 'Escribe aquí tu mensaje personal.\nLos saltos de línea se respetan.',
+    // Frase bajo la foto de la portada. Déjala vacía para ocultarla.
+    texto: '"Hay momentos inolvidables que se atesoran en el corazón para siempre. Por eso quiero compartir contigo esta noche tan especial, celebrando juntos mis XV años."',
   },
 
   // Padres y padrinos. Agrega o quita grupos libremente; con `grupos: []`
