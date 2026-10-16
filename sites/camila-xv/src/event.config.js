@@ -9,11 +9,14 @@ export default {
   titulo: 'Camila XV',
 
   hero: {
-    eyebrow: 'Te invito a mi',
-    titulo: 'Celebración',
-    subtitulo: 'Acompáñame a celebrar este día tan especial',
-    // Retrato a pantalla completa: public/images/hero.webp (mín. 1200x1600px)
-    imagen: 'images/hero.webp',
+    titulo: 'Camila',
+    subtitulo: 'Mis XV años',
+    // Flores de las esquinas del hero (arriba a la izquierda; abajo se giran).
+    imagen: 'images/flores.svg',
+  },
+
+  cuentaRegresiva: {
+    eyebrow: 'Faltan:',
   },
 
   // Fecha y hora del evento en formato ISO (respeta la zona horaria local).

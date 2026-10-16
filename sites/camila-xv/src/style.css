@@ -16,4 +16,8 @@
   --color-charcoal: #7a3e4a; /* secciones oscuras: rosa vino */
   --color-muted: #e3c58a; /* dorado claro: acentos sobre fondo oscuro */
   --color-line: #6e3a4426;
+  --color-blush: #eda3b3; /* rosa del nombre en el hero */
+  --color-rose: #c9737f; /* rosa medio: "Mis XV años" y etiquetas */
+
+  --font-script: 'Great Vibes', cursive;
 }

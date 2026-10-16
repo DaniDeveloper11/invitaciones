@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Camila XV" />
-    <meta name="theme-color" content="#7a3e4a" />
+    <meta name="theme-color" content="#ffffff" />
 
     <!--
       Vista previa al compartir (WhatsApp, Facebook, Telegram, iMessage…).
@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&family=Great+Vibes&display=swap"
       rel="stylesheet"
     />
     <title>Camila XV</title>
@@ -76,76 +76,90 @@
         </div>
       </template>
 
-      <!-- Hero: foto a pantalla completa con parallax al hacer scroll -->
+      <!-- Hero: fondo claro con flores en las esquinas, nombre y cuenta regresiva -->
       <section
         x-data="{ show: false }"
         x-init="setTimeout(() => (show = true), 150)"
-        class="relative h-[100svh] min-h-[100svh] w-full overflow-hidden bg-charcoal"
+        class="relative h-[100svh] min-h-[100svh] w-full overflow-hidden bg-white"
       >
-        <!-- public/images/hero.webp — retrato, mínimo 1200x1600px -->
+        <!-- Flores: public/images/flores.svg (arriba a la izquierda y, giradas, abajo a la derecha) -->
         <img
           :src="$store.event.hero.imagen"
           alt=""
+          aria-hidden="true"
           fetchpriority="high"
           decoding="async"
-          onerror="this.style.display='none'"
-          class="absolute inset-0 h-full w-full object-cover object-center"
-          :style="`transform: translate3d(0, ${$store.scroll.y * 0.4}px, 0) scale(${1 + Math.min($store.scroll.y, 700) / 1400})`"
+          class="pointer-events-none absolute -left-10 -top-10 w-[85%] max-w-[520px] transition-opacity duration-[1500ms] ease-out"
+          :class="show ? 'opacity-100' : 'opacity-0'"
+          :style="`transform: translate3d(0, ${$store.scroll.y * -0.15}px, 0)`"
         />
-        <div class="absolute inset-0 bg-gradient-to-b from-charcoal/20 via-charcoal/10 to-charcoal/95"></div>
-        <div
-          class="absolute inset-0 bg-charcoal transition-opacity duration-100"
-          :style="`opacity: ${Math.min($store.scroll.y / 500, 0.75)}`"
-        ></div>
+        <img
+          :src="$store.event.hero.imagen"
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+          class="pointer-events-none absolute -bottom-10 -right-10 w-[85%] max-w-[520px] rotate-180 transition-opacity duration-[1500ms] ease-out delay-300"
+          :class="show ? 'opacity-100' : 'opacity-0'"
+        />
 
         <div
-          class="relative z-10 flex h-full flex-col items-center justify-end px-6 pb-[max(3rem,env(safe-area-inset-bottom))] pt-[max(3rem,env(safe-area-inset-top))] text-center text-paper"
-          :style="`transform: translate3d(0, ${$store.scroll.y * 0.55}px, 0); opacity: ${Math.max(1 - $store.scroll.y / 350, 0)}`"
+          class="relative z-10 flex h-full flex-col items-center justify-center px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-[max(3rem,env(safe-area-inset-bottom))]"
+          :style="`transform: translate3d(0, ${$store.scroll.y * 0.4}px, 0); opacity: ${Math.max(1 - $store.scroll.y / 400, 0)}`"
         >
-          <p
-            x-show="show"
-            x-transition:enter="transition ease-out duration-1000"
-            x-transition:enter-start="opacity-0 translate-y-4"
-            x-transition:enter-end="opacity-100 translate-y-0"
-            class="uppercase tracking-[0.4em] text-xs sm:text-sm text-muted mb-4"
-            x-text="$store.event.hero.eyebrow"
-          ></p>
-          <h1
-            x-show="show"
-            x-transition:enter="transition ease-out duration-1000 delay-150"
-            x-transition:enter-start="opacity-0 translate-y-8 scale-95 blur-sm"
-            x-transition:enter-end="opacity-100 translate-y-0 scale-100 blur-none"
-            class="font-serif text-7xl sm:text-9xl leading-none"
-            x-text="$store.event.hero.titulo"
-          ></h1>
-          <div
-            x-show="show"
-            x-transition:enter="transition ease-out duration-700 delay-500"
-            x-transition:enter-start="opacity-0 w-0"
-            x-transition:enter-end="opacity-100 w-10"
-            class="h-px bg-muted my-6"
-          ></div>
-          <p
-            x-show="show"
-            x-transition:enter="transition ease-out duration-1000 delay-700"
-            x-transition:enter-start="opacity-0 translate-y-4"
-            x-transition:enter-end="opacity-100 translate-y-0"
-            class="text-sm sm:text-base text-muted max-w-xs"
-            x-text="$store.event.hero.subtitulo"
-          ></p>
+          <div class="flex flex-col items-end">
+            <h1
+              x-show="show"
+              x-transition:enter="transition ease-out duration-1000"
+              x-transition:enter-start="opacity-0 translate-y-6 blur-sm"
+              x-transition:enter-end="opacity-100 translate-y-0 blur-none"
+              class="font-script text-blush text-[5.5rem] leading-none sm:text-[9rem]"
+              x-text="$store.event.hero.titulo"
+            ></h1>
+            <p
+              x-show="show"
+              x-transition:enter="transition ease-out duration-1000 delay-500"
+              x-transition:enter-start="opacity-0 translate-y-3"
+              x-transition:enter-end="opacity-100 translate-y-0"
+              class="-mt-2 mr-1 uppercase tracking-[0.35em] text-sm sm:text-lg text-rose"
+              x-text="$store.event.hero.subtitulo"
+            ></p>
+          </div>
         </div>
 
+        <!-- Cuenta regresiva -->
         <div
+          x-data="countdown"
           x-show="show"
-          x-transition:enter="transition ease-out duration-1000 delay-1000"
-          x-transition:enter-start="opacity-0"
-          x-transition:enter-end="opacity-60"
-          :style="`opacity: ${Math.max(0.6 - $store.scroll.y / 150, 0)}`"
-          class="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-paper"
+          x-transition:enter="transition ease-out duration-1000 delay-700"
+          x-transition:enter-start="opacity-0 translate-y-4"
+          x-transition:enter-end="opacity-100 translate-y-0"
+          class="absolute inset-x-0 bottom-[max(2.5rem,env(safe-area-inset-bottom))] z-10 flex flex-col items-center px-6 text-center"
         >
-          <svg class="h-5 w-5 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+          <p class="font-script text-4xl text-ink mb-2" x-text="$store.event.cuentaRegresiva.eyebrow"></p>
+          <div x-show="!terminado" class="flex gap-5 sm:gap-8 text-blush [text-shadow:0_0_10px_#fff,0_0_4px_#fff]">
+            <div>
+              <span class="block font-serif text-4xl sm:text-5xl tabular-nums" x-text="pad(dias)"></span>
+              <span class="block mt-1 text-[10px] uppercase tracking-[0.25em] text-rose">Días</span>
+            </div>
+            <div>
+              <span class="block font-serif text-4xl sm:text-5xl tabular-nums" x-text="pad(horas)"></span>
+              <span class="block mt-1 text-[10px] uppercase tracking-[0.25em] text-rose">Horas</span>
+            </div>
+            <div>
+              <span class="block font-serif text-4xl sm:text-5xl tabular-nums" x-text="pad(minutos)"></span>
+              <span class="block mt-1 text-[10px] uppercase tracking-[0.25em] text-rose">Min</span>
+            </div>
+            <div>
+              <span class="block font-serif text-4xl sm:text-5xl tabular-nums" x-text="pad(segundos)"></span>
+              <span class="block mt-1 text-[10px] uppercase tracking-[0.25em] text-rose">Seg</span>
+            </div>
+          </div>
+          <p
+            x-show="terminado"
+            x-cloak
+            class="font-script text-4xl text-blush"
+            x-text="$store.event.cuentaRegresiva.finalizado"
+          ></p>
         </div>
       </section>
 
@@ -155,41 +169,6 @@
         <p x-reveal.lg.blur.delay-150 class="font-serif text-3xl sm:text-5xl" x-text="$store.event.fechaTexto"></p>
         <div class="w-10 h-px bg-ink/15 my-6"></div>
         <p x-reveal.delay-300 class="uppercase tracking-[0.2em] text-sm text-ink/70" x-text="$store.event.horaTexto"></p>
-      </section>
-
-      <!-- Cuenta regresiva -->
-      <section x-data="countdown" class="w-full bg-charcoal text-paper px-6 py-20">
-        <p
-          x-reveal
-          class="uppercase tracking-[0.25em] text-xs text-muted text-center mb-10"
-          x-text="$store.event.cuentaRegresiva.eyebrow"
-        ></p>
-
-        <div x-show="!terminado" x-reveal.lg.scale class="flex gap-6 sm:gap-10 justify-center text-center">
-          <div>
-            <span class="block text-4xl sm:text-6xl font-serif tabular-nums" x-text="pad(dias)"></span>
-            <span class="block mt-2 text-[10px] sm:text-xs uppercase tracking-[0.25em] text-muted">Días</span>
-          </div>
-          <div>
-            <span class="block text-4xl sm:text-6xl font-serif tabular-nums" x-text="pad(horas)"></span>
-            <span class="block mt-2 text-[10px] sm:text-xs uppercase tracking-[0.25em] text-muted">Horas</span>
-          </div>
-          <div>
-            <span class="block text-4xl sm:text-6xl font-serif tabular-nums" x-text="pad(minutos)"></span>
-            <span class="block mt-2 text-[10px] sm:text-xs uppercase tracking-[0.25em] text-muted">Min</span>
-          </div>
-          <div>
-            <span class="block text-4xl sm:text-6xl font-serif tabular-nums" x-text="pad(segundos)"></span>
-            <span class="block mt-2 text-[10px] sm:text-xs uppercase tracking-[0.25em] text-muted">Seg</span>
-          </div>
-        </div>
-
-        <p
-          x-show="terminado"
-          x-cloak
-          class="font-serif text-3xl sm:text-4xl text-center"
-          x-text="$store.event.cuentaRegresiva.finalizado"
-        ></p>
       </section>
 
       <!-- Mensaje personal -->
