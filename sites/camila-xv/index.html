@@ -92,12 +92,16 @@
             :class="[abriendo ? '[transform:rotateX(180deg)]' : '', solapaAtras ? 'z-0' : 'z-30']"
           ></div>
 
-          <!-- Sello de lacre con la inicial -->
+          <!-- Sello de lacre (public/images/decoracion/sello.webp) con la inicial grabada -->
           <div
-            class="absolute left-1/2 top-[58%] z-40 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[radial-gradient(circle_at_35%_30%,#d9b878,#a8843f_70%)] shadow-lg ring-2 ring-[#c9a45c]/60 ring-offset-2 ring-offset-[#e2bfb6] transition duration-300"
+            class="absolute left-1/2 top-[58%] z-40 h-20 w-20 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_4px_6px_rgba(90,50,10,0.35)] transition duration-300"
             :class="abriendo && 'scale-50 opacity-0'"
           >
-            <span class="font-script text-4xl leading-none text-paper" x-text="$store.event.hero.titulo.charAt(0)"></span>
+            <img src="/images/decoracion/sello.webp" alt="" aria-hidden="true" class="h-full w-full" />
+            <span
+              class="absolute inset-0 flex items-center justify-center pb-1 pl-0.5 font-script text-[2.6rem] leading-none text-[#8a5a14] [text-shadow:0_1px_0_#f6dd9a,0_-1px_1px_#6b420c]"
+              x-text="$store.event.hero.titulo.charAt(0)"
+            ></span>
           </div>
         </button>
 
