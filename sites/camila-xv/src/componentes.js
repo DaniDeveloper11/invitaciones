@@ -135,3 +135,37 @@ export const ICONOS = {
     '<rect x="6" y="9" width="36" height="34" rx="3"/><path d="M6 17h36M15 5v8M33 5v8"/><path d="M24 37s-8-4.5-8-9.5a4 4 0 0 1 8-1.5 4 4 0 0 1 8 1.5c0 5-8 9.5-8 9.5z"/>',
   ),
 }
+
+/**
+ * Carrusel deslizable (scroll-snap) para la galería de fotos destacadas.
+ * Avanza solo cada `intervalo` ms hasta que el invitado lo toca.
+ */
+export function carrusel(intervalo = 5000) {
+  return {
+    activo: 0,
+    _timer: null,
+
+    init() {
+      this._timer = setInterval(() => this.ir(this.activo + 1), intervalo)
+      this.$el.addEventListener('alpine:destroy', () => this.detener())
+    },
+
+    detener() {
+      clearInterval(this._timer)
+    },
+
+    /** Actualiza el punto activo según la posición del scroll. */
+    alDeslizar() {
+      const pista = this.$refs.pista
+      this.activo = Math.round(pista.scrollLeft / pista.clientWidth)
+    },
+
+    ir(i) {
+      const pista = this.$refs.pista
+      const total = pista.querySelectorAll(":scope > button").length
+      if (!total) return
+      const destino = (i + total) % total
+      pista.scrollTo({ left: destino * pista.clientWidth, behavior: 'smooth' })
+    },
+  }
+}

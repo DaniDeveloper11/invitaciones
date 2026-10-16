@@ -66,7 +66,6 @@ export default {
 
   // Fotos del diseño (verticales, ~1000x1250px). Deja una vacía para quitarla.
   fotos: {
-    destacada: 'images/foto-1.webp', // después de misa y recepción
     regalos: 'images/foto-2.webp', // antes de la sugerencia de regalos
     marco: 'images/foto-3.webp', // cuadrada, bajo "¡Te esperamos!"
     final: 'images/foto-4.webp', // cierre de la invitación
@@ -126,10 +125,10 @@ export default {
   },
 
   galeria: {
-    eyebrow: 'Momentos',
-    titulo: 'Galería',
-    // Fotos en public/images/gallery/1.webp, 2.webp, ... (cambia el número)
-    fotos: photos('gallery', 0),
+    // Carrusel de fotos destacadas (después de misa y recepción). Fotos
+    // verticales 4:5 en public/images/gallery/1.webp, 2.webp, …; cambia el
+    // número al total de fotos. Con 0 la sección desaparece.
+    fotos: photos('gallery', 6),
   },
 
   rsvp: {
