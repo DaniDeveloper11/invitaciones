@@ -57,10 +57,17 @@ const DEFAULTS = {
     fotos: [],
   },
   rsvp: {
+    // 'whatsapp': cada opción abre WhatsApp con el mensaje escrito.
+    // 'pases': cada invitado confirma con su enlace personal (/?i=<código>)
+    //          marcando quién asiste; la lista se carga con `npm run rsvp:alta`.
+    modo: 'whatsapp',
     titulo: 'Confirma tu asistencia',
-    nota: 'Elige una opción y se enviará como mensaje de WhatsApp.',
+    nota: '', // por defecto, según el modo (abajo)
     whatsapp: '',
     opciones: [],
+    cierra: '', // fecha límite (sólo la lee `npm run rsvp:alta`)
+    sinEnlace: 'Para confirmar, abre el enlace personal que te enviamos.',
+    gracias: '¡Gracias por confirmar!',
   },
   musica: {
     src: 'audio/song.mp3',
@@ -127,12 +134,24 @@ export function normalizeEvent(config = {}) {
   event.tieneMusica = Boolean(event.musica.src)
   event.tieneGaleria = event.galeria.fotos.length > 0
   event.tieneDresscode = Boolean(event.dresscode.titulo)
-  event.tieneRsvp = Boolean(event.rsvp.whatsapp) && event.rsvp.opciones.length > 0
 
   // VITE_FOTOS_API permite apuntar a `wrangler dev` en local sin tocar el config.
   const fotos = event.fotosInvitados
   fotos.api = import.meta.env.VITE_FOTOS_API || fotos.api
   fotos.slug = fotos.slug || import.meta.env.VITE_INVITACION_SLUG || ''
+
+  // El RSVP con pases usa la misma API y el mismo evento que las fotos.
+  const rsvp = event.rsvp
+  rsvp.api = fotos.api
+  rsvp.slug = fotos.slug
+  rsvp.locale = event.locale
+  rsvp.conWhatsapp = Boolean(rsvp.whatsapp) && rsvp.opciones.length > 0
+  rsvp.nota ||=
+    rsvp.modo === 'pases'
+      ? 'Marca quiénes nos acompañarán. Puedes cambiar tu respuesta más adelante.'
+      : 'Elige una opción y se enviará como mensaje de WhatsApp.'
+  event.tieneRsvpPases = rsvp.modo === 'pases' && Boolean(rsvp.slug)
+  event.tieneRsvp = event.tieneRsvpPases || (rsvp.modo !== 'pases' && rsvp.conWhatsapp)
   fotos.locale = event.locale
   fotos.url = asset('fotos/')
   fotos.inicio = asset('')

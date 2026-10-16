@@ -4,11 +4,12 @@ import { countdown } from './components/countdown.js'
 import { gallery } from './components/gallery.js'
 import { audioPlayer } from './components/audio-player.js'
 import { rsvp } from './components/rsvp.js'
+import { rsvpPases } from './components/rsvp-pases.js'
 import { registerReveal } from './directives/reveal.js'
 import { registerScrollStore } from './stores/scroll.js'
 
 export { asset, photos, normalizeEvent } from './event.js'
-export { countdown, gallery, audioPlayer, rsvp, registerReveal, registerScrollStore }
+export { countdown, gallery, audioPlayer, rsvp, rsvpPases, registerReveal, registerScrollStore }
 export { Alpine }
 
 /**
@@ -41,6 +42,7 @@ export function createInvitation(config, { setup } = {}) {
   Alpine.data('lugar', () => ({ ...event.lugar }))
   Alpine.data('audioPlayer', () => audioPlayer(event.musica))
   Alpine.data('rsvp', () => rsvp(event.rsvp))
+  Alpine.data('rsvpPases', () => rsvpPases(event.rsvp))
 
   registerReveal(Alpine)
   registerScrollStore(Alpine)

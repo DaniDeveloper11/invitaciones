@@ -437,26 +437,160 @@
         </section>
       </template>
 
-      <!-- RSVP por WhatsApp -->
+      <!-- RSVP: por WhatsApp (rsvp.modo: 'whatsapp') o con pases (rsvp.modo: 'pases') -->
       <template x-if="$store.event.tieneRsvp">
-        <section class="w-full bg-charcoal text-paper px-6 py-24 border-t border-paper/15">
-          <div x-data="rsvp" class="max-w-sm mx-auto text-center">
-            <p x-reveal class="font-serif text-3xl sm:text-4xl mb-2" x-text="titulo"></p>
+        <section id="rsvp" class="w-full bg-charcoal text-paper px-6 py-24 border-t border-paper/15">
+          <div class="max-w-sm mx-auto text-center">
+            <p x-reveal class="font-serif text-3xl sm:text-4xl mb-2" x-text="$store.event.rsvp.titulo"></p>
             <div class="w-10 h-px bg-muted mx-auto my-6"></div>
-            <p x-reveal.delay-150 class="text-sm text-muted mb-10 max-w-xs mx-auto" x-text="nota"></p>
 
-            <div class="grid grid-cols-2 gap-3 text-left">
-              <template x-for="(opcion, i) in opciones" :key="opcion">
-                <button
-                  type="button"
-                  @click="enviar(opcion)"
-                  x-reveal.delay-300
-                  :style="`transition-delay: ${i * 80}ms`"
-                  class="border border-paper/30 px-4 py-3.5 text-xs leading-snug hover:bg-paper hover:text-charcoal transition-colors"
-                  x-text="opcion"
-                ></button>
-              </template>
-            </div>
+            <!-- Opciones de WhatsApp: modo 'whatsapp', o respaldo sin enlace personal -->
+            <template x-if="!$store.event.tieneRsvpPases">
+              <div x-data="rsvp">
+                <p x-reveal.delay-150 class="text-sm text-muted mb-10 max-w-xs mx-auto" x-text="nota"></p>
+                <div class="grid grid-cols-2 gap-3 text-left">
+                  <template x-for="(opcion, i) in opciones" :key="opcion">
+                    <button
+                      type="button"
+                      @click="enviar(opcion)"
+                      x-reveal.delay-300
+                      :style="`transition-delay: ${i * 80}ms`"
+                      class="border border-paper/30 px-4 py-3.5 text-xs leading-snug hover:bg-paper hover:text-charcoal transition-colors"
+                      x-text="opcion"
+                    ></button>
+                  </template>
+                </div>
+              </div>
+            </template>
+
+            <!-- Pases: cada invitado confirma con su enlace (/?i=<código>) -->
+            <template x-if="$store.event.tieneRsvpPases">
+              <div x-data="rsvpPases" class="text-left">
+                <p x-show="estado === 'cargando'" class="text-sm text-muted text-center">Cargando tu invitación…</p>
+
+                <div x-show="estado === 'sin_enlace'" class="text-center">
+                  <p class="text-sm text-muted max-w-xs mx-auto" x-text="error || $store.event.rsvp.sinEnlace"></p>
+                  <template x-if="$store.event.rsvp.conWhatsapp">
+                    <div x-data="rsvp" class="grid grid-cols-2 gap-3 text-left mt-8">
+                      <template x-for="opcion in opciones" :key="opcion">
+                        <button
+                          type="button"
+                          @click="enviar(opcion)"
+                          class="border border-paper/30 px-4 py-3.5 text-xs leading-snug hover:bg-paper hover:text-charcoal transition-colors"
+                          x-text="opcion"
+                        ></button>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+
+                <div x-show="estado === 'error'" class="text-center">
+                  <p class="text-sm text-muted mb-6" x-text="error"></p>
+                  <button
+                    type="button"
+                    @click="cargar()"
+                    class="text-xs uppercase tracking-[0.2em] border border-paper/40 px-5 py-2.5 hover:bg-paper hover:text-charcoal transition-colors"
+                  >
+                    Reintentar
+                  </button>
+                </div>
+
+                <template x-if="estado === 'listo'">
+                  <div>
+                    <p class="font-serif text-2xl text-center" x-text="pase.nombre"></p>
+
+                    <!-- Formulario -->
+                    <form x-show="editando" @submit.prevent="enviar()" class="mt-6">
+                      <p class="text-sm text-muted text-center mb-6" x-text="$store.event.rsvp.nota"></p>
+                      <ul class="space-y-2">
+                        <template x-for="persona in personas" :key="persona.id">
+                          <li class="border border-paper/20 px-4 py-3">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                              <input type="checkbox" x-model="persona.asiste" class="size-4 accent-paper" />
+                              <span class="flex-1 text-sm" x-text="persona.libre ? 'Acompañante' : persona.nombre"></span>
+                              <span x-show="persona.nino" class="text-[10px] uppercase tracking-[0.2em] text-muted">Niño/a</span>
+                            </label>
+                            <input
+                              x-show="persona.libre && persona.asiste"
+                              x-model="persona.nombre"
+                              @input="error = ''"
+                              type="text"
+                              maxlength="80"
+                              placeholder="Nombre de tu acompañante"
+                              class="mt-3 w-full bg-transparent border-b border-paper/30 py-1.5 text-sm placeholder:text-muted focus:outline-none focus:border-paper"
+                            />
+                          </li>
+                        </template>
+                      </ul>
+
+                      <textarea
+                        x-model="mensaje"
+                        rows="2"
+                        maxlength="500"
+                        placeholder="Mensaje para los festejados (opcional)"
+                        class="mt-6 w-full bg-transparent border border-paper/20 px-4 py-3 text-sm placeholder:text-muted focus:outline-none focus:border-paper/60"
+                      ></textarea>
+
+                      <p x-show="error" class="mt-4 text-sm text-center text-red-300" x-text="error"></p>
+
+                      <button
+                        type="submit"
+                        :disabled="enviando"
+                        class="mt-6 w-full bg-paper text-charcoal py-3.5 text-xs uppercase tracking-[0.2em] disabled:opacity-60"
+                        x-text="textoBoton"
+                      ></button>
+                      <button
+                        x-show="personas.length > 1 && asistentes.length"
+                        type="button"
+                        @click="noAsistiremos()"
+                        :disabled="enviando"
+                        class="mt-3 w-full border border-paper/30 py-3 text-xs uppercase tracking-[0.2em] hover:bg-paper/10"
+                      >
+                        No podremos asistir
+                      </button>
+                      <button
+                        x-show="respondio"
+                        type="button"
+                        @click="cancelar()"
+                        class="mt-3 w-full py-2 text-xs text-muted underline underline-offset-4"
+                      >
+                        Cancelar
+                      </button>
+                      <p x-show="fechaLimite" class="mt-6 text-xs text-muted text-center">
+                        Puedes confirmar o cambiar tu respuesta hasta el <span x-text="fechaLimite"></span>.
+                      </p>
+                    </form>
+
+                    <!-- Respuesta guardada -->
+                    <div x-show="!editando" class="mt-6 text-center">
+                      <template x-if="respondio">
+                        <div>
+                          <p class="text-xs uppercase tracking-[0.25em] text-muted mb-3" x-text="$store.event.rsvp.gracias"></p>
+                          <p class="text-sm" x-text="resumen"></p>
+                          <p x-show="mensaje" class="mt-4 text-sm text-muted italic" x-text="`“${mensaje}”`"></p>
+                        </div>
+                      </template>
+                      <p x-show="!respondio" class="text-sm text-muted">La fecha para confirmar ya pasó.</p>
+                      <p x-show="error" class="mt-4 text-sm text-red-300" x-text="error"></p>
+                      <template x-if="abierta">
+                        <div>
+                          <button
+                            type="button"
+                            @click="cambiar()"
+                            class="mt-8 text-xs uppercase tracking-[0.2em] border border-paper/40 px-5 py-2.5 hover:bg-paper hover:text-charcoal transition-colors"
+                          >
+                            Cambiar respuesta
+                          </button>
+                          <p x-show="fechaLimite" class="mt-4 text-xs text-muted">
+                            Hasta el <span x-text="fechaLimite"></span>.
+                          </p>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
           </div>
         </section>
       </template>
