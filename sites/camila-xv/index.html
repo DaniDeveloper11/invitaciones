@@ -359,14 +359,14 @@
         </template>
       </section>
 
-      <!-- Foto destacada con bordes de papel rasgado: public/images/foto-1.webp (vertical) -->
+      <!-- Foto destacada con bordes de papel rasgado: fotos.destacada -->
       <section class="relative w-full py-6">
         <div
           x-reveal.lg
           class="relative aspect-[4/5] w-full bg-gradient-to-b from-[#f0dcd6] to-[#e6cdc5] [mask-image:url('/images/rasgado.svg')] [mask-size:100%_100%]"
         >
           <img
-            :src="$store.event.fotoDestacada"
+            :src="$store.event.fotos.destacada"
             alt=""
             loading="lazy"
             onerror="this.style.display='none'"
@@ -411,115 +411,61 @@
         </section>
       </template>
 
-      <!-- Dress code -->
+      <!-- Código de vestimenta (dresscode.titulo vacío lo oculta) -->
       <template x-if="$store.event.tieneDresscode">
-        <section x-data="dresscode" class="w-full px-6 py-24">
-          <div class="max-w-md mx-auto text-center">
-            <p x-reveal class="uppercase tracking-[0.3em] text-xs text-ink/50 mb-4" x-text="eyebrow"></p>
-            <p x-reveal.lg.blur.delay-150 class="font-serif italic text-5xl sm:text-6xl mb-12" x-text="titulo"></p>
-
-            <button
-              type="button"
-              @click="show(0)"
-              x-reveal.scale.delay-300
-              :disabled="!photos.length"
-              class="group relative mx-auto flex aspect-[3/4] w-full max-w-[260px] flex-col items-center justify-center gap-6 border border-ink/25 p-8 transition-colors hover:border-ink/60 cursor-pointer disabled:cursor-default"
-            >
-              <span class="absolute -top-px -left-px h-3 w-3 border-t border-l border-ink"></span>
-              <span class="absolute -top-px -right-px h-3 w-3 border-t border-r border-ink"></span>
-              <span class="absolute -bottom-px -left-px h-3 w-3 border-b border-l border-ink"></span>
-              <span class="absolute -bottom-px -right-px h-3 w-3 border-b border-r border-ink"></span>
-
-              <svg
-                class="h-14 w-14 text-ink/60 transition-colors group-hover:text-ink"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M12 3a1.4 1.4 0 1 0-1.4 1.4" />
-                <path d="M12 4.4V7" />
-                <path d="M12 7l-8.4 5.6a1.8 1.8 0 0 0 1 3.3h14.8a1.8 1.8 0 0 0 1-3.3z" />
-                <path d="M5 15.5h14" />
-              </svg>
-              <p class="max-w-[10rem] text-[11px] uppercase leading-relaxed tracking-[0.2em] text-ink/60" x-text="nota"></p>
-              <span
-                x-show="photos.length"
-                class="absolute bottom-3 text-[10px] uppercase tracking-[0.2em] text-ink/40 opacity-0 transition-opacity group-hover:opacity-100"
-              >
-                Ver ejemplos
-              </span>
-            </button>
-
-            <div x-reveal.delay-500 class="mt-10 flex items-center justify-center gap-4">
-              <template x-for="color in paleta" :key="color">
-                <span class="h-8 w-8 rounded-full border border-ink/20" :style="`background-color: ${color}`"></span>
-              </template>
-            </div>
-
-            <button
-              type="button"
-              x-show="photos.length"
-              @click="show(0)"
-              x-reveal.delay-700
-              class="mt-8 inline-block text-xs uppercase tracking-[0.2em] border border-ink/40 px-5 py-2.5 hover:bg-ink hover:text-paper transition-colors"
-            >
-              Ver ejemplos
-            </button>
+        <section class="relative w-full px-8 py-12 text-center">
+          <p x-reveal class="font-script text-4xl text-gold">Código de vestimenta</p>
+          <p x-reveal.delay-150 class="mt-1 text-lg font-semibold uppercase tracking-[0.06em]" x-text="$store.event.dresscode.titulo"></p>
+          <div x-reveal.lg class="mt-4 flex items-end justify-center gap-1 text-ink">
+            <span class="block h-16 w-16" x-html="$icono('traje')"></span>
+            <span class="block h-16 w-16" x-html="$icono('vestido')"></span>
           </div>
+          <p
+            x-reveal.delay-150
+            class="mx-auto mt-5 max-w-[19rem] text-[13px] font-semibold uppercase leading-relaxed tracking-[0.03em]"
+            x-text="$store.event.dresscode.nota"
+          ></p>
+        </section>
+      </template>
 
-          <!-- Visor a pantalla completa: ejemplos del dress code -->
+      <!-- Segunda foto con bordes rasgados: fotos.regalos -->
+      <template x-if="$store.event.fotos.regalos">
+        <section class="relative w-full py-6">
           <div
-            x-show="open"
-            x-cloak
-            @keydown.escape.window="close()"
-            @keydown.arrow-right.window="next()"
-            @keydown.arrow-left.window="prev()"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-ink/95 p-4"
-            @click.self="close()"
+            x-reveal.lg
+            class="relative aspect-[4/5] w-full bg-gradient-to-b from-[#f0dcd6] to-[#e6cdc5] [mask-image:url('/images/rasgado.svg')] [mask-size:100%_100%]"
           >
-            <button
-              type="button"
-              @click="close()"
-              class="absolute top-[max(1.25rem,env(safe-area-inset-top))] right-5 text-paper/70 hover:text-paper text-3xl leading-none"
-              aria-label="Cerrar"
-            >
-              &times;
-            </button>
-            <button
-              type="button"
-              @click="prev()"
-              class="absolute left-2 sm:left-6 text-paper/60 hover:text-paper text-4xl px-2"
-              aria-label="Anterior"
-            >
-              &#8249;
-            </button>
-            <img
-              :src="photos[index]"
-              :alt="`Ejemplo de dress code ${index + 1}`"
-              x-transition:enter="transition ease-out duration-300"
-              x-transition:enter-start="opacity-0 scale-95"
-              x-transition:enter-end="opacity-100 scale-100"
-              :key="index"
-              class="max-h-[85svh] max-w-full object-contain"
-            />
-            <button
-              type="button"
-              @click="next()"
-              class="absolute right-2 sm:right-6 text-paper/60 hover:text-paper text-4xl px-2"
-              aria-label="Siguiente"
-            >
-              &#8250;
-            </button>
+            <img :src="$store.event.fotos.regalos" alt="" loading="lazy" onerror="this.style.display='none'" class="h-full w-full object-cover" />
           </div>
+          <img src="/images/decoracion/ramo.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -bottom-6 -left-2 w-1/2" />
+        </section>
+      </template>
+
+      <!-- Sugerencia de regalos (regalos.texto vacío lo oculta) -->
+      <template x-if="$store.event.regalos?.texto">
+        <section x-data="{ copiado: false }" class="relative w-full px-8 py-12 text-center">
+          <span x-reveal class="mx-auto block h-11 w-11 text-green" x-html="$icono('regalo')"></span>
+          <p x-reveal class="mt-1 font-script text-4xl text-gold">Sugerencia de regalos</p>
+          <p
+            x-reveal.delay-150
+            class="mx-auto mt-3 max-w-[19rem] text-[13px] font-semibold uppercase leading-relaxed tracking-[0.03em]"
+            x-text="$store.event.regalos.texto"
+          ></p>
+          <template x-if="$store.event.regalos.datos?.length">
+            <div x-reveal.lg class="mt-6">
+              <span class="mx-auto block h-10 w-10 text-green" x-html="$icono('tarjeta')"></span>
+              <template x-for="linea in $store.event.regalos.datos" :key="linea">
+                <p class="text-[13px] font-bold uppercase leading-snug tracking-[0.05em]" x-text="linea"></p>
+              </template>
+              <button
+                x-show="$store.event.regalos.copiar"
+                type="button"
+                @click="navigator.clipboard?.writeText($store.event.regalos.copiar); copiado = true; setTimeout(() => (copiado = false), 2000)"
+                class="mt-4 rounded-md border border-gold px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-gold transition-colors hover:bg-gold hover:text-paper"
+                x-text="copiado ? '¡Copiado!' : 'Copiar cuenta'"
+              ></button>
+            </div>
+          </template>
         </section>
       </template>
 
@@ -620,44 +566,56 @@
 
       <!-- RSVP: por WhatsApp (rsvp.modo: 'whatsapp') o con pases (rsvp.modo: 'pases') -->
       <template x-if="$store.event.tieneRsvp">
-        <section id="rsvp" class="w-full bg-charcoal text-paper px-6 py-24 border-t border-paper/15">
+        <section id="rsvp" class="w-full px-8 py-12">
           <div class="max-w-sm mx-auto text-center">
-            <p x-reveal class="font-serif text-3xl sm:text-4xl mb-2" x-text="$store.event.rsvp.titulo"></p>
-            <div class="w-10 h-px bg-muted mx-auto my-6"></div>
+            <span x-reveal class="mx-auto block h-11 w-11 text-green" x-html="$icono('confirmar')"></span>
+            <p x-reveal class="mt-1 font-script text-4xl text-gold" x-text="$store.event.rsvp.titulo"></p>
 
             <!-- Opciones de WhatsApp: modo 'whatsapp', o respaldo sin enlace personal -->
             <template x-if="!$store.event.tieneRsvpPases">
               <div x-data="rsvp">
-                <p x-reveal.delay-150 class="text-sm text-muted mb-10 max-w-xs mx-auto" x-text="nota"></p>
-                <div class="grid grid-cols-2 gap-3 text-left">
-                  <template x-for="(opcion, i) in opciones" :key="opcion">
-                    <button
-                      type="button"
-                      @click="enviar(opcion)"
-                      x-reveal.delay-300
-                      :style="`transition-delay: ${i * 80}ms`"
-                      class="border border-paper/30 px-4 py-3.5 text-xs leading-snug hover:bg-paper hover:text-charcoal transition-colors"
-                      x-text="opcion"
-                    ></button>
-                  </template>
-                </div>
+                <p x-reveal.delay-150 class="mx-auto mt-1 max-w-[17rem] text-[13px] font-semibold uppercase leading-relaxed tracking-[0.03em]" x-text="nota"></p>
+                <!-- Con una sola opción, un botón "Confirmar aquí"; con varias, una lista -->
+                <template x-if="opciones.length === 1">
+                  <button
+                    type="button"
+                    @click="enviar(opciones[0])"
+                    x-reveal.delay-300
+                    class="mt-5 rounded-md bg-gold px-6 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-paper shadow-sm transition-opacity hover:opacity-85"
+                    x-text="$store.event.rsvp.boton || 'Confirmar aquí'"
+                  ></button>
+                </template>
+                <template x-if="opciones.length > 1">
+                  <div class="mt-6 grid grid-cols-2 gap-3 text-left">
+                    <template x-for="(opcion, i) in opciones" :key="opcion">
+                      <button
+                        type="button"
+                        @click="enviar(opcion)"
+                        x-reveal.delay-300
+                        :style="`transition-delay: ${i * 80}ms`"
+                        class="rounded-md border border-gold/50 px-4 py-3.5 text-sm leading-snug hover:bg-gold hover:text-paper transition-colors"
+                        x-text="opcion"
+                      ></button>
+                    </template>
+                  </div>
+                </template>
               </div>
             </template>
 
             <!-- Pases: cada invitado confirma con su enlace (/?i=<código>) -->
             <template x-if="$store.event.tieneRsvpPases">
               <div x-data="rsvpPases" class="text-left">
-                <p x-show="estado === 'cargando'" class="text-sm text-muted text-center">Cargando tu invitación…</p>
+                <p x-show="estado === 'cargando'" class="text-sm text-ink/60 text-center">Cargando tu invitación…</p>
 
                 <div x-show="estado === 'sin_enlace'" class="text-center">
-                  <p class="text-sm text-muted max-w-xs mx-auto" x-text="error || $store.event.rsvp.sinEnlace"></p>
+                  <p class="text-sm text-ink/60 max-w-xs mx-auto" x-text="error || $store.event.rsvp.sinEnlace"></p>
                   <template x-if="$store.event.rsvp.conWhatsapp">
                     <div x-data="rsvp" class="grid grid-cols-2 gap-3 text-left mt-8">
                       <template x-for="opcion in opciones" :key="opcion">
                         <button
                           type="button"
                           @click="enviar(opcion)"
-                          class="border border-paper/30 px-4 py-3.5 text-xs leading-snug hover:bg-paper hover:text-charcoal transition-colors"
+                          class="border border-gold/50 px-4 py-3.5 text-xs leading-snug hover:bg-gold hover:text-paper transition-colors"
                           x-text="opcion"
                         ></button>
                       </template>
@@ -666,11 +624,11 @@
                 </div>
 
                 <div x-show="estado === 'error'" class="text-center">
-                  <p class="text-sm text-muted mb-6" x-text="error"></p>
+                  <p class="text-sm text-ink/60 mb-6" x-text="error"></p>
                   <button
                     type="button"
                     @click="cargar()"
-                    class="text-xs uppercase tracking-[0.2em] border border-paper/40 px-5 py-2.5 hover:bg-paper hover:text-charcoal transition-colors"
+                    class="text-xs uppercase tracking-[0.2em] border border-gold/60 px-5 py-2.5 hover:bg-gold hover:text-paper transition-colors"
                   >
                     Reintentar
                   </button>
@@ -678,18 +636,18 @@
 
                 <template x-if="estado === 'listo'">
                   <div>
-                    <p class="font-serif text-2xl text-center" x-text="pase.nombre"></p>
+                    <p class="font-script text-3xl text-center" x-text="pase.nombre"></p>
 
                     <!-- Formulario -->
                     <form x-show="editando" @submit.prevent="enviar()" class="mt-6">
-                      <p class="text-sm text-muted text-center mb-6" x-text="$store.event.rsvp.nota"></p>
+                      <p class="text-sm text-ink/60 text-center mb-6" x-text="$store.event.rsvp.nota"></p>
                       <ul class="space-y-2">
                         <template x-for="persona in personas" :key="persona.id">
-                          <li class="border border-paper/20 px-4 py-3">
+                          <li class="border border-gold/40 px-4 py-3">
                             <label class="flex items-center gap-3 cursor-pointer">
-                              <input type="checkbox" x-model="persona.asiste" class="size-4 accent-paper" />
+                              <input type="checkbox" x-model="persona.asiste" class="size-4 accent-[#b39457]" />
                               <span class="flex-1 text-sm" x-text="persona.libre ? 'Acompañante' : persona.nombre"></span>
-                              <span x-show="persona.nino" class="text-[10px] uppercase tracking-[0.2em] text-muted">Niño/a</span>
+                              <span x-show="persona.nino" class="text-[10px] uppercase tracking-[0.2em] text-ink/60">Niño/a</span>
                             </label>
                             <input
                               x-show="persona.libre && persona.asiste"
@@ -698,7 +656,7 @@
                               type="text"
                               maxlength="80"
                               placeholder="Nombre de tu acompañante"
-                              class="mt-3 w-full bg-transparent border-b border-paper/30 py-1.5 text-sm placeholder:text-muted focus:outline-none focus:border-paper"
+                              class="mt-3 w-full bg-transparent border-b border-gold/50 py-1.5 text-sm placeholder:text-ink/40 focus:outline-none focus:border-gold"
                             />
                           </li>
                         </template>
@@ -709,15 +667,15 @@
                         rows="2"
                         maxlength="500"
                         placeholder="Mensaje para los festejados (opcional)"
-                        class="mt-6 w-full bg-transparent border border-paper/20 px-4 py-3 text-sm placeholder:text-muted focus:outline-none focus:border-paper/60"
+                        class="mt-6 w-full bg-transparent border border-gold/40 px-4 py-3 text-sm placeholder:text-ink/40 focus:outline-none focus:border-gold"
                       ></textarea>
 
-                      <p x-show="error" class="mt-4 text-sm text-center text-red-300" x-text="error"></p>
+                      <p x-show="error" class="mt-4 text-sm text-center text-red-700" x-text="error"></p>
 
                       <button
                         type="submit"
                         :disabled="enviando"
-                        class="mt-6 w-full bg-paper text-charcoal py-3.5 text-xs uppercase tracking-[0.2em] disabled:opacity-60"
+                        class="mt-6 w-full bg-gold text-paper rounded-md py-3.5 text-xs uppercase tracking-[0.2em] disabled:opacity-60"
                         x-text="textoBoton"
                       ></button>
                       <button
@@ -725,7 +683,7 @@
                         type="button"
                         @click="noAsistiremos()"
                         :disabled="enviando"
-                        class="mt-3 w-full border border-paper/30 py-3 text-xs uppercase tracking-[0.2em] hover:bg-paper/10"
+                        class="mt-3 w-full border border-gold/50 py-3 text-xs uppercase tracking-[0.2em] hover:bg-gold/10"
                       >
                         No podremos asistir
                       </button>
@@ -733,11 +691,11 @@
                         x-show="respondio"
                         type="button"
                         @click="cancelar()"
-                        class="mt-3 w-full py-2 text-xs text-muted underline underline-offset-4"
+                        class="mt-3 w-full py-2 text-xs text-ink/60 underline underline-offset-4"
                       >
                         Cancelar
                       </button>
-                      <p x-show="fechaLimite" class="mt-6 text-xs text-muted text-center">
+                      <p x-show="fechaLimite" class="mt-6 text-xs text-ink/60 text-center">
                         Puedes confirmar o cambiar tu respuesta hasta el <span x-text="fechaLimite"></span>.
                       </p>
                     </form>
@@ -746,23 +704,23 @@
                     <div x-show="!editando" class="mt-6 text-center">
                       <template x-if="respondio">
                         <div>
-                          <p class="text-xs uppercase tracking-[0.25em] text-muted mb-3" x-text="$store.event.rsvp.gracias"></p>
+                          <p class="text-xs uppercase tracking-[0.25em] text-ink/60 mb-3" x-text="$store.event.rsvp.gracias"></p>
                           <p class="text-sm" x-text="resumen"></p>
-                          <p x-show="mensaje" class="mt-4 text-sm text-muted italic" x-text="`“${mensaje}”`"></p>
+                          <p x-show="mensaje" class="mt-4 text-sm text-ink/60 italic" x-text="`“${mensaje}”`"></p>
                         </div>
                       </template>
-                      <p x-show="!respondio" class="text-sm text-muted">La fecha para confirmar ya pasó.</p>
-                      <p x-show="error" class="mt-4 text-sm text-red-300" x-text="error"></p>
+                      <p x-show="!respondio" class="text-sm text-ink/60">La fecha para confirmar ya pasó.</p>
+                      <p x-show="error" class="mt-4 text-sm text-red-700" x-text="error"></p>
                       <template x-if="abierta">
                         <div>
                           <button
                             type="button"
                             @click="cambiar()"
-                            class="mt-8 text-xs uppercase tracking-[0.2em] border border-paper/40 px-5 py-2.5 hover:bg-paper hover:text-charcoal transition-colors"
+                            class="mt-8 text-xs uppercase tracking-[0.2em] border border-gold/60 px-5 py-2.5 hover:bg-gold hover:text-paper transition-colors"
                           >
                             Cambiar respuesta
                           </button>
-                          <p x-show="fechaLimite" class="mt-4 text-xs text-muted">
+                          <p x-show="fechaLimite" class="mt-4 text-xs text-ink/60">
                             Hasta el <span x-text="fechaLimite"></span>.
                           </p>
                         </div>
@@ -776,10 +734,27 @@
         </section>
       </template>
 
-      <footer
-        class="w-full px-6 py-10 text-center text-xs uppercase tracking-[0.2em] text-ink/40"
-        x-text="$store.event.footer"
-      ></footer>
+      <!-- Cierre: notas, "¡Te esperamos!", foto enmarcada y foto final -->
+      <section class="relative w-full px-8 pt-12 text-center">
+        <template x-for="nota in $store.event.notas" :key="nota">
+          <p x-reveal class="mx-auto mb-8 max-w-[19rem] text-[13px] font-semibold uppercase leading-relaxed tracking-[0.03em]" x-text="nota"></p>
+        </template>
+        <p x-reveal.lg class="mt-4 font-script text-5xl text-gold" x-text="$store.event.footer"></p>
+        <template x-if="$store.event.fotos.marco">
+          <div x-reveal.lg class="mx-auto mt-8 aspect-square w-40 border-2 border-gold bg-[#ead6cf] p-1">
+            <img :src="$store.event.fotos.marco" alt="" loading="lazy" onerror="this.style.display='none'" class="h-full w-full object-cover" />
+          </div>
+        </template>
+      </section>
+      <template x-if="$store.event.fotos.final">
+        <div class="relative mt-10 w-full">
+          <img src="/images/decoracion/ramo.webp" alt="" aria-hidden="true" onerror="this.remove()" class="pointer-events-none absolute -right-2 -top-16 z-10 w-1/2 -scale-x-100" />
+          <!-- Sólo el borde de arriba rasgado: la máscara se estira para esconder el de abajo -->
+          <div class="aspect-[3/4] w-full bg-gradient-to-b from-[#f0dcd6] to-[#e6cdc5] [mask-image:url('/images/rasgado.svg')] [mask-size:100%_106%] [mask-position:top]">
+            <img :src="$store.event.fotos.final" alt="" loading="lazy" onerror="this.style.display='none'" class="h-full w-full object-cover" />
+          </div>
+        </div>
+      </template>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

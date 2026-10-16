@@ -64,8 +64,13 @@ export default {
     },
   ],
 
-  // Foto grande con bordes de papel rasgado (vertical, ~1000x1250px).
-  fotoDestacada: 'images/foto-1.webp',
+  // Fotos del diseño (verticales, ~1000x1250px). Deja una vacía para quitarla.
+  fotos: {
+    destacada: 'images/foto-1.webp', // después de misa y recepción
+    regalos: 'images/foto-2.webp', // antes de la sugerencia de regalos
+    marco: 'images/foto-3.webp', // cuadrada, bajo "¡Te esperamos!"
+    final: 'images/foto-4.webp', // cierre de la invitación
+  },
 
   // Línea de tiempo; mismos íconos que en `ceremonias`.
   itinerario: [
@@ -78,12 +83,19 @@ export default {
 
   dresscode: {
     // Deja `titulo` vacío para ocultar toda la sección.
-    titulo: 'Formal',
-    nota: 'Te invitamos a vestir en estos tonos',
-    // Círculos de color de la paleta sugerida.
-    paleta: ['#e6339a', '#f9bbdb', '#c9a24a'],
-    // Ejemplos en public/images/dresscode/1.webp, 2.webp, ...
+    titulo: 'Etiqueta',
+    nota: 'Con mucho cariño, les pedimos evitar el tono rosa pastel, ya que está reservado especialmente para la quinceañera.',
+    paleta: [],
     fotos: photos('dresscode', 0),
+  },
+
+  // Sugerencia de regalos. `datos` son las líneas de la cuenta; `copiar` es
+  // lo que copia el botón "Copiar cuenta" (vacío lo oculta). Sin `texto` la
+  // sección desaparece.
+  regalos: {
+    texto: 'Tu presencia es mi mejor regalo. Si deseas tener un detalle conmigo, puedes hacerlo con una transferencia. ¡Gracias por cada detalle!',
+    datos: ['Banco', 'Nombre y apellido', 'CLABE 000 000 0000000000 0'],
+    copiar: '',
   },
 
   galeria: {
@@ -100,18 +112,15 @@ export default {
     modo: 'whatsapp',
     // Sólo con pases: fecha límite para confirmar (hasta el final de ese día).
     // cierra: '2026-11-20',
-    titulo: 'Confirma tu asistencia',
-    // nota: '',   (por defecto, un texto según el modo)
+    titulo: 'Confirmar asistencia',
+    nota: 'Por favor confirma tu asistencia antes del 1 de diciembre',
+    // Con una sola opción se muestra un botón con este texto.
+    boton: 'Confirmar aquí',
     // Código de país + número, sin "+", espacios ni guiones (ej. 523312345678).
     // Con 'whatsapp', déjalo vacío para ocultar la sección; con 'pases', es el
     // respaldo para quien abra la invitación sin su enlace personal.
     whatsapp: '',
-    opciones: [
-      '¡Sí, ahí estaré! 🎉',
-      'Sí, iré acompañado/a 👥',
-      'Aún no estoy seguro/a 🤔',
-      'No podré asistir 😢',
-    ],
+    opciones: ['¡Hola! Confirmo mi asistencia a los XV años de Camila 🎉'],
   },
 
   musica: {
@@ -131,5 +140,10 @@ export default {
     // nota: 'Toma o elige fotos del evento: se compartirán con los festejados y con los demás invitados.',
   },
 
-  footer: 'Nos vemos ahí',
+  // Notas finales y despedida (en cursiva, antes de la foto enmarcada).
+  notas: [
+    'Con mucho cariño, esta celebración es para que adolescentes y adultos puedan compartir y disfrutar juntos.',
+    'Tu presencia y alegría harán que esta noche sea inolvidable.',
+  ],
+  footer: '¡Te esperamos!',
 }

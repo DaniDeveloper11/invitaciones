@@ -113,4 +113,22 @@ export const ICONOS = {
     '<path d="M24 2v6"/><circle cx="24" cy="25" r="16"/><path d="M8 25h32M10 17h28M10 33h28M24 9v32"/><path d="M24 9c-6 4.5-6 27.5 0 32M24 9c6 4.5 6 27.5 0 32"/>',
   ),
   reloj: svg('<circle cx="24" cy="24" r="18"/><path d="M24 12v12l8 5"/>'),
+  traje: svg(
+    '<path d="M17 4h14l6 4 4 30-6 2V46H13v-6l-6-2 4-30z"/><path d="M17 4l7 10 7-10" fill="#fff" opacity=".9"/><path d="M22 9h4l-1 3h-2z" fill="#fff"/><path d="M24 14 21 38h6z" opacity=".35" fill="#fff"/>',
+    true,
+  ),
+  vestido: svg(
+    '<path d="M18 3c1 4 1 7 0 10l-3 4c2 2 3 3 4 5L8 44h32L29 22c1-2 2-3 4-5l-3-4c-1-3-1-6 0-10l-2 1c0 3-2 6-4 6s-4-3-4-6z"/>',
+    true,
+  ),
+  regalo: svg(
+    '<rect x="6" y="18" width="36" height="8" rx="1"/><path d="M9 26h30v18H9z"/><path d="M24 18c-3-8-12-11-12-5 0 4 7 5 12 5zM24 18c3-8 12-11 12-5 0 4-7 5-12 5z"/><path d="M24 18v26M6 26h36" stroke="#f7f3ee" stroke-width="2.4"/>',
+    true,
+  ),
+  tarjeta: svg(
+    '<rect x="4" y="10" width="40" height="28" rx="2"/><path d="M4 30h40M18 10v28"/><path d="M18 22c-4-6-10-5-8-1s8 1 8 1zM18 22c4-6 10-5 8-1s-8 1-8 1z"/><path d="M14 30l4-8 4 8"/>',
+  ),
+  confirmar: svg(
+    '<rect x="6" y="9" width="36" height="34" rx="3"/><path d="M6 17h36M15 5v8M33 5v8"/><path d="M24 37s-8-4.5-8-9.5a4 4 0 0 1 8-1.5 4 4 0 0 1 8 1.5c0 5-8 9.5-8 9.5z"/>',
+  ),
 }
