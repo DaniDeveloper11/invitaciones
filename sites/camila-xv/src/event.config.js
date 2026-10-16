@@ -40,7 +40,7 @@ export default {
     titulo: 'Formal',
     nota: 'Te invitamos a vestir en estos tonos',
     // Círculos de color de la paleta sugerida.
-    paleta: ['#1a1a1a', '#f0ece4'],
+    paleta: ['#e9aab3', '#c9a24a', '#fdf6f5'],
     // Ejemplos en public/images/dresscode/1.webp, 2.webp, ...
     fotos: photos('dresscode', 0),
   },

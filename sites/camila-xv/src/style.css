@@ -7,14 +7,13 @@
 @source './**/*.js';
 
 /*
- * Paleta propia de esta invitación: descomenta y cambia los tonos que quieras.
+ * Paleta propia de esta invitación (acuarela rosa + dorado).
  * Sobrescriben al tema compartido de @invitaciones/core.
  */
-/*
 @theme {
-  --color-paper: #f4efe9;
-  --color-ink: #23201c;
-  --color-charcoal: #2f2a24;
-  --color-muted: #a99f92;
+  --color-paper: #fdf6f5; /* blanco rosado de fondo */
+  --color-ink: #6e3a44; /* rosa palo oscuro para textos */
+  --color-charcoal: #7a3e4a; /* secciones oscuras: rosa vino */
+  --color-muted: #e3c58a; /* dorado claro: acentos sobre fondo oscuro */
+  --color-line: #6e3a4426;
 }
-*/

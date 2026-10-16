@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Camila XV" />
-    <meta name="theme-color" content="#1a1a1a" />
+    <meta name="theme-color" content="#7a3e4a" />
 
     <!--
       Vista previa al compartir (WhatsApp, Facebook, Telegram, iMessage…).
@@ -89,7 +89,7 @@
           fetchpriority="high"
           decoding="async"
           onerror="this.style.display='none'"
-          class="absolute inset-0 h-full w-full object-cover object-center grayscale"
+          class="absolute inset-0 h-full w-full object-cover object-center"
           :style="`transform: translate3d(0, ${$store.scroll.y * 0.4}px, 0) scale(${1 + Math.min($store.scroll.y, 700) / 1400})`"
         />
         <div class="absolute inset-0 bg-gradient-to-b from-charcoal/20 via-charcoal/10 to-charcoal/95"></div>
@@ -328,7 +328,7 @@
               x-transition:enter-start="opacity-0 scale-95"
               x-transition:enter-end="opacity-100 scale-100"
               :key="index"
-              class="max-h-[85svh] max-w-full object-contain grayscale"
+              class="max-h-[85svh] max-w-full object-contain"
             />
             <button
               type="button"
@@ -363,7 +363,7 @@
                   loading="lazy"
                   decoding="async"
                   onerror="this.closest('button').style.display='none'"
-                  class="h-full w-full object-cover grayscale transition duration-500 group-hover:scale-110 group-hover:grayscale-0"
+                  class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
                 />
               </button>
             </template>
@@ -407,7 +407,7 @@
                 x-transition:enter-start="opacity-0 scale-95"
                 x-transition:enter-end="opacity-100 scale-100"
                 :key="index"
-                class="max-h-[85svh] max-w-full object-contain grayscale"
+                class="max-h-[85svh] max-w-full object-contain"
               />
               <button
                 type="button"
