@@ -1,0 +1,976 @@
+{
+  "name": "Cuestionario · XV Años de Camila",
+  "nodes": [
+    {
+      "name": "La fiesta",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "webhookId": "4858a3ec-730c-4939-9ebe-e0185cde66ba",
+      "parameters": {
+        "formTitle": "Invitación · XV Años de Camila",
+        "formDescription": "¡Hola! Con esta información vamos a armar la invitación digital de los XV años de Camila. Te toma unos 10 minutos. Si algo no lo tienes todavía, déjalo en blanco y lo completamos después.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Qué día son los XV años de Camila?",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "¿A qué hora empieza la celebración?",
+              "fieldType": "text",
+              "requiredField": true,
+              "placeholder": "8:00 PM"
+            },
+            {
+              "fieldLabel": "¿Cómo quiere aparecer Camila en la invitación?",
+              "fieldType": "text",
+              "placeholder": "Camila"
+            },
+            {
+              "fieldLabel": "Mensaje de Camila para sus invitados",
+              "fieldType": "textarea",
+              "placeholder": "Si lo dejas vacío usamos: \"Hay momentos inolvidables que se atesoran en el corazón para siempre…\""
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "8fd59f28-4f9c-4edc-8a8f-20965b60be8e",
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Familia",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "5a2566e2-3716-4c99-aa1e-6d28acea5faf",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre completo del papá de Camila",
+              "fieldType": "text"
+            },
+            {
+              "fieldLabel": "Nombre completo de la mamá de Camila",
+              "fieldType": "text"
+            },
+            {
+              "fieldLabel": "¿Camila tendrá padrinos?",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sí"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Familia",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "99366186-f2b6-4440-ba21-4cb871ad0517",
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "name": "¿Tiene padrinos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "593108b6-5623-4ab3-8086-efc4b667f501",
+              "leftValue": "={{ $json['¿Camila tendrá padrinos?'] }}",
+              "rightValue": "Sí",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d07b7f2b-b892-48bb-9b0e-11f2392d358c",
+      "position": [
+        480,
+        -200
+      ]
+    },
+    {
+      "name": "Padrinos",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "6c6f9035-fd66-4be6-b325-ba91fe9d6a45",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Padrinos de Camila",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "Padrinos de velación: Juan Pérez, Ana López\nPadrinos de anillo: Luis Gómez, Sofía Ruiz"
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Padrinos de Camila",
+          "buttonLabel": "Siguiente",
+          "formDescription": "Escribe una línea por tipo de padrinos."
+        }
+      },
+      "id": "55b9fe98-2490-404d-8a24-6047f70c6756",
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "name": "Misa",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "1e88bf54-631f-42d4-b462-c9cde58150da",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Habrá misa para Camila?",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sí"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Misa de Acción de Gracias",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "958dd30c-804b-40da-833a-7064e1faa622",
+      "position": [
+        960,
+        0
+      ]
+    },
+    {
+      "name": "¿Hay misa?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "529b4f84-3d60-4e63-9f7e-e40e9dcefb4d",
+              "leftValue": "={{ $json['¿Habrá misa para Camila?'] }}",
+              "rightValue": "Sí",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "21db0c9b-6952-4416-8900-951231f1ad38",
+      "position": [
+        1200,
+        -200
+      ]
+    },
+    {
+      "name": "Datos de la misa",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "0e15a398-f235-4a0d-8f70-5f0407283212",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿En qué iglesia será?",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "¿A qué hora es la misa?",
+              "fieldType": "text",
+              "requiredField": true,
+              "placeholder": "6:00 PM"
+            },
+            {
+              "fieldLabel": "Dirección de la iglesia",
+              "fieldType": "text"
+            },
+            {
+              "fieldLabel": "Enlace de Google Maps de la iglesia",
+              "fieldType": "text",
+              "placeholder": "https://maps.app.goo.gl/..."
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Misa de Acción de Gracias",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "90d84cfe-8aba-4681-b26c-c0206975c326",
+      "position": [
+        1440,
+        0
+      ]
+    },
+    {
+      "name": "Recepción",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "c78313e3-f267-4c12-8c32-91f6c2f9dcee",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿En qué salón será la fiesta?",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "¿A qué hora empieza la recepción?",
+              "fieldType": "text",
+              "placeholder": "8:00 PM"
+            },
+            {
+              "fieldLabel": "Dirección del salón",
+              "fieldType": "text"
+            },
+            {
+              "fieldLabel": "Enlace de Google Maps del salón",
+              "fieldType": "text",
+              "placeholder": "https://maps.app.goo.gl/..."
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Recepción",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "f4fa7638-7a05-4850-8b34-93df54bd3727",
+      "position": [
+        1680,
+        0
+      ]
+    },
+    {
+      "name": "Programa",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "4d9b5d1b-449a-4818-a216-13d57c8458cd",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Cuál es el programa de la fiesta?",
+              "fieldType": "textarea",
+              "placeholder": "8:00 PM - Llegada\n8:30 PM - Vals de Camila\n9:00 PM - Sesión de fotos\n10:30 PM - Fiesta\n2:00 AM - Despedida"
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Programa de la noche",
+          "buttonLabel": "Siguiente",
+          "formDescription": "Escribe una actividad por línea con el formato Hora - Actividad."
+        }
+      },
+      "id": "6c87f3cb-569e-45fa-b537-ce67434d4f25",
+      "position": [
+        1920,
+        0
+      ]
+    },
+    {
+      "name": "Vestimenta",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "6446ea00-4c2b-4365-94db-a7954eb976a2",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Cuál es el código de vestimenta?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Formal"
+                  },
+                  {
+                    "option": "Formal casual"
+                  },
+                  {
+                    "option": "Etiqueta"
+                  },
+                  {
+                    "option": "Casual"
+                  },
+                  {
+                    "option": "Otro"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "¿Hay algún color reservado para Camila?",
+              "fieldType": "text",
+              "placeholder": "Rosa pastel"
+            },
+            {
+              "fieldLabel": "Otra indicación sobre la vestimenta",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "Fotos de ejemplo de vestimenta",
+              "fieldType": "file",
+              "multipleFiles": true,
+              "acceptFileTypes": ".jpg,.jpeg,.png,.webp,.heic"
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Vestimenta",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "6b994a59-72d3-472d-b344-7d1f1582241a",
+      "position": [
+        2160,
+        0
+      ]
+    },
+    {
+      "name": "Regalos",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "ea15f60e-3446-465e-b3ae-6fdc6528366d",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Quieren poner datos bancarios para quien quiera regalarle a Camila?",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sí"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Regalos",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "602e5a76-5def-4200-8bc3-d9cb88719db3",
+      "position": [
+        2400,
+        0
+      ]
+    },
+    {
+      "name": "¿Pone regalos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4fbc1b3e-6ed7-4a91-9665-f90daedfb4da",
+              "leftValue": "={{ $json['¿Quieren poner datos bancarios para quien quiera regalarle a Camila?'] }}",
+              "rightValue": "Sí",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3bb90482-258c-4e15-b6a0-70a4875e386b",
+      "position": [
+        2640,
+        -200
+      ]
+    },
+    {
+      "name": "Datos bancarios",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "c1269bf0-a128-4c18-b848-200b3c44c159",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Banco",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Nombre del titular de la cuenta",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "CLABE",
+              "fieldType": "text",
+              "requiredField": true,
+              "placeholder": "18 dígitos"
+            },
+            {
+              "fieldLabel": "¿Quieren otro mensaje sobre regalos?",
+              "fieldType": "textarea",
+              "placeholder": "Si lo dejas vacío usamos: \"Tu presencia es mi mejor regalo…\""
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Regalos",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "5555e215-5081-4b5f-aaf4-98fed8272756",
+      "position": [
+        2880,
+        0
+      ]
+    },
+    {
+      "name": "Hoteles",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "8c1da3c4-5626-4a39-92e0-0e6dff11decc",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Quieren recomendar hoteles cerca del salón?",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sí"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Invitados que vienen de fuera",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "1837e122-7f19-4459-8698-a9c6c7927280",
+      "position": [
+        3120,
+        0
+      ]
+    },
+    {
+      "name": "¿Pone hoteles?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1ea7e406-6e28-448b-adff-99bd12377c0f",
+              "leftValue": "={{ $json['¿Quieren recomendar hoteles cerca del salón?'] }}",
+              "rightValue": "Sí",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "450838f3-d790-4377-8e42-6784572e8f3d",
+      "position": [
+        3360,
+        -200
+      ]
+    },
+    {
+      "name": "Lista de hoteles",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "2a6dfbba-6876-4d1f-a9c3-4d41703408fe",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Hoteles recomendados",
+              "fieldType": "dropdown",
+              "multiselect": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Hotel Cadillac"
+                  },
+                  {
+                    "option": "Hotel El Centenario"
+                  },
+                  {
+                    "option": "Hotel Cuatro Caminos"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "¿Algún otro hotel que no esté en la lista?",
+              "fieldType": "textarea",
+              "placeholder": "Un hotel por línea: Nombre | Dirección | Teléfono | Código de descuento (si hay)"
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Invitados que vienen de fuera",
+          "buttonLabel": "Siguiente",
+          "formDescription": "Elige los hoteles que quieres recomendar."
+        }
+      },
+      "id": "1e19ebcc-ef42-4743-b430-9e2b3b771237",
+      "position": [
+        3600,
+        0
+      ]
+    },
+    {
+      "name": "Detalles",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "47dca8e3-2523-47b8-9de3-6a77c4b7f3ee",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Qué canción quiere Camila de fondo en su invitación?",
+              "fieldType": "text",
+              "placeholder": "Nombre y artista"
+            },
+            {
+              "fieldLabel": "O sube la canción en mp3",
+              "fieldType": "file",
+              "acceptFileTypes": ".mp3"
+            },
+            {
+              "fieldLabel": "¿Quieren activar el álbum compartido para que los invitados suban fotos durante la fiesta?",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sí"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Notas finales para los invitados",
+              "fieldType": "textarea",
+              "placeholder": "Esta celebración es para que adolescentes y adultos disfruten juntos."
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Detalles especiales",
+          "buttonLabel": "Siguiente"
+        }
+      },
+      "id": "7d64fc3d-5079-45b0-9d6a-bdddda1d8d47",
+      "position": [
+        3840,
+        0
+      ]
+    },
+    {
+      "name": "Contacto",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "9208803e-2193-463a-95ef-8276eee4ea56",
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Quién llena este formulario?",
+              "fieldType": "text",
+              "requiredField": true,
+              "placeholder": "Nombre y parentesco con Camila"
+            },
+            {
+              "fieldLabel": "WhatsApp de contacto",
+              "fieldType": "text",
+              "requiredField": true,
+              "placeholder": "10 dígitos"
+            },
+            {
+              "fieldLabel": "¿Algo más que nos quieras contar o pedir?",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Contacto",
+          "buttonLabel": "Enviar"
+        }
+      },
+      "id": "7a77769e-5600-41ce-b68a-52f755e53c16",
+      "position": [
+        4080,
+        0
+      ]
+    },
+    {
+      "name": "Reunir respuestas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "// Junta las respuestas de todas las páginas en la forma de src/event.config.js.\n// Las páginas que se saltaron (por un \"No\") no se ejecutaron y quedan vacías.\nconst pagina = (nodo) => ($(nodo).isExecuted ? $(nodo).first().json : {});\nconst lineas = (texto) => String(texto || '').split('\\n').map((l) => l.trim()).filter(Boolean);\n\n// \"8:00 PM\" -> \"20:00\"\nconst hora24 = (texto) => {\n  const m = String(texto || '').trim().match(/^(\\d{1,2})(?::(\\d{2}))?\\s*([ap])?/i);\n  if (!m) return '20:00';\n  let h = Number(m[1]);\n  const ampm = (m[3] || '').toLowerCase();\n  if (ampm === 'p' && h < 12) h += 12;\n  if (ampm === 'a' && h === 12) h = 0;\n  return `${String(h).padStart(2, '0')}:${m[2] || '00'}`;\n};\n\nconst icono = (actividad) => {\n  const a = actividad.toLowerCase();\n  if (a.includes('vals')) return 'vals';\n  if (a.includes('foto')) return 'camara';\n  if (a.includes('fiesta') || a.includes('baile')) return 'disco';\n  if (a.includes('despedida') || a.includes('cierre')) return 'reloj';\n  if (a.includes('cena') || a.includes('brindis')) return 'copas';\n  return 'corona';\n};\n\n// Hoteles guardados que se ofrecen en la página \"Lista de hoteles\". Si agregas\n// uno aquí, agrégalo también como opción de \"Hoteles recomendados\".\nconst HOTELES = {\n  'Hotel Cadillac': {\n    nombre: 'Hotel Cadillac',\n    direccion: 'Juárez 206, Centro, Etzatlán, Jal.',\n    distancia: '',\n    telefono: '3867530114',\n    codigo: '',\n    mapsUrl: 'https://maps.app.goo.gl/y7Y99KGms3yBYNBC7',\n    url: 'http://www.hotelcadillac.com.mx',\n  },\n  'Hotel El Centenario': {\n    nombre: 'Hotel El Centenario',\n    direccion: 'Frente a la Plaza de Armas, Etzatlán, Jal.',\n    distancia: '',\n    telefono: '3867531561',\n    codigo: '',\n    mapsUrl: 'https://maps.app.goo.gl/pcfZtgx8JJZb9YKT6',\n    url: '',\n  },\n  'Hotel Cuatro Caminos': {\n    nombre: 'Hotel Cuatro Caminos',\n    direccion: 'Extramuros 238, Etzatlán, Jal.',\n    distancia: '',\n    telefono: '',\n    codigo: '',\n    mapsUrl: 'https://share.google/rreCl7qUvDKq6sg7Q',\n    url: '',\n  },\n};\n\nconst fiesta = pagina('La fiesta');\nconst familia = pagina('Familia');\nconst padrinos = pagina('Padrinos');\nconst misa = pagina('Datos de la misa');\nconst recepcion = pagina('Recepción');\nconst programa = pagina('Programa');\nconst vestimenta = pagina('Vestimenta');\nconst banco = pagina('Datos bancarios');\nconst hoteles = pagina('Lista de hoteles');\nconst detalles = pagina('Detalles');\nconst contacto = pagina('Contacto');\n\nconst fecha = String(fiesta['¿Qué día son los XV años de Camila?'] || '').slice(0, 10);\nconst color = vestimenta['¿Hay algún color reservado para Camila?'];\nconst clabe = String(banco['CLABE'] || '').replace(/\\D/g, '');\n\nconst config = {\n  hero: { titulo: fiesta['¿Cómo quiere aparecer Camila en la invitación?'] || 'Camila' },\n  fecha: `${fecha}T${hora24(fiesta['¿A qué hora empieza la celebración?'])}:00`,\n  mensaje: { texto: fiesta['Mensaje de Camila para sus invitados'] || '' },\n  familia: {\n    grupos: [\n      {\n        titulo: '',\n        nombres: [familia['Nombre completo del papá de Camila'], familia['Nombre completo de la mamá de Camila']].filter(Boolean),\n      },\n      ...lineas(padrinos['Padrinos de Camila']).map((linea) => {\n        const [titulo, nombres = ''] = linea.includes(':') ? linea.split(/:(.*)/s) : ['Mis padrinos', linea];\n        return { titulo: titulo.trim(), nombres: nombres.split(/,| y /).map((n) => n.trim()).filter(Boolean) };\n      }),\n    ],\n  },\n  ceremonias: [\n    ...($('Datos de la misa').isExecuted\n      ? [{\n          icono: 'iglesia',\n          titulo: 'Misa de Agradecimiento',\n          hora: misa['¿A qué hora es la misa?'],\n          lugar: misa['¿En qué iglesia será?'],\n          direccion: misa['Dirección de la iglesia'] || '',\n          mapsUrl: misa['Enlace de Google Maps de la iglesia'] || '',\n        }]\n      : []),\n    {\n      icono: 'copas',\n      titulo: 'Recepción',\n      hora: recepcion['¿A qué hora empieza la recepción?'] || '',\n      lugar: recepcion['¿En qué salón será la fiesta?'],\n      direccion: recepcion['Dirección del salón'] || '',\n      mapsUrl: recepcion['Enlace de Google Maps del salón'] || '',\n    },\n  ],\n  itinerario: lineas(programa['¿Cuál es el programa de la fiesta?']).map((linea) => {\n    const [hora, actividad = ''] = linea.split(/\\s+[-–—]\\s+(.*)/s);\n    return { hora: hora.trim(), actividad: actividad.trim() || hora.trim(), icono: icono(actividad || hora) };\n  }),\n  hoteles: {\n    lista: [\n      ...[].concat(hoteles['Hoteles recomendados'] || []).map((nombre) => HOTELES[nombre]).filter(Boolean),\n      ...lineas(hoteles['¿Algún otro hotel que no esté en la lista?']).map((linea) => {\n        const [nombre, direccion = '', telefono = '', codigo = ''] = linea.split('|').map((p) => p.trim());\n        return { nombre, direccion, distancia: '', telefono, codigo, mapsUrl: '', url: '' };\n      }),\n    ],\n  },\n  dresscode: {\n    titulo: vestimenta['¿Cuál es el código de vestimenta?'] || '',\n    nota: [color && `El color ${color.toLowerCase()} está reservado especialmente para la quinceañera.`, vestimenta['Otra indicación sobre la vestimenta']]\n      .filter(Boolean)\n      .join(' '),\n  },\n  regalos: $('Datos bancarios').isExecuted\n    ? {\n        ...(banco['¿Quieren otro mensaje sobre regalos?'] ? { texto: banco['¿Quieren otro mensaje sobre regalos?'] } : {}),\n        datos: [banco['Banco'], banco['Nombre del titular de la cuenta'], `CLABE ${clabe}`],\n        copiar: clabe,\n      }\n    : { texto: '' },\n  fotosInvitados: {\n    habilitado: detalles['¿Quieren activar el álbum compartido para que los invitados suban fotos durante la fiesta?'] === 'Sí',\n  },\n  notas: lineas(detalles['Notas finales para los invitados']),\n};\n\nreturn [{\n  json: {\n    config,\n    cancion: detalles['¿Qué canción quiere Camila de fondo en su invitación?'] || '',\n    colorReservado: color || '',\n    contacto: {\n      nombre: contacto['¿Quién llena este formulario?'],\n      whatsapp: contacto['WhatsApp de contacto'],\n      comentarios: contacto['¿Algo más que nos quieras contar o pedir?'] || '',\n    },\n  },\n}];\n"
+      },
+      "id": "dda27726-39ce-4d96-986f-65099dbbc8d9",
+      "position": [
+        4320,
+        0
+      ]
+    },
+    {
+      "name": "Fin",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "webhookId": "d826ec77-f39b-4198-b64f-9c84671f510c",
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "¡Gracias!",
+        "completionMessage": "Ya tenemos todo para preparar la invitación de Camila. Te mandamos una vista previa por WhatsApp. 👑",
+        "options": {}
+      },
+      "id": "7c925a84-e1e4-4b3f-a585-d3f799d631bb",
+      "position": [
+        4560,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "La fiesta": {
+      "main": [
+        [
+          {
+            "node": "Familia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Familia": {
+      "main": [
+        [
+          {
+            "node": "¿Tiene padrinos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Tiene padrinos?": {
+      "main": [
+        [
+          {
+            "node": "Padrinos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Misa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Padrinos": {
+      "main": [
+        [
+          {
+            "node": "Misa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Misa": {
+      "main": [
+        [
+          {
+            "node": "¿Hay misa?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Hay misa?": {
+      "main": [
+        [
+          {
+            "node": "Datos de la misa",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Recepción",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos de la misa": {
+      "main": [
+        [
+          {
+            "node": "Recepción",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recepción": {
+      "main": [
+        [
+          {
+            "node": "Programa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Programa": {
+      "main": [
+        [
+          {
+            "node": "Vestimenta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vestimenta": {
+      "main": [
+        [
+          {
+            "node": "Regalos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regalos": {
+      "main": [
+        [
+          {
+            "node": "¿Pone regalos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Pone regalos?": {
+      "main": [
+        [
+          {
+            "node": "Datos bancarios",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Hoteles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos bancarios": {
+      "main": [
+        [
+          {
+            "node": "Hoteles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hoteles": {
+      "main": [
+        [
+          {
+            "node": "¿Pone hoteles?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Pone hoteles?": {
+      "main": [
+        [
+          {
+            "node": "Lista de hoteles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Detalles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lista de hoteles": {
+      "main": [
+        [
+          {
+            "node": "Detalles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detalles": {
+      "main": [
+        [
+          {
+            "node": "Contacto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contacto": {
+      "main": [
+        [
+          {
+            "node": "Reunir respuestas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reunir respuestas": {
+      "main": [
+        [
+          {
+            "node": "Fin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
