@@ -16,7 +16,7 @@ export default {
   },
 
   cuentaRegresiva: {
-    eyebrow: 'Faltan:',
+    eyebrow: 'Faltan',
   },
 
   // Fecha y hora del evento en formato ISO (respeta la zona horaria local).
@@ -31,14 +31,16 @@ export default {
     texto: '"Hay momentos inolvidables que se atesoran en el corazón para siempre. Por eso quiero compartir contigo esta noche tan especial, celebrando juntos mis XV años."',
   },
 
-  // Padres y padrinos. Agrega o quita grupos libremente; con `grupos: []`
-  // la sección desaparece.
+  // Padres y padrinos. `titulo` presenta al primer grupo (los padres, sin
+  // título propio); agrega o quita grupos libremente. Con `grupos: []` la
+  // sección desaparece. `cierre` va antes de "XV Años" (vacío lo oculta).
   familia: {
-    titulo: 'Con la bendición de Dios y el cariño de',
+    titulo: 'Acompáñame en este día tan especial junto a mis padres:',
     grupos: [
-      { titulo: 'Mis padres', nombres: ['Nombre del papá', 'Nombre de la mamá'] },
+      { titulo: '', nombres: ['Nombre del papá', 'Nombre de la mamá'] },
       { titulo: 'Mis padrinos', nombres: ['Nombre del padrino', 'Nombre de la madrina'] },
     ],
+    cierre: 'A festejar mis',
   },
 
   lugar: {
