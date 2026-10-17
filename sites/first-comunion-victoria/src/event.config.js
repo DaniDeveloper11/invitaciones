@@ -95,15 +95,16 @@ export default {
 
   rsvp: {
     titulo: 'Favor de confirmar asistencia',
-    nota: 'Elige una opción y se enviará como mensaje de WhatsApp al 33 1344 9813.',
+    nota: 'Elige una opción y se enviará como mensaje de WhatsApp al 33 14 85 7062.',
     // Código de país + número, sin "+", espacios ni guiones (ej. 523312345678).
     // Déjalo vacío para ocultar la sección.
-    whatsapp: '523313449813',
+    whatsapp: '523314857062',
     opciones: [
       '¡Sí, ahí estaré! 🎉',
       'Sí, iré acompañado/a 👥',
       'Aún no estoy seguro/a 🤔',
       'No podré asistir 😢',
+      '¿Puedo llevar un invitado? 😢',
     ],
   },
 
