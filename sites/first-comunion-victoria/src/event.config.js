@@ -1,5 +1,26 @@
 import { asset, photos } from '@invitaciones/core'
 
+// Fecha de demostración: siempre 2 meses después de hoy, a las 12:00 hrs.
+const hoy = new Date()
+const ultimoDia = new Date(hoy.getFullYear(), hoy.getMonth() + 3, 0).getDate()
+const evento = new Date(
+  hoy.getFullYear(),
+  hoy.getMonth() + 2,
+  Math.min(hoy.getDate(), ultimoDia), // 31 dic → 28 feb, no 3 mar
+  12, 0, 0,
+)
+
+const pad = (n) => String(n).padStart(2, '0')
+const parte = (opts) => new Intl.DateTimeFormat('es-MX', opts).format(evento)
+const mayus = (s) => s.charAt(0).toUpperCase() + s.slice(1)
+
+const partes = {
+  dia: mayus(parte({ weekday: 'long' })),
+  numero: String(evento.getDate()),
+  mes: mayus(parte({ month: 'long' })),
+  anio: String(evento.getFullYear()),
+}
+
 /**
  * Datos de la invitación. Este es el único archivo que necesitas editar
  * para una invitación nueva; index.html sólo se toca si cambias el diseño.
@@ -19,14 +40,13 @@ export default {
     imagen: 'images/hero.webp',
   },
 
-  // Fecha y hora del evento en formato ISO (respeta la zona horaria local).
-  // Los textos de fecha y hora se calculan solos; si quieres otro texto,
-  // llena `fechaTexto` y `horaTexto`.
-  fecha: '2026-10-10T12:00:00',
-  fechaTexto: 'Sábado 10 de Octubre, 2026',
+  // Fecha y hora del evento en formato ISO local (sin `Z`), calculada arriba
+  // como hoy + 2 meses. Para una fecha fija, reemplaza estos campos por texto.
+  fecha: `${partes.anio}-${pad(evento.getMonth() + 1)}-${pad(evento.getDate())}T12:00:00`,
+  fechaTexto: `${partes.dia} ${partes.numero} de ${partes.mes}, ${partes.anio}`,
   horaTexto: '12:00 hrs',
   // Bloque de fecha en tres columnas (como la invitación impresa).
-  fechaPartes: { dia: 'Sábado', numero: '10', mes: 'Octubre', anio: '2026' },
+  fechaPartes: partes,
   guardaLaFecha: 'Guarda la fecha',
 
   cuentaRegresiva: {
