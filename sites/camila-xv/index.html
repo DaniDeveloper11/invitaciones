@@ -166,14 +166,23 @@
         @sobre-abierto.window="setTimeout(() => (show = true), 100)"
         class="relative w-full overflow-hidden px-6 pb-16 text-center"
       >
-        <!-- public/images/decoracion/arco-rosas.webp — medio aro de rosas que enmarca "Mis XV Años" -->
+        <!-- Racimos de rosas en las esquinas de arriba (public/images/decoracion/portada-sup-*.webp) -->
         <img
-          src="/images/decoracion/arco-rosas.webp"
+          src="/images/decoracion/portada-sup-izq.webp"
           alt=""
           aria-hidden="true"
           fetchpriority="high"
           onerror="this.remove()"
-          class="pointer-events-none absolute inset-x-0 top-0 w-full transition-opacity duration-1000"
+          class="pointer-events-none absolute left-0 top-0 w-[46%] transition-opacity duration-1000"
+          :class="show ? 'opacity-100' : 'opacity-0'"
+        />
+        <img
+          src="/images/decoracion/portada-sup-der.webp"
+          alt=""
+          aria-hidden="true"
+          fetchpriority="high"
+          onerror="this.remove()"
+          class="pointer-events-none absolute right-0 top-0 w-[42%] transition-opacity duration-1000"
           :class="show ? 'opacity-100' : 'opacity-0'"
         />
 
@@ -481,8 +490,8 @@
           </div>
 
           <!-- Esquinas de rosas sobre la galería -->
-          <img src="/images/decoracion/esquina-galeria-sup.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -left-6 -top-8 z-10 w-2/3" />
-          <img src="/images/decoracion/esquina-galeria-inf.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute bottom-16 -right-6 z-10 w-2/3 -scale-x-100" />
+          <img src="/images/decoracion/esquina-galeria-sup.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute left-0 -top-8 z-10 w-1/2" />
+          <img src="/images/decoracion/esquina-galeria-inf.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute bottom-16 right-0 z-10 w-1/2" />
 
             <!-- Visor a pantalla completa -->
             <div
@@ -876,6 +885,7 @@
       <template x-if="$store.event.fotos.final">
         <div class="relative mt-10 w-full">
           <img src="/images/decoracion/ramo-rosas.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -right-8 -top-24 z-10 w-1/2" />
+          <img src="/images/decoracion/final-inf-izq.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute bottom-0 left-0 z-10 w-1/2" />
           <!-- Sólo el borde de arriba rasgado: la máscara se estira para esconder el de abajo -->
           <div class="aspect-[3/4] w-full bg-gradient-to-b from-[#f0dcd6] to-[#e6cdc5] [mask-image:url('/images/rasgado.svg')] [mask-size:100%_106%] [mask-position:top]">
             <img :src="$store.event.fotos.final" alt="" loading="lazy" onerror="this.style.display='none'" class="h-full w-full object-cover" />
