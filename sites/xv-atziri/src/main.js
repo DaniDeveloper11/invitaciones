@@ -1,11 +1,12 @@
 import './style.css'
 import { createInvitation } from '@invitaciones/core'
 import event from './event.config.js'
-import { carrusel, ICONOS } from './componentes.js'
+import { carrusel, sobre, ICONOS } from './componentes.js'
 
 createInvitation(event, {
   setup(Alpine, event) {
     Alpine.data('carrusel', carrusel)
+    Alpine.data('sobre', sobre)
     Alpine.magic('icono', () => (nombre) => ICONOS[nombre] || '')
 
     // Fecha de la portada: "Sábado · 31 de diciembre · 2026".

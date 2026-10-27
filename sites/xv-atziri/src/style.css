@@ -39,3 +39,34 @@
   font-size: 1.25em;
   line-height: 1;
 }
+
+/* Apertura tipo sobre (index.html, x-data="sobre") */
+@keyframes sello-latido {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes sello-romper {
+  0% {
+    transform: scale(1);
+  }
+  55% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.sello-latido {
+  animation: sello-latido 2.2s ease-in-out infinite;
+}
+
+.sello-romper {
+  animation: sello-romper 0.45s ease-in-out forwards;
+}

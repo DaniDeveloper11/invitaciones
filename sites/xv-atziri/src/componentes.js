@@ -76,3 +76,36 @@ export const ICONOS = {
     '<rect x="3" y="8.5" width="18" height="11" rx="1.5"/><path d="M3 12.5h18"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/><rect x="10.5" y="11.5" width="3" height="2.2" rx=".5"/>',
   ),
 }
+
+/**
+ * Apertura tipo sobre: cubre la invitación hasta que el invitado toca el
+ * sello. El sello late, las dos mitades del sobre se abren como puertas
+ * (cada una se lleva media cera, como si el lacre se rompiera) y la pantalla
+ * se desvanece. El toque también arranca la música, que ya puede sonar.
+ */
+export function sobre() {
+  return {
+    abriendo: false,
+    selloRoto: false,
+    abierto: false,
+
+    init() {
+      document.documentElement.style.overflow = 'hidden'
+      window.scrollTo(0, 0)
+    },
+
+    abrir() {
+      if (this.abriendo) return
+      this.abriendo = true
+      document.getElementById('musica')?.play().catch(() => {})
+      // El sello entero se quita al terminar su latido, justo cuando las
+      // puertas (que tienen media cera cada una) empiezan a girar.
+      setTimeout(() => (this.selloRoto = true), 420)
+      setTimeout(() => {
+        this.abierto = true
+        document.documentElement.style.overflow = ''
+        window.dispatchEvent(new CustomEvent('sobre-abierto'))
+      }, 2300)
+    },
+  }
+}
