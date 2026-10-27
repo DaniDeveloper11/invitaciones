@@ -7,14 +7,35 @@
 @source './**/*.js';
 
 /*
- * Paleta propia de esta invitación: descomenta y cambia los tonos que quieras.
- * Sobrescriben al tema compartido de @invitaciones/core.
+ * Paleta "Cowgirl Chic" del diseño de Stitch: menta, cuero y crema.
+ * Sobrescribe al tema compartido de @invitaciones/core; paper/ink/muted
+ * siguen existiendo para /fotos/ y /rsvp/.
  */
-/*
 @theme {
-  --color-paper: #f4efe9;
-  --color-ink: #23201c;
-  --color-charcoal: #2f2a24;
-  --color-muted: #a99f92;
+  --color-paper: #fcf9f4;
+  --color-ink: #1c1c19;
+  --color-charcoal: #31302d;
+  --color-muted: #675d4f;
+
+  --color-card: #ffffff;
+  --color-crema: #f6f3ee;
+  --color-arena: #ecddcc;
+  --color-arena-oscura: #d2c4b4;
+  --color-menta: #176a5f;
+  --color-menta-clara: #75bfb2;
+  --color-menta-suave: #a6f1e3;
+  --color-cuero: #835425;
+  --color-cuero-oscuro: #643a0d;
+  --color-texto: #3f4946;
+  --color-cafe: #675d4f;
+
+  --font-script: 'Alex Brush', cursive;
+  --font-display: 'Cinzel', serif;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
 }
-*/
+
+.material-symbols-outlined {
+  font-size: 1.25em;
+  line-height: 1;
+}
