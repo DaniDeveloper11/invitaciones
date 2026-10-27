@@ -126,7 +126,7 @@ export default {
     boton: 'Ver ejemplos',
     // Ejemplos verticales en public/images/dresscode/1.webp, 2.webp, ...
     // (cambia el número al total). Con 0 el botón desaparece.
-    fotos: photos('dresscode', 4),
+    fotos: photos('dresscode', 7),
   },
 
   // Lluvia de sobres / regalos. Sin `texto` la sección desaparece.
