@@ -108,23 +108,34 @@
           ></p>
         </div>
 
-        <!-- public/images/hero.webp — vertical, ~900x1200px -->
+        <!--
+          public/images/hero.webp — vertical, ~900x1200px. Ocupa todo el ancho y
+          tiene parallax: la foto es 30% más alta que su marco y baja más lento
+          que el scroll (se queda quieta con "reducir movimiento").
+        -->
         <template x-if="$store.event.hero.imagen">
           <div
             data-hero
-            class="relative z-10 mb-8 mt-4 flex w-64 flex-col items-center rounded-2xl border border-arena-oscura/60 bg-card p-2 shadow-md"
+            x-data="{ h: 0, quieto: matchMedia('(prefers-reduced-motion: reduce)').matches }"
+            x-init="h = $el.offsetHeight"
+            @resize.window.debounce.150ms="h = $el.offsetHeight"
+            class="relative z-10 -mx-5 mb-8 mt-4 aspect-[4/5] w-[calc(100%+2.5rem)]"
           >
-            <div class="relative h-80 w-full overflow-hidden rounded-xl shadow-inner">
+            <div class="absolute inset-0 overflow-hidden">
               <img
                 :src="$store.event.hero.imagen"
                 :alt="$store.event.hero.titulo"
                 fetchpriority="high"
                 decoding="async"
                 onerror="this.closest('[data-hero]').style.display='none'"
-                class="h-full w-full object-cover"
+                class="absolute inset-x-0 -top-[15%] h-[130%] w-full object-cover will-change-transform"
+                :style="quieto ? '' : `transform: translate3d(0, ${Math.min($store.scroll.y * 0.2, h * 0.15)}px, 0)`"
               />
+              <!-- Funde los bordes con el fondo de la página -->
+              <div class="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-paper to-transparent"></div>
+              <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-paper to-transparent"></div>
             </div>
-            <div class="absolute -bottom-4 z-20 flex items-center gap-1.5 rounded-full border border-arena-oscura/40 bg-card/95 px-4 py-1 shadow">
+            <div class="absolute -bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-arena-oscura/40 bg-card/95 px-4 py-1 shadow">
               <span class="material-symbols-outlined text-xs text-cuero">auto_awesome</span>
               <span class="text-[11px] font-semibold uppercase tracking-wider text-cuero" x-text="`${$store.event.hero.titulo} · XV`"></span>
             </div>
