@@ -71,18 +71,47 @@ export default {
 
   dresscode: {
     // Deja `titulo` vacío para ocultar toda la sección.
-    eyebrow: 'Etiqueta Sugerida',
-    titulo: 'Vaquero Formal / Western Chic',
-    nota: 'Botas, sombrero, vestidos de gala y vestimenta elegante campestre.',
-    // Tonos sugeridos para los invitados.
-    paleta: ['#8b5a2b', '#d7c9b8', '#1c1c19'],
-    // Tono reservado para la quinceañera (se muestra tachado). Vacío lo oculta.
-    reservado: {
-      color: '#75bfb2',
-      nombre: 'Verde Menta / Aqua',
+    eyebrow: 'Código de Vestimenta',
+    titulo: 'Vaquero Formal',
+    subtitulo: 'Para una noche especial',
+    // Prendas por grupo. `icono`: sombrero, saco, monio, camisa, bota,
+    // vestido, joya o bolsa (definidos en src/componentes.js).
+    grupos: [
+      {
+        titulo: 'Ellos',
+        prendas: [
+          { icono: 'sombrero', texto: 'Sombrero o tejana formal' },
+          { icono: 'saco', texto: 'Saco, americana o tejana de gala' },
+          { icono: 'monio', texto: 'Moño o corbatín vaquero (bolo tie)' },
+          { icono: 'camisa', texto: 'Camisa de vestir formal' },
+          { icono: 'bota', texto: 'Botas vaqueras limpias y formales' },
+        ],
+      },
+      {
+        titulo: 'Ellas',
+        prendas: [
+          { icono: 'sombrero', texto: 'Sombrero vaquero formal (opcional)' },
+          { icono: 'vestido', texto: 'Vestido largo de gala en telas finas' },
+          { icono: 'bota', texto: 'Botas vaqueras de gala o calzado formal' },
+          { icono: 'joya', texto: 'Accesorios elegantes y discretos' },
+          { icono: 'bolsa', texto: 'Bolsa de mano pequeña o clutch' },
+        ],
+      },
+    ],
+    // Tonos reservados para la quinceañera (se muestran tachados).
+    // Con `colores: []` el bloque desaparece.
+    prohibidos: {
+      titulo: 'Colores prohibidos',
+      colores: [
+        { nombre: 'Aqua y azul', tonos: ['#4fc3c3', '#3466b8'] },
+        { nombre: 'Rosa', tonos: ['#f5a9c8', '#e2559a'] },
+      ],
+      nota: 'Agradecemos evitar estos tonos para que la quinceañera destaque en su gran noche.',
     },
-    // Ejemplos en public/images/dresscode/1.webp, 2.webp, ...
-    fotos: photos('dresscode', 0),
+    boton: 'Ver ejemplos',
+    // Ejemplos verticales en public/images/dresscode/1.webp, 2.webp, ...
+    // (cambia el número al total). Con 0 el botón desaparece.
+    fotos: photos('dresscode', 4),
   },
 
   // Lluvia de sobres / regalos. Sin `texto` la sección desaparece.
