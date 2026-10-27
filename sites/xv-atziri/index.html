@@ -36,7 +36,7 @@
     />
     <!-- Sólo los íconos que se usan (en orden alfabético); agrega aquí los nuevos. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..400,0..1,0&icon_names=apparel,auto_awesome,calendar_today,celebration,church,close,favorite,hourglass_top,mail,near_me,photo_camera,photo_library,pin_drop,redeem,schedule,wine_bar&display=block"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..400,0..1,0&icon_names=apparel,auto_awesome,calendar_today,celebration,church,close,face_retouching_natural,favorite,hourglass_top,mail,music_note,near_me,photo_camera,photo_library,pin_drop,redeem,restaurant,schedule,wine_bar&display=block"
       rel="stylesheet"
     />
     <title>Mis XV Atziri</title>
@@ -391,6 +391,44 @@
             class="mx-auto my-3 h-48 w-48 object-contain drop-shadow-sm"
           />
         </div>
+      </template>
+
+      <!-- Itinerario (itinerario en event.config.js; vacío lo oculta) -->
+      <template x-if="$store.event.itinerario?.length">
+        <section class="my-4 px-5">
+          <div x-reveal.lg class="rounded-xl bg-card px-5 py-6 shadow-md">
+            <div class="text-center">
+              <span class="font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-cafe">Mi gran día</span>
+              <h2 class="mb-5 mt-0.5 font-script text-[40px] leading-[1.1] text-cuero">Itinerario</h2>
+            </div>
+
+            <ol class="relative">
+              <!-- Línea vertical que une los íconos -->
+              <span class="absolute bottom-6 left-6 top-6 w-px -translate-x-1/2 bg-arena-oscura"></span>
+              <template x-for="(paso, i) in $store.event.itinerario" :key="paso.hora + paso.titulo">
+                <li x-reveal :style="`transition-delay: ${i * 80}ms`" class="relative flex gap-4 py-2.5">
+                  <span
+                    :class="i === 0 ? 'bg-menta text-white shadow-md' : 'border border-cuero/40 bg-card text-cuero'"
+                    class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full"
+                  >
+                    <span class="material-symbols-outlined text-[22px]" x-text="paso.icono"></span>
+                  </span>
+                  <div
+                    :class="i === 0 && 'rounded-lg bg-menta-suave/25 px-3 py-2 -my-1'"
+                    class="min-w-0 flex-1 self-center"
+                  >
+                    <p class="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-cafe" x-text="paso.hora"></p>
+                    <p
+                      :class="i === 0 ? 'font-script text-[30px] leading-[1.15] text-menta' : 'font-serif text-xl font-semibold leading-tight text-ink'"
+                      x-text="paso.titulo"
+                    ></p>
+                    <p x-show="paso.nota" class="mt-0.5 font-serif text-[15px] italic leading-snug text-texto" x-text="paso.nota"></p>
+                  </div>
+                </li>
+              </template>
+            </ol>
+          </div>
+        </section>
       </template>
 
       <img src="/images/deco/divisor-flor.webp" alt="" class="mx-auto max-h-10 w-[calc(100%-3rem)] object-contain py-2 opacity-80" />

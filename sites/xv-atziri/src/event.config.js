@@ -69,6 +69,23 @@ export default {
     },
   ],
 
+  // Itinerario del día, en orden. `icono` es un nombre de Material Symbols
+  // (agrégalo a `icon_names` en index.html si usas uno nuevo); `nota` es
+  // opcional. Con `itinerario: []` la sección desaparece.
+  itinerario: [
+    {
+      hora: '3:00 P.M.',
+      titulo: 'Get Ready With Me',
+      nota: 'Acompáñame mientras me preparo para mi gran día.',
+      icono: 'face_retouching_natural',
+    },
+    { hora: '5:00 P.M.', titulo: 'Misa de acción de gracias', icono: 'church' },
+    { hora: '8:00 P.M.', titulo: 'Recepción', icono: 'wine_bar' },
+    { hora: '9:00 P.M.', titulo: 'Vals', icono: 'music_note' },
+    { hora: '9:30 P.M.', titulo: 'Cena', icono: 'restaurant' },
+    { hora: '10:30 P.M.', titulo: '¡A bailar!', icono: 'celebration' },
+  ],
+
   dresscode: {
     // Deja `titulo` vacío para ocultar toda la sección.
     eyebrow: 'Código de Vestimenta',
