@@ -399,18 +399,25 @@
               <span class="h-px w-6 bg-cuero/40"></span>
             </div>
 
-            <!-- Prendas: una columna por grupo (Ellos / Ellas) -->
-            <div x-show="grupos?.length" class="relative mt-6 grid grid-cols-2 gap-3">
-              <template x-for="grupo in grupos || []" :key="grupo.titulo">
-                <div>
-                  <p class="mb-3 font-script text-[32px] leading-none text-menta" x-text="grupo.titulo"></p>
+            <!-- Prendas a los lados de la ilustración: grupos[0] izquierda, grupos[1] derecha -->
+            <div x-show="grupos?.length" class="relative mt-5 grid grid-cols-[1fr_8.5rem_1fr] items-start gap-1">
+              <img
+                src="/images/deco/dresscode-pareja.webp"
+                alt="Ejemplo de vestimenta vaquera formal para ellos y ellas"
+                loading="lazy"
+                decoding="async"
+                class="order-2 w-full self-center drop-shadow-md"
+              />
+              <template x-for="(grupo, g) in (grupos || []).slice(0, 2)" :key="grupo.titulo">
+                <div :class="g === 0 ? 'order-1' : 'order-3'">
+                  <p class="mb-1 font-script text-[30px] leading-none text-menta" x-text="grupo.titulo"></p>
                   <ul>
                     <template x-for="(prenda, i) in grupo.prendas" :key="prenda.texto">
-                      <li class="flex flex-col items-center gap-1.5 px-1 py-3" :class="i > 0 && 'border-t border-arena-oscura/50'">
-                        <span class="flex h-11 w-11 items-center justify-center rounded-full border border-cuero/40 text-cuero">
-                          <span class="block h-6 w-6" x-html="$icono(prenda.icono)"></span>
+                      <li class="flex flex-col items-center gap-1 py-2.5" :class="i > 0 && 'border-t border-arena-oscura/50'">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full border border-cuero/40 text-cuero">
+                          <span class="block h-[22px] w-[22px]" x-html="$icono(prenda.icono)"></span>
                         </span>
-                        <span class="font-serif text-[15px] leading-snug text-ink" x-text="prenda.texto"></span>
+                        <span class="font-serif text-sm leading-tight text-ink" x-text="prenda.texto"></span>
                       </li>
                     </template>
                   </ul>

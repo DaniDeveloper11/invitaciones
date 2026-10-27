@@ -74,27 +74,25 @@ export default {
     eyebrow: 'Código de Vestimenta',
     titulo: 'Vaquero Formal',
     subtitulo: 'Para una noche especial',
-    // Prendas por grupo. `icono`: sombrero, saco, monio, camisa, bota,
-    // vestido, joya o bolsa (definidos en src/componentes.js).
+    // Prendas a los lados de la ilustración (public/images/deco/dresscode-pareja.webp):
+    // el primer grupo va a la izquierda y el segundo a la derecha. `icono`:
+    // sombrero, saco, monio, camisa, bota, vestido, joya o bolsa
+    // (definidos en src/componentes.js).
     grupos: [
       {
         titulo: 'Ellos',
         prendas: [
-          { icono: 'sombrero', texto: 'Sombrero o tejana formal' },
-          { icono: 'saco', texto: 'Saco, americana o tejana de gala' },
-          { icono: 'monio', texto: 'Moño o corbatín vaquero (bolo tie)' },
-          { icono: 'camisa', texto: 'Camisa de vestir formal' },
-          { icono: 'bota', texto: 'Botas vaqueras limpias y formales' },
+          { icono: 'sombrero', texto: 'Sombrero o tejana' },
+          { icono: 'saco', texto: 'Saco y camisa formal' },
+          { icono: 'bota', texto: 'Botas vaqueras' },
         ],
       },
       {
         titulo: 'Ellas',
         prendas: [
-          { icono: 'sombrero', texto: 'Sombrero vaquero formal (opcional)' },
-          { icono: 'vestido', texto: 'Vestido largo de gala en telas finas' },
-          { icono: 'bota', texto: 'Botas vaqueras de gala o calzado formal' },
-          { icono: 'joya', texto: 'Accesorios elegantes y discretos' },
-          { icono: 'bolsa', texto: 'Bolsa de mano pequeña o clutch' },
+          { icono: 'sombrero', texto: 'Sombrero (opcional)' },
+          { icono: 'vestido', texto: 'Vestido largo de gala' },
+          { icono: 'bota', texto: 'Botas o calzado formal' },
         ],
       },
     ],
