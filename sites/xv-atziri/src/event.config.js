@@ -75,8 +75,8 @@ export default {
   itinerario: [
     {
       hora: '3:00 P.M.',
-      titulo: 'Get Ready With Me',
-      nota: 'Acompáñame mientras me preparo para mi gran día.',
+      titulo: 'Preparandome',
+      nota: 'Me preparo para mi gran día.',
       icono: 'face_retouching_natural',
     },
     { hora: '5:00 P.M.', titulo: 'Misa de acción de gracias', icono: 'church' },
