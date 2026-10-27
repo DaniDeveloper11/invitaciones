@@ -145,8 +145,8 @@ export default {
   },
 
   dresscode: {
-    // Deja `titulo` vacío para ocultar toda la sección. Las figuras son
-    // public/images/dresscode/ellos.webp y ellas.webp.
+    // Deja `titulo` vacío para ocultar toda la sección. La ilustración es
+    // public/images/dresscode/pareja.webp.
     titulo: 'Formal',
     intro: 'Queremos que luzcan espectaculares y cómodos para disfrutar juntos de esta celebración.',
     ellos: ['Traje formal (opcional)', 'Camisa de vestir', 'Corbata(opcional)', 'Zapatos de vestir', 'Accesorios a gusto'],
