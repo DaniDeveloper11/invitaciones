@@ -88,33 +88,14 @@ export default {
     final: 'images/foto-4.webp', // cierre de la invitación
   },
 
-  // Línea de tiempo; mismos íconos que en `ceremonias`.
-    "itinerario": [
-    {
-      "hora": "5:00 PM Misa",
-      "actividad": "5:00 PM Misa",
-      "icono": "corona"
-    },
-    {
-      "hora": "7:00 PM Recepcion",
-      "actividad": "7:00 PM Recepcion",
-      "icono": "corona"
-    },
-    {
-      "hora": "8:00 PM Cena",
-      "actividad": "8:00 PM Cena",
-      "icono": "copas"
-    },
-    {
-      "hora": "9:00 PM Valz",
-      "actividad": "9:00 PM Valz",
-      "icono": "corona"
-    },
-    {
-      "hora": "10:00 PM Baile",
-      "actividad": "10:00 PM Baile",
-      "icono": "disco"
-    }
+  // Línea de tiempo. Íconos (src/componentes.js): iglesia, copas, cena,
+  // corona, vals, camara, disco, reloj.
+  itinerario: [
+    { hora: '5:00 PM', actividad: 'Misa', icono: 'iglesia' },
+    { hora: '7:00 PM', actividad: 'Recepción', icono: 'copas' },
+    { hora: '8:00 PM', actividad: 'Cena', icono: 'cena' },
+    { hora: '9:00 PM', actividad: 'Vals', icono: 'vals' },
+    { hora: '10:00 PM', actividad: 'Baile', icono: 'disco' },
   ],
 
   // Hoteles cercanos para invitados de fuera. Cada botón (Llamar, Ubicación,

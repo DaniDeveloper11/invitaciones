@@ -104,7 +104,10 @@ export const ICONOS = {
     '<path d="M8 34c10-2.5 22-2.5 32 0"/><path d="M8.5 33 11 21l6 6 3.5-10L24 9l3.5 8L31 27l6-6 2.5 12"/><circle cx="24" cy="8" r="1.5"/><circle cx="11" cy="20" r="1.2"/><circle cx="37" cy="20" r="1.2"/>',
   ),
   vals: svg(
-    '<circle cx="18" cy="8" r="3.2"/><path d="M18 11.5c-2 1-3 3.5-3 6l-1 6 5-1 3-6 5-4"/><path d="M15 23 8 42h20l-6-17"/><circle cx="31" cy="7" r="3.2"/><path d="M31 10.5v12M27 14l4 1.5 2-1M31 22.5l-2 19.5M31 22.5l3 19.5"/>',
+    '<circle cx="16" cy="8" r="3.2"/><path d="M16 11.5l1 8.5"/><path d="M14.5 20h5c2 7 4.5 14 7.5 22-6.5 1.5-13 1.5-19.5 0 2.5-8 5-15 7-22z"/><path d="M16.5 14l7.5-3.5 8-.5"/><circle cx="32" cy="7" r="3.2"/><path d="M32 10.5v14M32 24.5l-2.5 17.5M32 24.5l3 17.5M32 15l-12 5.5"/>',
+  ),
+  cena: svg(
+    '<circle cx="24" cy="25" r="12"/><circle cx="24" cy="25" r="7.5"/><path d="M6 9v7a3 3 0 0 0 3 3v22M9 9v7M12 9v7a3 3 0 0 1-3 3"/><path d="M39 41V9c3 2.5 4 8 3.5 14H39"/>',
   ),
   camara: svg(
     '<rect x="5" y="13" width="38" height="26" rx="3"/><path d="M16 13l3-5h10l3 5"/><circle cx="24" cy="26" r="7"/><circle cx="24" cy="26" r="3"/><path d="M37 18h2"/>',
