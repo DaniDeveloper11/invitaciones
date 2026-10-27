@@ -407,9 +407,8 @@
 
       <!-- Misa y recepción (ceremonias en event.config.js) -->
       <section class="relative w-full px-6 py-10 text-center">
-        <!-- Ramos de rosas en las esquinas -->
+        <!-- Ramo de rosas en la esquina superior izquierda -->
         <img src="/images/decoracion/ramo-rosas.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -left-14 top-2 w-36 -scale-x-100 opacity-90" />
-        <img src="/images/decoracion/ramo-rosas.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -right-14 top-[45%] w-36 opacity-90" />
         <template x-for="c in $store.event.ceremonias" :key="c.titulo">
           <div x-reveal.lg class="relative mx-auto my-4 max-w-[280px] px-6 py-10">
             <!-- Marco: la misma esquina girada en las cuatro puntas -->
