@@ -21,3 +21,6 @@ assets-origen/qr-fotos*.png
 
 # Lista de invitados y enlaces del RSVP (npm run rsvp:alta): datos personales.
 assets-origen/*.csv
+
+# Originales sin optimizar (fotos del dress code, sobre, canción): no se publican.
+assets-origen/

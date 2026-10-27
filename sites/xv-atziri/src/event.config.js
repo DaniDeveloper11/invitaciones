@@ -12,7 +12,7 @@ export default {
     eyebrow: 'Mis XV Años',
     titulo: 'Atziri',
     // Apellidos bajo el nombre. Déjalo vacío para ocultarlo.
-    subtitulo: 'Apellido Apellido',
+    subtitulo: 'Ulloa Zarate',
     // Foto vertical en el marco de la portada: public/images/hero.webp
     // (~900x1200px). Sin foto, el marco desaparece.
     imagen: 'images/hero.webp',
@@ -25,8 +25,8 @@ export default {
   // Fecha y hora del evento en formato ISO (respeta la zona horaria local).
   // El texto de la portada ("Sábado · 31 de diciembre · 2026") se calcula
   // solo; si quieres otro, llena `fechaPortada`.
-  fecha: '2026-12-31T20:00:00',
-  fechaPortada: '',
+  fecha: '2027-02-20T20:17:00',
+  fechaPortada: '20 de Febrero 2027',
 
   mensaje: {
     // Frase bajo la fecha de la portada. Déjala vacía para ocultarla.
@@ -37,8 +37,8 @@ export default {
   // Con `grupos: []` la sección desaparece.
   familia: {
     grupos: [
-      { eyebrow: 'Con la bendición de', titulo: 'Mis Padres', nombres: ['Nombre del papá', 'Nombre de la mamá'] },
-      { eyebrow: 'Y con el cariño de', titulo: 'Mis Padrinos', nombres: ['Nombre del padrino', 'Nombre de la madrina'] },
+      { eyebrow: 'Con la bendición de', titulo: 'Mis Padres', nombres: ['Emanuel Ulloa Villalobos', 'Ma. Concepción Zarate Meza'] },
+      { eyebrow: 'Y con el cariño de', titulo: 'Mis Padrinos', nombres: ['Sergio Ulloa Villalobos', 'Ma. Veronica Ulloa Villalobos'] },
     ],
   },
 
@@ -52,9 +52,9 @@ export default {
       eyebrow: 'Solemne Misa',
       titulo: 'Ceremonia Religiosa',
       hora: '5:00 P.M.',
-      lugar: 'Nombre de la parroquia',
-      direccion: 'Calle y número, Ciudad',
-      mapsUrl: 'https://maps.google.com/',
+      lugar: 'Santuario Parroquial de Nuestra Señora Del Pueblito',
+      direccion: 'Morelos 2, Centro, 46560 San Juanito de Escobedo, Jal.',
+      mapsUrl: 'https://maps.app.goo.gl/KXRPVQzjQWSpzKAU9/',
       boton: 'Ver ubicación en mapa',
     },
     {
@@ -62,10 +62,10 @@ export default {
       eyebrow: 'Fiesta y Brindis',
       titulo: 'Recepción',
       hora: '8:00 P.M.',
-      lugar: 'Nombre de la hacienda',
-      direccion: 'Calle y número, Ciudad',
-      mapsUrl: 'https://maps.google.com/',
-      boton: 'Ver mapa de la hacienda',
+      lugar: 'Salón de eventos "El 8"',
+      direccion: ' Allende 118, Centro, 46560 San Juanito de Escobedo, Jal.',
+      mapsUrl: 'https://maps.app.goo.gl/Js53w7gb3ounfw6d7/',
+      boton: 'Ver mapa del salon',
     },
   ],
 
@@ -130,11 +130,11 @@ export default {
   },
 
   // Lluvia de sobres / regalos. Sin `texto` la sección desaparece.
-  regalos: {
-    titulo: 'Lluvia de Sobres',
-    texto: 'El regalo más valioso para mí es tu grata presencia. Si deseas hacerme un detalle, dispondremos de un buzón en la recepción para muestras de afecto en sobre.',
-    cierre: '¡Muchísimas Gracias!',
-  },
+  // regalos: {
+  //   titulo: 'Lluvia de Sobres',
+  //   texto: 'El regalo más valioso para mí es tu grata presencia. Si deseas hacerme un detalle, dispondremos de un buzón en la recepción para muestras de afecto en sobre.',
+  //   cierre: '¡Muchísimas Gracias!',
+  // },
 
   galeria: {
     eyebrow: 'Sesión Fotográfica',
@@ -158,7 +158,7 @@ export default {
     // Código de país + número, sin "+", espacios ni guiones (ej. 523312345678).
     // Con 'whatsapp', déjalo vacío para ocultar la sección; con 'pases', es el
     // respaldo para quien abra la invitación sin su enlace personal.
-    whatsapp: '',
+    whatsapp: '523751217602',
     opciones: [
       '¡Sí, ahí estaré! 🎉',
       'Sí, iré acompañado/a 👥',
@@ -187,7 +187,7 @@ export default {
   // Despedida: `footer` es el título; `despedida.firma` vacía la oculta.
   footer: '¡Te Esperamos!',
   despedida: {
-    texto: 'Será un honor compartir el inicio de esta nueva etapa contigo y nuestra amada familia.',
-    firma: 'Familia Apellido Apellido',
+    texto: 'Será un honor compartir este momento tan especial contigo.',
+    firma: 'Familia Ulloa Zarate',
   },
 }
