@@ -672,28 +672,9 @@
               </template>
             </div>
 
-            <!-- Paleta sugerida -->
-            <template x-if="d.paleta?.length">
-              <div class="mt-10">
-                <div class="flex items-center gap-3">
-                  <span class="h-px flex-1 bg-gold/60"></span>
-                  <p class="text-[12px] font-semibold uppercase tracking-[0.1em]">Paleta sugerida para vestidos</p>
-                  <span class="h-px flex-1 bg-gold/60"></span>
-                </div>
-                <div class="mt-5 flex flex-wrap justify-center gap-x-3 gap-y-4">
-                  <template x-for="c in d.paleta" :key="c.nombre">
-                    <div class="w-16">
-                      <span class="mx-auto block h-11 w-11 rounded-full shadow-sm ring-1 ring-ink/10" :style="`background:${c.color}`"></span>
-                      <p class="mt-1.5 text-[12px] leading-tight" x-text="c.nombre"></p>
-                    </div>
-                  </template>
-                </div>
-              </div>
-            </template>
-
             <!-- Colores a evitar: círculo tachado con una X dorada -->
             <template x-if="d.evitar?.length">
-              <div class="mt-8">
+              <div class="mt-10">
                 <div class="flex items-center gap-3">
                   <span class="h-px flex-1 bg-gold/60"></span>
                   <p class="text-[12px] font-semibold uppercase tracking-[0.1em]">Colores a evitar</p>
