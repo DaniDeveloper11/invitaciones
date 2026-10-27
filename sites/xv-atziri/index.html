@@ -212,26 +212,70 @@
             </div>
             <h2 class="mb-4 font-script text-4xl leading-[1.1] text-cuero" x-text="$store.event.galeria.titulo"></h2>
 
-            <div x-data="gallery" class="grid w-full grid-cols-2 gap-2.5">
-              <template x-for="(photo, i) in photos" :key="i">
-                <button
-                  type="button"
-                  @click="show(i)"
-                  x-reveal
-                  :style="`transition-delay: ${(i % 4) * 60}ms`"
-                  :class="i % 4 < 2 ? 'aspect-[4/5]' : 'aspect-square'"
-                  class="group relative overflow-hidden rounded-xl border border-arena/50 bg-crema shadow-sm"
+            <!-- Carrusel con miniaturas; al tocar la foto grande se abre el visor -->
+            <div x-data="gallery" class="w-full">
+              <div x-data="carrusel" @pointerdown="detener()">
+                <div class="relative overflow-hidden rounded-xl border border-arena/50 bg-crema shadow-sm">
+                  <div
+                    x-ref="pista"
+                    @scroll.debounce.50ms="alDeslizar()"
+                    class="flex aspect-[4/5] snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                  >
+                    <template x-for="(photo, i) in photos" :key="i">
+                      <button type="button" @click="show(i)" class="h-full w-full shrink-0 snap-center" :aria-label="`Ver foto ${i + 1}`">
+                        <img
+                          :src="photo"
+                          :alt="`Foto ${i + 1} de ${$store.event.hero.titulo}`"
+                          :loading="i === 0 ? 'eager' : 'lazy'"
+                          decoding="async"
+                          class="h-full w-full object-cover"
+                        />
+                      </button>
+                    </template>
+                  </div>
+
+                  <!-- Flechas (útiles en computadora; en el celular se desliza) -->
+                  <button
+                    type="button"
+                    x-show="photos.length > 1"
+                    @click="detener(); ir(activo - 1)"
+                    class="absolute left-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-card/85 pb-0.5 text-3xl leading-none text-cuero shadow-sm"
+                    aria-label="Foto anterior"
+                  >&#8249;</button>
+                  <button
+                    type="button"
+                    x-show="photos.length > 1"
+                    @click="detener(); ir(activo + 1)"
+                    class="absolute right-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-card/85 pb-0.5 text-3xl leading-none text-cuero shadow-sm"
+                    aria-label="Foto siguiente"
+                  >&#8250;</button>
+
+                  <span
+                    class="absolute bottom-2 right-2 z-10 rounded-full bg-card/85 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider text-cuero"
+                    x-text="`${activo + 1} / ${photos.length}`"
+                  ></span>
+                </div>
+
+                <!-- Miniaturas -->
+                <div
+                  x-show="photos.length > 1"
+                  x-ref="tira"
+                  class="mt-2.5 flex gap-2 overflow-x-auto px-0.5 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 >
-                  <img
-                    :src="photo"
-                    :alt="`Foto ${i + 1}`"
-                    loading="lazy"
-                    decoding="async"
-                    onerror="this.closest('button').style.display='none'"
-                    class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-                </button>
-              </template>
+                  <template x-for="(photo, i) in photos" :key="i">
+                    <button
+                      type="button"
+                      @click="detener(); ir(i)"
+                      :class="activo === i ? 'ring-2 ring-menta opacity-100' : 'opacity-55 hover:opacity-90'"
+                      class="aspect-[4/5] w-14 shrink-0 overflow-hidden rounded-lg transition"
+                      :aria-label="`Ir a la foto ${i + 1}`"
+                      :aria-current="activo === i"
+                    >
+                      <img :src="photo" alt="" loading="lazy" decoding="async" class="h-full w-full object-cover" />
+                    </button>
+                  </template>
+                </div>
+              </div>
 
               <!-- Visor a pantalla completa -->
               <div
