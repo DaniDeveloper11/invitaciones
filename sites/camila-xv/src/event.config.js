@@ -22,8 +22,8 @@ export default {
   // Fecha y hora del evento en formato ISO (respeta la zona horaria local).
   // Los textos de fecha y hora se calculan solos; si quieres otro texto,
   // llena `fechaTexto` y `horaTexto`.
-  fecha: '2026-12-31T20:00:00',
-  fechaTexto: '',
+  fecha: '2026-12-19T19:00:00',
+  fechaTexto: '19 de Diciembre del 2026',
   horaTexto: '',
 
   mensaje: {
@@ -36,32 +36,49 @@ export default {
   // sección desaparece. `cierre` va antes de "XV Años" (vacío lo oculta).
   familia: {
     titulo: 'Acompáñame en este día tan especial junto a mis padres:',
-    grupos: [
-      { titulo: '', nombres: ['Nombre del papá', 'Nombre de la mamá'] },
-      { titulo: 'Mis padrinos', nombres: ['Nombre del padrino', 'Nombre de la madrina'] },
+       "grupos": [
+      {
+        "titulo": "",
+        "nombres": [
+          "Leonel Alvarez",
+          "Elena Perez"
+        ]
+      },
+      {
+        "titulo": "Mis padrinos",
+        "nombres": [
+          "Irma Martinez"
+        ]
+      },
+      {
+        "titulo": "Mis padrinos",
+        "nombres": [
+          "Cesar Villaseñor"
+        ]
+      }
     ],
     cierre: 'A festejar mis',
   },
 
   // Misa y recepción. `icono`: iglesia, copas, corona, vals, camara, disco o
   // reloj. Sin `mapsUrl` no aparece el botón "Ver ubicación".
-  ceremonias: [
+ "ceremonias": [
     {
-      icono: 'iglesia',
-      titulo: 'Misa de Agradecimiento',
-      hora: '6:00 PM',
-      lugar: 'Nombre de la iglesia',
-      direccion: 'Calle y número, Ciudad',
-      mapsUrl: 'https://maps.google.com/',
+      "icono": "iglesia",
+      "titulo": "Misa de Agradecimiento",
+      "hora": "5:00 PM",
+      "lugar": "Parroquia San Francisco de Asis",
+      "direccion": "Alvaro Obregon no. 1",
+      "mapsUrl": "https://maps.app.goo.gl/3yh22G5FuEMYP6z8A"
     },
     {
-      icono: 'copas',
-      titulo: 'Recepción',
-      hora: '8:00 PM',
-      lugar: 'Nombre del salón',
-      direccion: 'Calle y número, Ciudad',
-      mapsUrl: 'https://maps.google.com/',
-    },
+      "icono": "copas",
+      "titulo": "Recepción",
+      "hora": "7:00 PM",
+      "lugar": "Kinta E Reinas",
+      "direccion": "",
+      "mapsUrl": ""
+    }
   ],
 
   // Fotos del diseño (verticales, ~1000x1250px). Deja una vacía para quitarla.
@@ -72,12 +89,32 @@ export default {
   },
 
   // Línea de tiempo; mismos íconos que en `ceremonias`.
-  itinerario: [
-    { hora: '8:00 PM', actividad: 'Llegada', icono: 'corona' },
-    { hora: '8:30 PM', actividad: 'Vals', icono: 'vals' },
-    { hora: '9:00 PM', actividad: 'Sesión de fotos', icono: 'camara' },
-    { hora: '10:30 PM', actividad: 'Fiesta', icono: 'disco' },
-    { hora: '2:00 AM', actividad: 'Despedida', icono: 'reloj' },
+    "itinerario": [
+    {
+      "hora": "5:00 PM Misa",
+      "actividad": "5:00 PM Misa",
+      "icono": "corona"
+    },
+    {
+      "hora": "7:00 PM Recepcion",
+      "actividad": "7:00 PM Recepcion",
+      "icono": "corona"
+    },
+    {
+      "hora": "8:00 PM Cena",
+      "actividad": "8:00 PM Cena",
+      "icono": "copas"
+    },
+    {
+      "hora": "9:00 PM Valz",
+      "actividad": "9:00 PM Valz",
+      "icono": "corona"
+    },
+    {
+      "hora": "10:00 PM Baile",
+      "actividad": "10:00 PM Baile",
+      "icono": "disco"
+    }
   ],
 
   // Hoteles cercanos para invitados de fuera. Cada botón (Llamar, Ubicación,
@@ -145,7 +182,7 @@ export default {
     // Código de país + número, sin "+", espacios ni guiones (ej. 523312345678).
     // Con 'whatsapp', déjalo vacío para ocultar la sección; con 'pases', es el
     // respaldo para quien abra la invitación sin su enlace personal.
-    whatsapp: '523314857062',
+    whatsapp: '0018157900905',
    // opciones: ['¡Hola! Confirmo mi asistencia a los XV años de Camila 🎉'],
   },
 
