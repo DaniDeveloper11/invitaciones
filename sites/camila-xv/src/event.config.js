@@ -147,19 +147,21 @@ export default {
   dresscode: {
     // Deja `titulo` vacío para ocultar toda la sección. Las figuras son
     // public/images/dresscode/ellos.webp y ellas.webp.
-    titulo: 'Formal elegante',
+    titulo: 'Formal',
     intro: 'Queremos que luzcan espectaculares y cómodos para disfrutar juntos de esta celebración.',
-    ellos: ['Traje formal (completo)', 'Camisa de vestir', 'Corbata', 'Zapatos de vestir', 'Accesorios a gusto'],
+    ellos: ['Traje formal (opcional)', 'Camisa de vestir', 'Corbata(opcional)', 'Zapatos de vestir', 'Accesorios a gusto'],
     ellas: ['Vestido largo', 'Accesorios a gusto para complementar el look'],
     // Colores a evitar: nombre y color.
     evitar: [
-      { nombre: 'Blanco', color: '#ffffff' },
-      { nombre: 'Beige', color: '#ecdcc4' },
-      { nombre: 'Verdes', color: '#6b8360' },
+
+
       { nombre: 'Rosa pastel', color: '#f2b8c6' },
     ],
     nota: 'El rosa pastel está reservado especialmente para la quinceañera.',
-    fotos: photos('dresscode', 0),
+    // Fotos de ejemplo del botón "Ver ejemplos": public/images/dresscode/1.webp,
+    // 2.webp, … (vertical 4:5). Con 0 el botón se oculta.
+    boton: 'Ver ejemplos',
+    fotos: photos('dresscode', 4),
   },
 
   // Sugerencia de regalos. `datos` son las líneas de la cuenta; `copiar` es
