@@ -149,8 +149,8 @@ export default {
     // public/images/dresscode/pareja.webp.
     titulo: 'Formal',
     intro: 'Queremos que luzcan espectaculares y cómodos para disfrutar juntos de esta celebración.',
-    ellos: ['Traje formal (opcional)', 'Camisa de vestir', 'Corbata(opcional)', 'Zapatos de vestir', 'Accesorios a gusto'],
-    ellas: ['Vestido largo', 'Accesorios a gusto para complementar el look'],
+    // ellos: ['Traje formal (opcional)', 'Camisa de vestir', 'Corbata(opcional)', 'Zapatos de vestir', 'Accesorios a gusto'],
+    // ellas: ['Vestido largo', 'Accesorios a gusto para complementar el look'],
     // Colores a evitar: nombre y color.
     evitar: [
 
