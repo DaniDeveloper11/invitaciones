@@ -106,3 +106,58 @@ body {
     transform: translate3d(-10%, 10%, 0) scale(0.95) rotate(-6deg);
   }
 }
+
+/*
+ * Sobre de apertura: entra subiendo y girando un poco, luego flota mientras
+ * espera el toque; el brillo late sobre el sello.
+ */
+.sobre-entrada {
+  animation: sobre-entrada 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.sobre-texto {
+  animation: sobre-aparecer 1s ease-out 0.6s both;
+}
+.sobre-flotar {
+  animation: sobre-flotar 4s ease-in-out 1.2s infinite;
+}
+.sobre-sello {
+  animation: sobre-sello 2.2s ease-out 1.4s infinite;
+}
+@keyframes sobre-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(60px) rotate(-6deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes sobre-aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes sobre-flotar {
+  50% {
+    transform: translateY(-8px) rotate(0.6deg);
+  }
+}
+@keyframes sobre-sello {
+  0% {
+    box-shadow: 0 0 0 0 #f6dd9acc;
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 18px #f6dd9a00;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sobre-entrada,
+  .sobre-texto,
+  .sobre-flotar,
+  .sobre-sello {
+    animation: none;
+  }
+}

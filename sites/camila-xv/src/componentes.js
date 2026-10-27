@@ -178,7 +178,7 @@ export function carrusel(intervalo = 5000) {
 export function sobre() {
   return {
     abriendo: false,
-    solapaAtras: false,
+    entrando: false,
     abierto: false,
 
     init() {
@@ -190,13 +190,13 @@ export function sobre() {
       if (this.abriendo) return
       this.abriendo = true
       document.getElementById('musica')?.play().catch(() => {})
-      // A media vuelta la solapa pasa detrás de la carta.
-      setTimeout(() => (this.solapaAtras = true), 350)
+      // Con las puertas casi abiertas, la carta crece y la pantalla se desvanece.
+      setTimeout(() => (this.entrando = true), 1000)
       setTimeout(() => {
         this.abierto = true
         document.documentElement.style.overflow = ''
         window.dispatchEvent(new CustomEvent('sobre-abierto'))
-      }, 1900)
+      }, 1500)
     },
   }
 }

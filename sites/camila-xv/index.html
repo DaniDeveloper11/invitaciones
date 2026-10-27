@@ -53,8 +53,10 @@
     -->
     <div id="app" x-data class="relative mx-auto flex min-h-screen w-full max-w-[480px] flex-col overflow-x-clip md:shadow-2xl">
       <!--
-        Apertura tipo sobre: tapa la invitación hasta que el invitado lo toca.
-        La solapa se abre, la carta sube y la pantalla se desvanece.
+        Apertura tipo sobre (public/images/sobre/): la ilustración partida en dos
+        mitades por el sello. Entra flotando; al tocarlo las mitades se abren como
+        puertas (el sello se parte), la carta de adentro crece y la pantalla se
+        desvanece. Animaciones .sobre-* en src/style.css.
       -->
       <div
         x-data="sobre"
@@ -66,57 +68,60 @@
       >
         <div class="humo" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
-        <p
-          class="font-script text-4xl text-gold transition-opacity duration-500"
-          :class="abriendo && 'opacity-0'"
-        >Tienes una invitación</p>
-        <img src="/images/ornamentos/divisor-corazon.svg" alt="" aria-hidden="true" class="mt-3 mb-10 w-56 transition-opacity duration-500" :class="abriendo && 'opacity-0'" />
+        <div class="sobre-texto transition-opacity duration-500" :class="abriendo && 'opacity-0'">
+          <p class="font-script text-4xl text-gold">Tienes una invitación</p>
+          <img src="/images/ornamentos/divisor-corazon.svg" alt="" aria-hidden="true" class="mx-auto mt-3 w-56" />
+        </div>
 
         <button
           type="button"
           @click="abrir()"
-          class="relative aspect-[10/7] w-[86vw] max-w-[360px] cursor-pointer [perspective:1200px]"
+          class="sobre-entrada relative mt-6 aspect-[1669/2322] w-[min(72vw,330px,38svh)] cursor-pointer"
           aria-label="Abrir la invitación"
         >
-          <!-- Fondo del sobre -->
-          <div class="absolute inset-0 rounded-sm bg-[#e3c3bb] shadow-2xl"></div>
+          <div class="sobre-flotar h-full w-full [perspective:900px]" :class="abriendo && '[animation-play-state:paused]'">
+            <!-- Carta de adentro: se ve al abrir las puertas y luego crece -->
+            <div
+              class="absolute left-[5.5%] right-[3%] top-[11.5%] bottom-[1%] flex flex-col items-center justify-center border border-gold/60 bg-paper text-center shadow-inner transition-transform duration-700 ease-in"
+              :class="entrando && 'scale-[1.35]'"
+            >
+              <img src="/images/ornamentos/esquina-larga.svg" alt="" aria-hidden="true" class="absolute left-2 top-2 w-10" />
+              <img src="/images/ornamentos/esquina-larga.svg" alt="" aria-hidden="true" class="absolute right-2 top-2 -scale-x-100 w-10" />
+              <img src="/images/ornamentos/esquina-larga.svg" alt="" aria-hidden="true" class="absolute bottom-2 left-2 -scale-y-100 w-10" />
+              <img src="/images/ornamentos/esquina-larga.svg" alt="" aria-hidden="true" class="absolute bottom-2 right-2 rotate-180 w-10" />
+              <p class="whitespace-pre-line font-script text-4xl leading-[0.9] text-green" x-text="$store.event.hero.eyebrow"></p>
+              <img src="/images/ornamentos/divisor-corazon.svg" alt="" aria-hidden="true" class="mt-3 w-[70%]" />
+              <p class="mt-1 font-script text-5xl text-gold" x-text="$store.event.hero.titulo"></p>
+            </div>
 
-          <!-- Carta: sube al abrir -->
-          <div
-            class="absolute inset-x-[7%] top-[6%] bottom-[6%] z-10 flex flex-col items-center border border-gold/60 bg-paper pt-[6%] text-center shadow-md transition-transform delay-500 duration-1000 ease-out"
-            :class="abriendo && '-translate-y-[58%]'"
-          >
-            <p class="whitespace-pre-line font-script text-3xl leading-[0.9] text-green" x-text="$store.event.hero.eyebrow"></p>
-            <p class="mt-1 font-script text-4xl text-gold" x-text="$store.event.hero.titulo"></p>
-          </div>
+            <!-- Mitad izquierda: gira sobre su borde izquierdo -->
+            <div
+              class="absolute inset-y-0 left-0 z-10 w-[51.9%] origin-left [transition:transform_1200ms_cubic-bezier(.6,0,.3,1),opacity_350ms_ease-in_950ms] [transform-style:preserve-3d]"
+              :class="abriendo && '[transform:rotateY(-108deg)] opacity-0'"
+            >
+              <img src="/images/sobre/izquierda.webp" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full [backface-visibility:hidden]" />
+              <div class="absolute bottom-0 left-[9%] right-0 top-[10.7%] bg-[#ecd3cb] [backface-visibility:hidden] [transform:rotateY(180deg)]"></div>
+            </div>
 
-          <!-- Bolsillo delantero (deja ver la carta por arriba) -->
-          <div
-            class="absolute inset-0 z-20 rounded-sm bg-gradient-to-b from-[#f2e0da] to-[#ead0c8] [clip-path:polygon(0_0,50%_56%,100%_0,100%_100%,0_100%)]"
-          ></div>
-          <div class="absolute inset-0 z-20 [clip-path:polygon(0_100%,50%_52%,100%_100%)] bg-[#efd8d1]"></div>
+            <!-- Mitad derecha: gira sobre su borde derecho -->
+            <div
+              class="absolute inset-y-0 right-0 z-10 w-[48.1%] origin-right [transition:transform_1200ms_cubic-bezier(.6,0,.3,1),opacity_350ms_ease-in_950ms] [transform-style:preserve-3d]"
+              :class="abriendo && '[transform:rotateY(108deg)] opacity-0'"
+            >
+              <img src="/images/sobre/derecha.webp" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full [backface-visibility:hidden]" />
+              <div class="absolute bottom-0 left-0 right-[5%] top-[10.7%] bg-[#ecd3cb] [backface-visibility:hidden] [transform:rotateY(180deg)]"></div>
+            </div>
 
-          <!-- Solapa -->
-          <div
-            class="absolute inset-x-0 top-0 h-[58%] origin-top bg-gradient-to-b from-[#ecd2ca] to-[#e2bfb6] transition-transform duration-700 ease-in-out [clip-path:polygon(0_0,100%_0,50%_100%)]"
-            :class="[abriendo ? '[transform:rotateX(180deg)]' : '', solapaAtras ? 'z-0' : 'z-30']"
-          ></div>
-
-          <!-- Sello de lacre (public/images/decoracion/sello.webp) con la inicial grabada -->
-          <div
-            class="absolute left-1/2 top-[58%] z-40 h-20 w-20 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_4px_6px_rgba(90,50,10,0.35)] transition duration-300"
-            :class="abriendo && 'scale-50 opacity-0'"
-          >
-            <img src="/images/decoracion/sello.webp" alt="" aria-hidden="true" class="h-full w-full" />
+            <!-- Brillo que late sobre el sello mientras espera el toque -->
             <span
-              class="absolute inset-0 flex -translate-x-[6px] translate-y-[2px] items-center justify-center font-script text-[2.6rem] leading-none text-[#8a5a14] [text-shadow:0_1px_0_#f6dd9a,0_-1px_1px_#6b420c]"
-              x-text="$store.event.hero.titulo.charAt(0)"
+              class="sobre-sello pointer-events-none absolute left-[51.9%] top-[54.6%] z-20 aspect-square w-[20%] -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-300"
+              :class="abriendo && 'opacity-0'"
             ></span>
           </div>
         </button>
 
         <p
-          class="mt-10 animate-pulse text-xs font-semibold uppercase tracking-[0.3em] text-ink/70 transition-opacity duration-500"
+          class="sobre-texto mt-8 animate-pulse text-xs font-semibold uppercase tracking-[0.3em] text-ink/70 transition-opacity duration-500"
           :class="abriendo && 'opacity-0'"
         >Toca para abrir</p>
       </div>
