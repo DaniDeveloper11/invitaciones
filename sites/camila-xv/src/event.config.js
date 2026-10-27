@@ -145,10 +145,29 @@ export default {
   },
 
   dresscode: {
-    // Deja `titulo` vacío para ocultar toda la sección.
-    titulo: 'Formal Casual',
-    nota: 'Colores rosa pastel, ya que está reservado especialmente para la quinceañera.',
-    paleta: ['#ea899a'],
+    // Deja `titulo` vacío para ocultar toda la sección. Las figuras son
+    // public/images/dresscode/ellos.webp y ellas.webp.
+    titulo: 'Formal elegante',
+    intro: 'Queremos que luzcan espectaculares y cómodos para disfrutar juntos de esta celebración.',
+    ellos: ['Traje formal (completo)', 'Camisa de vestir', 'Corbata', 'Zapatos de vestir', 'Accesorios a gusto'],
+    ellas: ['Vestido largo', 'Accesorios a gusto para complementar el look'],
+    // Paleta sugerida para vestidos y colores a evitar: nombre y color.
+    paleta: [
+      { nombre: 'Malva', color: '#a87a8e' },
+      { nombre: 'Ciruela', color: '#7e4160' },
+      { nombre: 'Borgoña', color: '#6b1a2e' },
+      { nombre: 'Terracota', color: '#a8452a' },
+      { nombre: 'Cobre', color: '#c0662a' },
+      { nombre: 'Azul marino', color: '#1c2f50' },
+      { nombre: 'Gris grafito', color: '#3a3b3d' },
+    ],
+    evitar: [
+      { nombre: 'Blanco', color: '#ffffff' },
+      { nombre: 'Beige', color: '#ecdcc4' },
+      { nombre: 'Verdes', color: '#6b8360' },
+      { nombre: 'Rosa pastel', color: '#f2b8c6' },
+    ],
+    nota: 'El rosa pastel está reservado especialmente para la quinceañera.',
     fotos: photos('dresscode', 0),
   },
 

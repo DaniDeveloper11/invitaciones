@@ -635,21 +635,88 @@
         </section>
       </template>
 
-      <!-- Código de vestimenta (dresscode.titulo vacío lo oculta) -->
+      <!--
+        Código de vestimenta (dresscode.titulo vacío lo oculta): tarjeta con
+        marco dorado, Ellos / Ellas con figura y lista, paleta sugerida y
+        colores a evitar. Figuras en public/images/dresscode/.
+      -->
       <template x-if="$store.event.tieneDresscode">
-        <section class="relative w-full px-8 py-12 text-center">
-          <p x-reveal class="font-script text-4xl text-gold">Código de vestimenta</p>
-          <p x-reveal.delay-150 class="mt-1 text-lg font-semibold uppercase tracking-[0.06em]" x-text="$store.event.dresscode.titulo"></p>
-          <div x-reveal.lg class="mt-4 flex items-end justify-center gap-1 text-ink">
-            <span class="block h-16 w-16" x-html="$icono('traje')"></span>
-            <span class="block h-16 w-16" x-html="$icono('vestido')"></span>
+        <section x-data="{ d: $store.event.dresscode }" class="relative w-full px-4 py-12 text-center">
+          <div x-reveal.lg class="relative border border-gold/60 bg-paper/70 px-4 pb-10 pt-12">
+            <!-- Rosas en dos esquinas, como en la referencia -->
+            <img src="/images/decoracion/ramo-rosas.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -left-6 -top-10 w-28 -scale-x-100" />
+            <img src="/images/decoracion/ramo-rosas.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -bottom-10 -right-6 w-28 rotate-180 -scale-x-100" />
+
+            <p class="font-script text-4xl text-gold">Código de vestimenta</p>
+            <div class="mt-2 flex items-center justify-center gap-3">
+              <span class="h-px w-8 bg-gold/70"></span>
+              <p class="text-base font-semibold uppercase tracking-[0.14em]" x-text="d.titulo"></p>
+              <span class="h-px w-8 bg-gold/70"></span>
+            </div>
+            <p x-show="d.intro" class="mx-auto mt-3 max-w-[18rem] text-[15px] italic leading-snug" x-text="d.intro"></p>
+
+            <!-- Ellos / Ellas -->
+            <div class="relative mt-8 grid grid-cols-2 gap-x-4">
+              <div class="absolute bottom-6 left-1/2 top-10 w-px -translate-x-1/2 bg-gold/50"></div>
+              <img src="/images/ornamentos/flor-1.svg" alt="" aria-hidden="true" class="absolute left-1/2 top-1/3 w-5 -translate-x-1/2" />
+              <template x-for="lado in [['Ellos', 'ellos', d.ellos], ['Ellas', 'ellas', d.ellas]]" :key="lado[0]">
+                <div>
+                  <p class="text-2xl font-medium uppercase tracking-[0.08em] text-green" x-text="lado[0]"></p>
+                  <img :src="`/images/dresscode/${lado[1]}.webp`" alt="" aria-hidden="true" loading="lazy" class="mx-auto mt-3 h-56 w-auto" />
+                  <ul class="mt-4 space-y-1.5 text-left text-[13px] font-medium leading-snug">
+                    <template x-for="item in lado[2]" :key="item">
+                      <li class="flex gap-2"><span class="mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full bg-gold"></span><span x-text="item"></span></li>
+                    </template>
+                  </ul>
+                </div>
+              </template>
+            </div>
+
+            <!-- Paleta sugerida -->
+            <template x-if="d.paleta?.length">
+              <div class="mt-10">
+                <div class="flex items-center gap-3">
+                  <span class="h-px flex-1 bg-gold/60"></span>
+                  <p class="text-[12px] font-semibold uppercase tracking-[0.1em]">Paleta sugerida para vestidos</p>
+                  <span class="h-px flex-1 bg-gold/60"></span>
+                </div>
+                <div class="mt-5 flex flex-wrap justify-center gap-x-3 gap-y-4">
+                  <template x-for="c in d.paleta" :key="c.nombre">
+                    <div class="w-16">
+                      <span class="mx-auto block h-11 w-11 rounded-full shadow-sm ring-1 ring-ink/10" :style="`background:${c.color}`"></span>
+                      <p class="mt-1.5 text-[12px] leading-tight" x-text="c.nombre"></p>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+
+            <!-- Colores a evitar: círculo tachado con una X dorada -->
+            <template x-if="d.evitar?.length">
+              <div class="mt-8">
+                <div class="flex items-center gap-3">
+                  <span class="h-px flex-1 bg-gold/60"></span>
+                  <p class="text-[12px] font-semibold uppercase tracking-[0.1em]">Colores a evitar</p>
+                  <span class="h-px flex-1 bg-gold/60"></span>
+                </div>
+                <div class="mt-5 flex flex-wrap justify-center gap-x-3 gap-y-4">
+                  <template x-for="c in d.evitar" :key="c.nombre">
+                    <div class="w-16">
+                      <span class="relative mx-auto block h-11 w-11 rounded-full shadow-sm ring-1 ring-ink/15" :style="`background:${c.color}`">
+                        <svg class="absolute -inset-1 text-gold" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                          <path d="M6 6l40 40M46 6 6 46" />
+                        </svg>
+                      </span>
+                      <p class="mt-1.5 text-[12px] leading-tight" x-text="c.nombre"></p>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+
+            <p x-show="d.nota" class="mx-auto mt-7 max-w-[17rem] text-[15px] italic leading-snug" x-text="d.nota"></p>
+            <img src="/images/ornamentos/divisor-corazon.svg" alt="" aria-hidden="true" class="mx-auto mt-4 w-44" />
           </div>
-          <p
-            x-reveal.delay-150
-            class="mx-auto mt-5 max-w-[19rem] text-[13px] font-semibold uppercase leading-relaxed tracking-[0.03em]"
-            x-text="$store.event.dresscode.nota"
-          ></p>
-          <img x-reveal src="/images/ornamentos/divisor-corazon.svg" alt="" aria-hidden="true" class="mx-auto mt-6 w-56" />
         </section>
       </template>
 
