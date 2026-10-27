@@ -158,10 +158,10 @@ export default {
       { nombre: 'Rosa pastel', color: '#f2b8c6' },
     ],
     nota: 'El rosa pastel está reservado especialmente para la quinceañera.',
-    // Fotos de ejemplo del botón "Ver ejemplos": public/images/dresscode/1.webp,
-    // 2.webp, … (vertical 4:5). Con 0 el botón se oculta.
+    // Fotos de ejemplo del botón "Ver ejemplos": public/images/dresscode/1.jpg,
+    // 2.jpg, … (verticales). Con 0 el botón se oculta.
     boton: 'Ver ejemplos',
-    fotos: photos('dresscode', 4),
+    fotos: photos('dresscode', 4, 'jpg'),
   },
 
   // Sugerencia de regalos. `datos` son las líneas de la cuenta; `copiar` es
