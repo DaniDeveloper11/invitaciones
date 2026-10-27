@@ -167,7 +167,7 @@ export default {
     //          asiste. La lista se carga con `npm run rsvp:alta` (ver README).
     modo: 'pases',
     // Sólo con pases: fecha límite para confirmar (hasta el final de ese día).
-    cierra: '2026-11-25',
+    cierra: '2026-12-01',
     titulo: 'Confirmar asistencia',
     nota: 'Por favor confirma tu asistencia antes del 1 de diciembre',
     // Con una sola opción se muestra un botón con este texto.
@@ -175,7 +175,7 @@ export default {
     // Código de país + número, sin "+", espacios ni guiones (ej. 523312345678).
     // Con 'whatsapp', déjalo vacío para ocultar la sección; con 'pases', es el
     // respaldo para quien abra la invitación sin su enlace personal.
-    whatsapp: '0018157900905',
+    whatsapp: '18157900905',
    // opciones: ['¡Hola! Confirmo mi asistencia a los XV años de Camila 🎉'],
   },
 
