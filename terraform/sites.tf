@@ -33,11 +33,16 @@ locals {
       watch_paths = ["sites/prueba-rsvp/**", "packages/**", "package.json", "package-lock.json"]
     }
 
- "camila-xv" = {
-    subdominio  = "camila"
-    watch_paths = ["sites/camila-xv/**", "packages/**", "package.json",
-  "package-lock.json"]
-  }
+    "camila-xv" = {
+      subdominio = "camila"
+      watch_paths = ["sites/camila-xv/**", "packages/**", "package.json",
+      "package-lock.json"]
+    }
+
+    "xv-atziri" = {
+      subdominio  = "atziri"
+      watch_paths = ["sites/xv-atziri/**", "packages/**", "package.json", "package-lock.json"]
+    }
   }
 }
 
