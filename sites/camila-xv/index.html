@@ -662,6 +662,20 @@
                 </ul>
               </div>
             </div>
+            <!--
+              Ejemplos de cada opción: abren el mismo visor con sus fotos
+              (dresscode.fotos / dresscode.vaquero.fotos); sin fotos muestra la ilustración.
+            -->
+            <button
+              type="button"
+              @click="photos = fotos?.length ? fotos : ['/images/dresscode/pareja.webp']; show(0)"
+              class="relative mt-5 inline-flex items-center gap-2 rounded-md bg-gold px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-paper shadow-sm transition-opacity hover:opacity-85"
+            >
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="14" height="14" rx="1.5" /><path d="M7 3h12a2 2 0 0 1 2 2v12M3 15l4-4 4 4 2-2 4 4" />
+              </svg>
+              <span x-text="boton || 'Ver ejemplos'"></span>
+            </button>
 
             <!-- Segunda opción: vaquero formal (dresscode.vaquero.titulo vacío la oculta) -->
             <template x-if="vaquero?.titulo">
@@ -674,6 +688,16 @@
                 <p class="mt-3 text-base font-semibold uppercase tracking-[0.14em]" x-text="vaquero.titulo"></p>
                 <p x-show="vaquero.texto" class="mx-auto mt-3 max-w-[18rem] text-[15px] italic leading-snug" x-text="vaquero.texto"></p>
                 <img src="/images/dresscode/vaquero.webp" alt="" aria-hidden="true" loading="lazy" class="mx-auto mt-6 h-64 w-auto" />
+                <button
+                  type="button"
+                  @click="photos = vaquero.fotos?.length ? vaquero.fotos : ['/images/dresscode/vaquero.webp']; show(0)"
+                  class="relative mt-5 inline-flex items-center gap-2 rounded-md bg-gold px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-paper shadow-sm transition-opacity hover:opacity-85"
+                >
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="5" width="14" height="14" rx="1.5" /><path d="M7 3h12a2 2 0 0 1 2 2v12M3 15l4-4 4 4 2-2 4 4" />
+                  </svg>
+                  <span x-text="vaquero.boton || 'Ver ejemplos'"></span>
+                </button>
               </div>
             </template>
 
@@ -702,26 +726,6 @@
 
             <p x-show="nota" class="mx-auto mt-7 max-w-[17rem] text-[15px] italic leading-snug" x-text="nota"></p>
             <img src="/images/ornamentos/divisor-corazon.svg" alt="" aria-hidden="true" class="mx-auto mt-4 w-44" />
-
-            <!--
-              Ejemplos de vestimenta: un botón por opción (sin fotos se oculta).
-              Los dos comparten el visor; cada uno le carga sus fotos.
-            -->
-            <div class="relative mt-6 flex flex-wrap justify-center gap-3">
-              <template x-for="op in [{ fotos, boton: boton || 'Ver ejemplos' }, { fotos: vaquero?.titulo ? vaquero.fotos : [], boton: vaquero?.boton || 'Ejemplos vaquero' }]" :key="op.boton">
-                <button
-                  type="button"
-                  x-show="op.fotos?.length"
-                  @click="photos = op.fotos; show(0)"
-                  class="inline-flex items-center gap-2 rounded-md bg-gold px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-paper shadow-sm transition-opacity hover:opacity-85"
-                >
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="3" y="5" width="14" height="14" rx="1.5" /><path d="M7 3h12a2 2 0 0 1 2 2v12M3 15l4-4 4 4 2-2 4 4" />
-                  </svg>
-                  <span x-text="op.boton"></span>
-                </button>
-              </template>
-            </div>
           </div>
 
           <!-- Visor de ejemplos: flechas, deslizar con el dedo y contador -->
