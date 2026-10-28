@@ -141,21 +141,41 @@ export const ICONOS = {
 
 /**
  * Carrusel deslizable (scroll-snap) para la galería de fotos destacadas.
- * Avanza solo cada `intervalo` ms hasta que el invitado lo toca.
+ * Avanza solo cada `intervalo` ms mientras está en pantalla, hasta que el
+ * invitado lo toca.
  */
 export function carrusel(intervalo = 5000) {
   return {
     activo: 0,
     _timer: null,
+    _tocado: false,
+    _observador: null,
 
     init() {
-      this._timer = setInterval(() => this.ir(this.activo + 1), intervalo)
+      this._observador = new IntersectionObserver(
+        ([entrada]) => (entrada.isIntersecting ? this.reanudar() : this.pausar()),
+        { threshold: 0.5 },
+      )
+      this._observador.observe(this.$el)
       this.$el.addEventListener('alpine:destroy', () => this.detener())
       this.$watch('activo', (i) => this.centrarMiniatura(i))
     },
 
-    detener() {
+    reanudar() {
+      if (this._tocado || this._timer) return
+      this._timer = setInterval(() => this.ir(this.activo + 1), intervalo)
+    },
+
+    pausar() {
       clearInterval(this._timer)
+      this._timer = null
+    },
+
+    /** El invitado tocó el carrusel: ya no avanza solo. */
+    detener() {
+      this._tocado = true
+      this.pausar()
+      this._observador?.disconnect()
     },
 
     /** Actualiza el punto activo según la posición del scroll. */
