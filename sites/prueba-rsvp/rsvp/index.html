@@ -64,7 +64,7 @@
             </div>
             <div class="border border-ink/15 p-4 text-center">
               <p class="font-serif text-4xl" x-text="totales.personas - totales.adultos - totales.ninos"></p>
-              <p class="mt-1 text-[11px] uppercase tracking-[0.15em] text-ink/60">Lugares libres</p>
+              <p class="mt-1 text-[11px] uppercase tracking-[0.15em] text-ink/60">Sin ocupar</p>
               <p class="mt-1 text-xs text-ink/50" x-text="`de ${totales.personas} invitados`"></p>
             </div>
           </section>
@@ -124,6 +124,7 @@
                       <span class="w-4 text-center" x-text="persona.asiste === null ? '·' : persona.asiste ? '✓' : '✗'"></span>
                       <span x-text="nombrePersona(persona)"></span>
                       <span x-show="persona.nino" class="text-[10px] uppercase tracking-[0.15em] text-ink/50">niño/a</span>
+                      <span x-show="persona.libre" class="text-[10px] uppercase tracking-[0.15em] text-ink/50">acompañante</span>
                     </li>
                   </template>
                 </ul>

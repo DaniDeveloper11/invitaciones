@@ -540,14 +540,13 @@
                         x-text="textoBoton"
                       ></button>
                       <button
-                        x-show="personas.length > 1 && asistentes.length"
+                        x-show="asistentes.length"
                         type="button"
                         @click="noAsistiremos()"
                         :disabled="enviando"
                         class="mt-3 w-full border border-paper/30 py-3 text-xs uppercase tracking-[0.2em] hover:bg-paper/10"
-                      >
-                        No podremos asistir
-                      </button>
+                        x-text="textoNoAsistir"
+                      ></button>
                       <button
                         x-show="respondio"
                         type="button"

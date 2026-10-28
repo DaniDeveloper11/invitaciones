@@ -121,7 +121,7 @@ export function rsvpAdmin(event) {
       const van = pase.personas.filter((p) => p.asiste).length
       const estado = this.estadoPase(pase)
       if (estado === 'pendiente') return `Sin responder · ${pase.personas.length} en el pase`
-      if (estado === 'no_van') return 'No asistirán'
+      if (estado === 'no_van') return pase.personas.length > 1 ? 'No asistirán' : 'No asistirá'
       return `Asisten ${van} de ${pase.personas.length}`
     },
 
@@ -156,17 +156,17 @@ export function rsvpAdmin(event) {
         const t = String(v ?? '')
         return /[",\n]/.test(t) ? `"${t.replaceAll('"', '""')}"` : t
       }
-      const filas = [['pase', 'persona', 'tipo', 'asiste', 'mensaje', 'telefono', 'respondio']]
+      const filas = [['pase', 'persona', 'tipo', 'asiste', 'mensaje', 'telefono', 'ultima_respuesta']]
       for (const pase of this.pases) {
         for (const p of pase.personas) {
           filas.push([
             pase.nombre,
             this.nombrePersona(p),
-            p.nino ? 'niño/a' : 'adulto',
+            [p.nino ? 'niño/a' : 'adulto', p.libre && 'acompañante'].filter(Boolean).join(', '),
             p.asiste === null ? 'sin responder' : p.asiste ? 'sí' : 'no',
             pase.mensaje,
             pase.telefono,
-            pase.respondido_en ? formatearFechaHora(pase.respondido_en, config.locale) : '',
+            pase.respondido_en ? formatearFechaHora(pase.actualizado_en ?? pase.respondido_en, config.locale) : '',
           ])
         }
       }

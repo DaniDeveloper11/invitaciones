@@ -110,7 +110,12 @@ export function rsvpPases(config) {
 
     get textoBoton() {
       if (this.enviando) return 'Enviando…'
-      return this.asistentes.length ? 'Confirmar' : 'Confirmar que no asistiremos'
+      if (this.asistentes.length) return 'Confirmar'
+      return this.personas.length > 1 ? 'Confirmar que no asistiremos' : 'Confirmar que no asistiré'
+    },
+
+    get textoNoAsistir() {
+      return this.personas.length > 1 ? 'No podremos asistir' : 'No podré asistir'
     },
 
     get fechaLimite() {
