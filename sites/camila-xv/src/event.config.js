@@ -47,16 +47,11 @@ export default {
       {
         "titulo": "Mis padrinos",
         "nombres": [
-          "Irma Martinez"
-        ]
-      },
-      {
-        "titulo": "Mis padrinos",
-        "nombres": [
+          "Irma Martinez",
           "Cesar Villaseñor"
         ]
       }
-    ],
+         ],
     cierre: 'A festejar mis',
   },
 
