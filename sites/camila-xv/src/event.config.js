@@ -140,12 +140,12 @@ export default {
     fotos: photos('dresscode', 4, 'jpg'),
     // Segunda opción de vestimenta. Deja `titulo` vacío para ocultarla. La
     // ilustración es public/images/dresscode/vaquero.webp y sus ejemplos
-    // public/images/dresscode/vaquero/1.jpg, 2.jpg, … (con 0 muestra la ilustración).
+    // public/images/dresscode/vaquero/1.webp, 2.webp, … (con 0 muestra la ilustración).
     vaquero: {
       titulo: 'Vaquero formal',
       texto: 'Si lo prefieren, también pueden venir de vaquero formal: sombrero, botas y cinturón piteado con su mejor atuendo.',
       boton: 'Ver ejemplos vaquero',
-      fotos: photos('dresscode/vaquero', 0, 'jpg'),
+      fotos: photos('dresscode/vaquero', 7),
     },
   },
 
