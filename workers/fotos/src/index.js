@@ -16,7 +16,10 @@
 //   GET    /v1/:slug/rsvp                  el pase y su respuesta          (pase)
 //   PUT    /v1/:slug/rsvp                  confirmar / cambiar respuesta   (pase)
 //   GET    /v1/:slug/admin/rsvp            todos los pases y totales       (admin)
+//   POST   /v1/:slug/admin/rsvp            agregar un pase                 (admin)
+//   PUT    /v1/:slug/admin/rsvp/:id        editar un pase y sus personas   (admin)
 //   PATCH  /v1/:slug/admin/rsvp/:id        marcar la invitación enviada    (admin)
+//   DELETE /v1/:slug/admin/rsvp/:id        borrar un pase                  (admin)
 //
 // Código: header X-Codigo (o ?c= en <img>). Pase: header X-Pase.
 // Admin: Authorization: Bearer <token>.
@@ -32,7 +35,7 @@ import {
   cambiarFoto,
   borrarFoto,
 } from './fotos.js'
-import { verPase, responderPase, listarRsvp, marcarEnviada } from './rsvp.js'
+import { verPase, responderPase, listarRsvp, crearPase, editarPase, marcarEnviada, borrarPase } from './rsvp.js'
 
 const SLUG = '([a-z0-9-]+)'
 const ID = '([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'
@@ -48,7 +51,10 @@ const RUTAS = [
   ['GET', `^/v1/${SLUG}/rsvp$`, verPase],
   ['PUT', `^/v1/${SLUG}/rsvp$`, responderPase],
   ['GET', `^/v1/${SLUG}/admin/rsvp$`, listarRsvp],
+  ['POST', `^/v1/${SLUG}/admin/rsvp$`, crearPase],
+  ['PUT', `^/v1/${SLUG}/admin/rsvp/(\\d+)$`, editarPase],
   ['PATCH', `^/v1/${SLUG}/admin/rsvp/(\\d+)$`, marcarEnviada],
+  ['DELETE', `^/v1/${SLUG}/admin/rsvp/(\\d+)$`, borrarPase],
 ].map(([metodo, patron, handler]) => ({ metodo, patron: new RegExp(patron), handler }))
 
 async function enrutar(request, env) {

@@ -19,6 +19,9 @@
 // Se puede volver a correr con la lista actualizada: agrega los pases nuevos
 // y no toca los que ya existen (sus enlaces ya se enviaron). Si el evento no
 // existe, lo da de alta sólo para RSVP e imprime el enlace de los festejados.
+// Reconoce los pases por su nombre: si los festejados renombraron o borraron
+// uno en su panel, volver a correrlo con el CSV viejo lo agrega de nuevo. Una
+// vez que usan el panel, la lista vive ahí.
 //
 // Escribe sites/<slug>/assets-origen/rsvp-enlaces.csv con el enlace de cada
 // pase y un enlace de WhatsApp con el mensaje listo (está en .gitignore;

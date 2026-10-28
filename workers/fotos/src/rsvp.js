@@ -9,6 +9,11 @@ import { exigirAdmin } from './auth.js'
 
 const MAX_NOMBRE = 80
 const MAX_MENSAJE = 500
+const MAX_PERSONAS = 20
+
+// Igual que scripts/rsvp-alta.mjs: sin O/0, I/1/L para dictarlo sin confusiones.
+const ALFABETO = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
+const LARGO_CODIGO = 8
 
 function estadoRsvp(evento, ahora = new Date().toISOString()) {
   return evento.rsvp_cierra_en && ahora >= evento.rsvp_cierra_en ? 'cerrada' : 'abierta'
@@ -187,4 +192,154 @@ export async function marcarEnviada({ request, env, evento, params }) {
     .first()
   if (!pase) throw new HttpError(404, 'Pase no encontrado')
   return json(pase)
+}
+
+// ── Lista de invitados (festejados) ──────────────────────────────────────────
+
+function codigoAleatorio() {
+  const bytes = crypto.getRandomValues(new Uint32Array(LARGO_CODIGO))
+  return Array.from(bytes, (n) => ALFABETO[n % ALFABETO.length]).join('')
+}
+
+/** Como en rsvp-alta: 10 dígitos son de México (se antepone 52); si no, con lada del país. */
+function normalizarTelefono(valor) {
+  let telefono = String(valor ?? '').replace(/\D/g, '')
+  if (!telefono) return null
+  if (telefono.length === 10) telefono = `52${telefono}`
+  if (telefono.length < 11 || telefono.length > 15) {
+    throw new HttpError(400, 'Teléfono no válido: 10 dígitos si es de México, o con la lada de su país', {
+      codigo: 'telefono',
+    })
+  }
+  return telefono
+}
+
+const texto = (valor) => (typeof valor === 'string' ? valor.trim().slice(0, MAX_NOMBRE) : '')
+
+/**
+ * Valida { nombre, telefono?, personas: [{ id?, nombre?, nino, libre }] }. Las
+ * personas van en el orden de la lista; las que traen id ya existían.
+ */
+function leerPase(body) {
+  const nombre = texto(body?.nombre)
+  if (!nombre) throw new HttpError(400, 'Escribe el nombre del pase', { codigo: 'falta_nombre' })
+  if (!Array.isArray(body.personas) || !body.personas.length) {
+    throw new HttpError(400, 'El pase necesita al menos una persona')
+  }
+  if (body.personas.length > MAX_PERSONAS) throw new HttpError(400, `Máximo ${MAX_PERSONAS} personas por pase`)
+
+  const personas = body.personas.map((p, i) => {
+    const libre = Boolean(p?.libre)
+    const nombrePersona = texto(p?.nombre)
+    if (!libre && !nombrePersona) {
+      throw new HttpError(400, 'Escribe el nombre de cada persona o márcala como acompañante', { codigo: 'falta_nombre' })
+    }
+    return {
+      id: Number.isInteger(p?.id) ? p.id : null,
+      orden: i + 1,
+      nombre: nombrePersona || null,
+      nino: p?.nino ? 1 : 0,
+      libre: libre ? 1 : 0,
+    }
+  })
+  return { nombre, telefono: normalizarTelefono(body.telefono), personas }
+}
+
+/** rsvp-alta reconoce los pases por su nombre: dos iguales lo confundirían. */
+async function exigirNombreLibre(env, evento, nombre, id = 0) {
+  const otro = await env.DB.prepare('SELECT id FROM pases WHERE slug = ? AND nombre = ? AND id != ?')
+    .bind(evento.slug, nombre, id)
+    .first()
+  if (otro) throw new HttpError(409, `Ya hay un pase llamado "${nombre}"`, { codigo: 'repetido' })
+}
+
+const insertarPersona = (env, paseId, p) =>
+  env.DB.prepare('INSERT INTO personas (pase_id, orden, nombre, es_nino, es_libre) VALUES (?, ?, ?, ?, ?)').bind(
+    paseId,
+    p.orden,
+    p.nombre,
+    p.nino,
+    p.libre,
+  )
+
+/** POST /v1/:slug/admin/rsvp — un pase nuevo con su propio enlace. */
+export async function crearPase({ request, env, evento }) {
+  await exigirAdmin(evento, request)
+  const datos = leerPase(await request.json().catch(() => null))
+  await exigirNombreLibre(env, evento, datos.nombre)
+
+  let codigo
+  do codigo = codigoAleatorio()
+  while (await env.DB.prepare('SELECT 1 FROM pases WHERE slug = ? AND codigo = ?').bind(evento.slug, codigo).first())
+
+  // En un solo batch, como rsvp-alta: o se guarda el pase con sus personas o nada.
+  const [, ...resto] = await env.DB.batch([
+    env.DB.prepare('INSERT INTO pases (slug, codigo, nombre, telefono) VALUES (?, ?, ?, ?)').bind(
+      evento.slug,
+      codigo,
+      datos.nombre,
+      datos.telefono,
+    ),
+    ...datos.personas.map((p) =>
+      env.DB.prepare(
+        `INSERT INTO personas (pase_id, orden, nombre, es_nino, es_libre)
+         VALUES ((SELECT id FROM pases WHERE slug = ? AND codigo = ?), ?, ?, ?, ?)`,
+      ).bind(evento.slug, codigo, p.orden, p.nombre, p.nino, p.libre),
+    ),
+    env.DB.prepare('SELECT id FROM pases WHERE slug = ? AND codigo = ?').bind(evento.slug, codigo),
+  ])
+  const pase = resto.at(-1).results[0]
+  return json({ id: pase.id, codigo }, 201)
+}
+
+async function paseDelEvento(env, evento, id) {
+  const pase = await env.DB.prepare('SELECT id FROM pases WHERE id = ? AND slug = ?').bind(id, evento.slug).first()
+  if (!pase) throw new HttpError(404, 'Pase no encontrado')
+  return pase
+}
+
+/**
+ * PUT /v1/:slug/admin/rsvp/:id — reemplaza nombre, teléfono y personas. Las
+ * personas que ya existían conservan su respuesta; las que faltan se borran.
+ */
+export async function editarPase({ request, env, evento, params }) {
+  await exigirAdmin(evento, request)
+  const pase = await paseDelEvento(env, evento, Number(params[0]))
+  const datos = leerPase(await request.json().catch(() => null))
+  await exigirNombreLibre(env, evento, datos.nombre, pase.id)
+
+  const actuales = new Set((await personasDe(env, pase.id)).map((p) => p.id))
+  const quedan = datos.personas.filter((p) => p.id !== null)
+  if (quedan.some((p) => !actuales.has(p.id)) || new Set(quedan.map((p) => p.id)).size !== quedan.length) {
+    throw new HttpError(400, 'La lista cambió mientras la editabas; vuelve a abrir el pase')
+  }
+  const borradas = [...actuales].filter((id) => !quedan.some((p) => p.id === id))
+
+  await env.DB.batch([
+    env.DB.prepare('UPDATE pases SET nombre = ?, telefono = ? WHERE id = ?').bind(datos.nombre, datos.telefono, pase.id),
+    ...borradas.map((id) => env.DB.prepare('DELETE FROM personas WHERE id = ?').bind(id)),
+    ...datos.personas.map((p) =>
+      p.id === null
+        ? insertarPersona(env, pase.id, p)
+        : env.DB.prepare('UPDATE personas SET orden = ?, nombre = ?, es_nino = ?, es_libre = ? WHERE id = ?').bind(
+            p.orden,
+            p.nombre,
+            p.nino,
+            p.libre,
+            p.id,
+          ),
+    ),
+  ])
+  return json({ id: pase.id })
+}
+
+/** DELETE /v1/:slug/admin/rsvp/:id — el pase, sus personas y su respuesta; su enlace deja de servir. */
+export async function borrarPase({ request, env, evento, params }) {
+  await exigirAdmin(evento, request)
+  const pase = await paseDelEvento(env, evento, Number(params[0]))
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM personas WHERE pase_id = ?').bind(pase.id),
+    env.DB.prepare('DELETE FROM pases WHERE id = ?').bind(pase.id),
+  ])
+  return new Response(null, { status: 204 })
 }

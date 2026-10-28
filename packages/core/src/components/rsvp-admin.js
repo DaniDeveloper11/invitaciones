@@ -2,11 +2,21 @@
 //
 // Muestra todos los pases con quién asiste y los totales (adultos y niños),
 // manda cada invitación por WhatsApp (y guarda que ya se envió), recuerda a los
-// pendientes y descarga la lista en CSV.
+// pendientes, permite agregar, editar y borrar pases, y descarga la lista en CSV.
 // Mismo token que el panel de fotos.
 import { crearApi, formatearFechaHora, tokenAdmin } from '../fotos/api.js'
 
 const CADA_MS = 60_000
+
+let claves = 0
+/** Persona del editor; `clave` sólo identifica la fila en el x-for. */
+const filaPersona = (p = {}) => ({
+  id: p.id ?? null,
+  nombre: p.nombre ?? '',
+  nino: Boolean(p.nino),
+  libre: Boolean(p.libre),
+  clave: ++claves,
+})
 
 /** Sin acentos ni mayúsculas, para la búsqueda. */
 const normalizar = (texto) =>
@@ -33,6 +43,11 @@ export function rsvpAdmin(event) {
     busqueda: '',
     copiado: null, // id del pase cuyo enlace se acaba de copiar
     actualizando: false,
+    // Editor de un pase: null = cerrado; id null = pase nuevo.
+    editor: null,
+    guardando: false,
+    errorEditor: '',
+    confirmarBorrar: false,
 
     async init() {
       if (config.modo !== 'pases') {
@@ -214,6 +229,77 @@ export function rsvpAdmin(event) {
       } catch (e) {
         pase.enviada_en = antes
         this.error = `No se pudo guardar el envío de ${pase.nombre}: ${e.message}`
+      }
+    },
+
+    // ── Agregar, editar y borrar pases ────────────────────────────────────
+
+    abrirEditor(pase = null) {
+      this.editor = {
+        id: pase?.id ?? null,
+        nombre: pase?.nombre ?? '',
+        // Los de México se guardan con 52; se editan con los 10 dígitos.
+        telefono: (pase?.telefono ?? '').replace(/^52(\d{10})$/, '$1'),
+        personas: pase ? pase.personas.map(filaPersona) : [filaPersona()],
+        respondido: Boolean(pase?.respondido_en),
+      }
+      this.errorEditor = ''
+      this.confirmarBorrar = false
+    },
+
+    cerrarEditor() {
+      if (!this.guardando) this.editor = null
+    },
+
+    agregarPersona(libre = false) {
+      this.editor.personas.push(filaPersona({ libre }))
+    },
+
+    quitarPersona(i) {
+      this.editor.personas.splice(i, 1)
+    },
+
+    async guardarPase() {
+      const { id, nombre, telefono, personas } = this.editor
+      this.guardando = true
+      this.errorEditor = ''
+      try {
+        await api.pedir(id ? `/admin/rsvp/${id}` : '/admin/rsvp', {
+          method: id ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre,
+            telefono,
+            personas: personas.map(({ id, nombre, nino, libre }) => ({ id, nombre, nino, libre })),
+          }),
+        })
+        if (!id) {
+          // Que el pase nuevo se vea en la lista.
+          this.filtro = 'todos'
+          this.busqueda = nombre.trim()
+        }
+        this.guardando = false
+        this.editor = null
+        await this.cargar()
+      } catch (e) {
+        this.errorEditor = e.message
+      } finally {
+        this.guardando = false
+      }
+    },
+
+    async borrarPase() {
+      this.guardando = true
+      this.errorEditor = ''
+      try {
+        await api.pedir(`/admin/rsvp/${this.editor.id}`, { method: 'DELETE' })
+        this.guardando = false
+        this.editor = null
+        await this.cargar()
+      } catch (e) {
+        this.errorEditor = e.message
+      } finally {
+        this.guardando = false
       }
     },
 
