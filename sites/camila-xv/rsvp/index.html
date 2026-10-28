@@ -108,6 +108,12 @@
                   <div>
                     <p class="font-serif text-xl" x-text="pase.nombre"></p>
                     <p class="mt-0.5 text-xs text-ink/60" x-text="resumenPase(pase)"></p>
+                    <p x-show="pase.enviada_en" class="mt-0.5 text-xs text-ink/50">
+                      <span x-text="textoEnviada(pase)"></span> ·
+                      <button type="button" @click="marcarEnviada(pase, false)" class="underline hover:text-ink">
+                        desmarcar
+                      </button>
+                    </p>
                   </div>
                   <span
                     class="shrink-0 px-2 py-1 text-[10px] uppercase tracking-[0.15em]"
@@ -141,7 +147,17 @@
                     x-text="copiado === pase.id ? '¡Copiado!' : 'Copiar enlace'"
                   ></button>
                   <a
-                    x-show="estadoPase(pase) === 'pendiente' && abierta"
+                    x-show="porEnviar(pase) && abierta"
+                    :href="invitacion(pase)"
+                    @click="marcarEnviada(pase, true)"
+                    target="_blank"
+                    rel="noopener"
+                    class="bg-ink px-3 py-1.5 text-paper"
+                  >
+                    Enviar invitación
+                  </a>
+                  <a
+                    x-show="pase.enviada_en && estadoPase(pase) === 'pendiente' && abierta"
                     :href="recordatorio(pase)"
                     target="_blank"
                     rel="noopener"

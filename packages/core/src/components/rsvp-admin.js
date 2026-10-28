@@ -1,7 +1,8 @@
 // Componente Alpine: panel de los festejados en /rsvp/#admin=<token>.
 //
-// Muestra todos los pases con quién asiste, los totales (adultos y niños), los
-// pendientes con un recordatorio por WhatsApp y descarga la lista en CSV.
+// Muestra todos los pases con quién asiste y los totales (adultos y niños),
+// manda cada invitación por WhatsApp (y guarda que ya se envió), recuerda a los
+// pendientes y descarga la lista en CSV.
 // Mismo token que el panel de fotos.
 import { crearApi, formatearFechaHora, tokenAdmin } from '../fotos/api.js'
 
@@ -28,7 +29,7 @@ export function rsvpAdmin(event) {
     totales: null,
     abierta: true,
     cierraEn: null,
-    filtro: 'todos', // todos · van · no_van · pendiente
+    filtro: 'todos', // todos · van · no_van · pendiente · sin_enviar
     busqueda: '',
     copiado: null, // id del pase cuyo enlace se acaba de copiar
     actualizando: false,
@@ -81,8 +82,11 @@ export function rsvpAdmin(event) {
     },
 
     get conteo() {
-      const conteo = { todos: this.pases.length, van: 0, no_van: 0, pendiente: 0 }
-      for (const pase of this.pases) conteo[this.estadoPase(pase)]++
+      const conteo = { todos: this.pases.length, van: 0, no_van: 0, pendiente: 0, sin_enviar: 0 }
+      for (const pase of this.pases) {
+        conteo[this.estadoPase(pase)]++
+        if (this.porEnviar(pase)) conteo.sin_enviar++
+      }
       return conteo
     },
 
@@ -93,6 +97,7 @@ export function rsvpAdmin(event) {
         ['van', `Confirmados (${c.van})`],
         ['no_van', `No van (${c.no_van})`],
         ['pendiente', `Pendientes (${c.pendiente})`],
+        ['sin_enviar', `Sin enviar (${c.sin_enviar})`],
       ]
     },
 
@@ -100,7 +105,9 @@ export function rsvpAdmin(event) {
       const q = normalizar(this.busqueda.trim())
       return this.pases.filter(
         (pase) =>
-          (this.filtro === 'todos' || this.estadoPase(pase) === this.filtro) &&
+          (this.filtro === 'todos' ||
+            this.estadoPase(pase) === this.filtro ||
+            (this.filtro === 'sin_enviar' && this.porEnviar(pase))) &&
           (!q || normalizar([pase.nombre, ...pase.personas.map((p) => p.nombre)].join(' ')).includes(q)),
       )
     },
@@ -139,13 +146,75 @@ export function rsvpAdmin(event) {
       }
     },
 
-    /** WhatsApp con un recordatorio ya escrito (sin teléfono, WhatsApp pide elegir el contacto). */
-    recordatorio(pase) {
-      const limite = this.cierraEn
-        ? ` antes del ${new Intl.DateTimeFormat(config.locale, { day: 'numeric', month: 'long' }).format(new Date(new Date(this.cierraEn).getTime() - 1))}`
-        : ''
-      const texto = `¡Hola, ${pase.nombre}! 💌 Te recordamos confirmar tu asistencia a ${event.titulo}${limite}:\n${this.enlace(pase)}`
+    // ── WhatsApp (sin teléfono, WhatsApp pide elegir el contacto) ─────────
+
+    get limite() {
+      if (!this.cierraEn) return ''
+      const fecha = new Date(new Date(this.cierraEn).getTime() - 1)
+      return ` antes del ${new Intl.DateTimeFormat(config.locale, { day: 'numeric', month: 'long' }).format(fecha)}`
+    },
+
+    whatsapp(pase, texto) {
       return `https://wa.me/${pase.telefono ?? ''}?text=${encodeURIComponent(texto)}`
+    },
+
+    /** Nadie le ha mandado la invitación y aún puede confirmar. */
+    porEnviar(pase) {
+      return !pase.enviada_en && this.estadoPase(pase) === 'pendiente'
+    },
+
+    /** La primera invitación: a quién incluye el pase y el enlace para confirmar. */
+    invitacion(pase) {
+      const nombres = pase.personas.map((p) =>
+        p.libre ? 'un acompañante' : p.nino ? `${p.nombre} (niño/a)` : p.nombre,
+      )
+      const quienes = nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0]
+      return this.whatsapp(
+        pase,
+        [
+          `¡Hola, ${pase.nombre}! 💌`,
+          `Te compartimos la invitación a ${event.titulo}.`,
+          `Pase para: ${quienes}.`,
+          `Confirma tu asistencia aquí${this.limite}:`,
+          this.enlace(pase),
+        ].join('\n'),
+      )
+    },
+
+    recordatorio(pase) {
+      return this.whatsapp(
+        pase,
+        `¡Hola, ${pase.nombre}! 💌 Te recordamos confirmar tu asistencia a ${event.titulo}${this.limite}:\n${this.enlace(pase)}`,
+      )
+    },
+
+    textoEnviada(pase) {
+      if (!pase.enviada_en) return ''
+      const fecha = new Intl.DateTimeFormat(config.locale, { day: 'numeric', month: 'short' }).format(
+        new Date(pase.enviada_en),
+      )
+      return `Invitación enviada el ${fecha}`
+    },
+
+    /**
+     * Al tocar "Enviar invitación" (el enlace abre WhatsApp) o "Desmarcar". Se
+     * marca de inmediato; si la API falla, vuelve como estaba y se ve el aviso.
+     */
+    async marcarEnviada(pase, enviada) {
+      const antes = pase.enviada_en
+      pase.enviada_en = enviada ? (antes ?? new Date().toISOString()) : null
+      try {
+        const datos = await api.pedir(`/admin/rsvp/${pase.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enviada }),
+        })
+        pase.enviada_en = datos.enviada_en
+        this.error = ''
+      } catch (e) {
+        pase.enviada_en = antes
+        this.error = `No se pudo guardar el envío de ${pase.nombre}: ${e.message}`
+      }
     },
 
     // ── CSV ───────────────────────────────────────────────────────────────

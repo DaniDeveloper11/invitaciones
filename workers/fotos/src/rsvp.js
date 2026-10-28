@@ -164,7 +164,27 @@ export async function listarRsvp({ request, env, evento }) {
       id: p.id,
       codigo: p.codigo,
       telefono: p.telefono,
+      enviada_en: p.enviada_en,
       ...aPase(p, porPase.get(p.id) ?? []),
     })),
   })
+}
+
+/**
+ * PATCH /v1/:slug/admin/rsvp/:id — { enviada: true | false }. Guarda la primera
+ * vez que se envió (reenviar no la cambia); false la desmarca.
+ */
+export async function marcarEnviada({ request, env, evento, params }) {
+  await exigirAdmin(evento, request)
+  const body = await request.json().catch(() => null)
+  if (typeof body?.enviada !== 'boolean') throw new HttpError(400, 'Indica si la invitación se envió')
+
+  const pase = await env.DB.prepare(
+    `UPDATE pases SET enviada_en = ${body.enviada ? 'COALESCE(enviada_en, ?)' : 'NULL'}
+     WHERE id = ? AND slug = ? RETURNING id, enviada_en`,
+  )
+    .bind(...(body.enviada ? [new Date().toISOString()] : []), Number(params[0]), evento.slug)
+    .first()
+  if (!pase) throw new HttpError(404, 'Pase no encontrado')
+  return json(pase)
 }
