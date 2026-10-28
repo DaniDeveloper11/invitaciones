@@ -83,9 +83,9 @@ export default {
 
   // Fotos del diseño (verticales, ~1000x1250px). Deja una vacía para quitarla.
   fotos: {
-    regalos: 'images/foto-2.webp', // antes de la sugerencia de regalos
-    marco: 'images/foto-3.webp', // cuadrada, bajo "¡Te esperamos!"
-    final: 'images/foto-4.webp', // cierre de la invitación
+    regalos: 'images/gallery/8.webp', // antes de la sugerencia de regalos
+    marco: 'images/gallery/2.webp', // cuadrada, bajo "¡Te esperamos!"
+    final: 'images/gallery/4.webp', // cierre de la invitación
   },
 
   // Línea de tiempo. Íconos (src/componentes.js): iglesia, copas, cena,
