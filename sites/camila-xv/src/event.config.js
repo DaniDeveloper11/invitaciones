@@ -123,7 +123,7 @@ export default {
   dresscode: {
     // Deja `titulo` vacío para ocultar toda la sección. La ilustración es
     // public/images/dresscode/pareja.webp.
-    titulo: 'Formal',
+    titulo: 'Formal / Vaquero',
     intro: 'Queremos que luzcan espectaculares y cómodos para disfrutar juntos de esta celebración.',
     // ellos: ['Traje formal (opcional)', 'Camisa de vestir', 'Corbata(opcional)', 'Zapatos de vestir', 'Accesorios a gusto'],
     // ellas: ['Vestido largo', 'Accesorios a gusto para complementar el look'],
@@ -138,6 +138,15 @@ export default {
     // 2.jpg, … (verticales). Con 0 el botón se oculta.
     boton: 'Ver ejemplos',
     fotos: photos('dresscode', 4, 'jpg'),
+    // Segunda opción de vestimenta. Deja `titulo` vacío para ocultarla. La
+    // ilustración es public/images/dresscode/vaquero.webp y sus ejemplos
+    // public/images/dresscode/vaquero/1.jpg, 2.jpg, … (con 0 el botón se oculta).
+    vaquero: {
+      titulo: 'Vaquero formal',
+      texto: 'Si lo prefieren, también pueden venir de vaquero formal: sombrero, botas y cinturón piteado con su mejor atuendo.',
+      boton: 'Ejemplos vaquero',
+      fotos: photos('dresscode/vaquero', 0, 'jpg'),
+    },
   },
 
   // Sugerencia de regalos. `datos` son las líneas de la cuenta; `copiar` es
