@@ -203,3 +203,35 @@ export function sobre() {
     },
   }
 }
+
+/**
+ * Directiva x-parallax="0.4": al hacer scroll el elemento baja a esa fracción
+ * de la velocidad de la página, así parece quedarse atrás. Se apaga si el
+ * sistema pide reducir movimiento.
+ */
+export function registrarParallax(Alpine) {
+  Alpine.directive('parallax', (el, { expression }, { cleanup }) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const velocidad = Number(expression) || 0.4
+    const contenedor = el.parentElement
+    let pendiente = false
+
+    const mover = () => {
+      pendiente = false
+      const { top, bottom } = contenedor.getBoundingClientRect()
+      if (bottom < 0 || top > window.innerHeight) return
+      el.style.transform = `translate3d(0, ${Math.max(-top, 0) * velocidad}px, 0)`
+    }
+    const alHacerScroll = () => {
+      if (!pendiente) {
+        pendiente = true
+        requestAnimationFrame(mover)
+      }
+    }
+
+    el.style.willChange = 'transform'
+    window.addEventListener('scroll', alHacerScroll, { passive: true })
+    mover()
+    cleanup(() => window.removeEventListener('scroll', alHacerScroll))
+  })
+}
