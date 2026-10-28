@@ -68,7 +68,11 @@
       >
         <div class="humo" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
-        <div class="sobre-texto transition-opacity duration-500" :class="abriendo && 'opacity-0'">
+        <!-- En el celular el sobre llena la pantalla y los textos van encima -->
+        <div
+          class="sobre-texto transition-opacity duration-500 max-sm:absolute max-sm:top-[6svh] max-sm:z-30 max-sm:rounded-2xl max-sm:bg-paper/80 max-sm:px-5 max-sm:pb-2 max-sm:pt-1 max-sm:backdrop-blur-sm"
+          :class="abriendo && 'opacity-0'"
+        >
           <p class="font-script text-4xl text-gold">Tienes una invitación</p>
           <img src="/images/ornamentos/divisor-corazon.svg" alt="" aria-hidden="true" class="mx-auto mt-3 w-56" />
         </div>
@@ -76,13 +80,13 @@
         <button
           type="button"
           @click="abrir()"
-          class="sobre-entrada relative mt-6 aspect-[1669/2322] w-[min(72vw,330px,38svh)] cursor-pointer"
+          class="sobre-entrada relative mt-6 aspect-[1669/2322] w-[min(72vw,330px,38svh)] cursor-pointer max-sm:absolute max-sm:left-1/2 max-sm:top-[-12svh] max-sm:mt-0 max-sm:h-[116svh] max-sm:w-auto max-sm:-translate-x-1/2"
           aria-label="Abrir la invitación"
         >
-          <div class="sobre-flotar h-full w-full [perspective:900px]" :class="abriendo && '[animation-play-state:paused]'">
+          <div class="sobre-flotar h-full w-full [perspective:900px] max-sm:[animation:none]" :class="abriendo && '[animation-play-state:paused]'">
             <!-- Carta de adentro: se ve al abrir las puertas y luego crece -->
             <div
-              class="absolute left-[5.5%] right-[3%] top-[11.5%] bottom-[1%] flex flex-col items-center justify-center border border-gold/60 bg-paper text-center shadow-inner transition-transform duration-700 ease-in"
+              class="absolute left-[5.5%] right-[3%] top-[11.5%] bottom-[1%] max-sm:inset-x-[23%] max-sm:bottom-[8%] flex flex-col items-center justify-center border border-gold/60 bg-paper text-center shadow-inner transition-transform duration-700 ease-in"
               :class="entrando && 'scale-[1.35]'"
             >
               <img src="/images/ornamentos/esquina-larga.svg" alt="" aria-hidden="true" class="absolute left-2 top-2 w-10" />
@@ -96,7 +100,7 @@
 
             <!-- Mitad izquierda: gira sobre su borde izquierdo -->
             <div
-              class="absolute inset-y-0 left-0 z-10 w-[51.9%] origin-left [transition:transform_1200ms_cubic-bezier(.6,0,.3,1),opacity_350ms_ease-in_950ms] [transform-style:preserve-3d]"
+              class="absolute inset-y-0 left-0 z-10 w-[calc(51.9%+1px)] origin-left [transition:transform_1200ms_cubic-bezier(.6,0,.3,1),opacity_350ms_ease-in_950ms] [transform-style:preserve-3d]"
               :class="abriendo && '[transform:rotateY(-108deg)] opacity-0'"
             >
               <img src="/images/sobre/izquierda.webp" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full [backface-visibility:hidden]" />
@@ -121,7 +125,7 @@
         </button>
 
         <p
-          class="sobre-texto mt-8 animate-pulse text-xs font-semibold uppercase tracking-[0.3em] text-ink/70 transition-opacity duration-500"
+          class="sobre-texto mt-8 animate-pulse text-xs font-semibold uppercase tracking-[0.3em] text-ink/70 transition-opacity duration-500 max-sm:absolute max-sm:bottom-[6svh] max-sm:z-30 max-sm:mt-0 max-sm:rounded-full max-sm:bg-paper/80 max-sm:px-4 max-sm:py-1.5"
           :class="abriendo && 'opacity-0'"
         >Toca para abrir</p>
       </div>
