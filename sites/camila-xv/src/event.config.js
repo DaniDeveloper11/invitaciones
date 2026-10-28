@@ -40,8 +40,9 @@ export default {
       {
         "titulo": "",
         "nombres": [
+           "Elena Perez",
           "Leonel Alvarez",
-          "Elena Perez"
+
         ]
       },
       {
@@ -70,7 +71,7 @@ export default {
       "icono": "copas",
       "titulo": "Recepción",
       "hora": "7:00 PM",
-      "lugar": "Kinta E Reinas",
+      "lugar": "Kinta 3 Reinas",
       "direccion": "",
       "mapsUrl": ""
     }
@@ -99,6 +100,15 @@ export default {
   hoteles: {
     nota: 'Para nuestros invitados que vienen de fuera, te recomendamos estas opciones cerca del salón.',
     lista: [
+              {
+        nombre: 'Casona de mis Recuerdos',
+        direccion: 'El Seguro, Centro, 46730 Ahualulco de Mercado, Jal.',
+        distancia: 'Justo Enfrente',
+        telefono: '+523867522401',
+        codigo: '',
+        mapsUrl: 'https://maps.app.goo.gl/QXPxARkR4ekvFRYLA',
+        url: '',
+      },
       {
         nombre: 'Hacienda del Carmen',
         direccion: 'Calle Ramon Diaz Ordaz No.2-1, El Carmen, 46750 Jal.',
@@ -116,7 +126,8 @@ export default {
         codigo: '',
         mapsUrl: 'https://maps.app.goo.gl/oiBZqxrhYdMEoE7b8',
         url: '',
-      },
+      }
+
     ],
   },
 
