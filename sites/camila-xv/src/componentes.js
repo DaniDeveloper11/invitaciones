@@ -151,6 +151,7 @@ export function carrusel(intervalo = 5000) {
     init() {
       this._timer = setInterval(() => this.ir(this.activo + 1), intervalo)
       this.$el.addEventListener('alpine:destroy', () => this.detener())
+      this.$watch('activo', (i) => this.centrarMiniatura(i))
     },
 
     detener() {
@@ -169,6 +170,16 @@ export function carrusel(intervalo = 5000) {
       if (!total) return
       const destino = (i + total) % total
       pista.scrollTo({ left: destino * pista.clientWidth, behavior: 'smooth' })
+    },
+
+    /** Desliza la tira de miniaturas para dejar la activa al centro. */
+    centrarMiniatura(i) {
+      const tira = this.$refs.miniaturas
+      const miniatura = tira?.querySelectorAll(':scope > button')[i]
+      if (!miniatura) return
+      // scrollTo en la tira (no scrollIntoView) para no mover la página.
+      const left = miniatura.offsetLeft - (tira.clientWidth - miniatura.offsetWidth) / 2
+      tira.scrollTo({ left, behavior: 'smooth' })
     },
   }
 }

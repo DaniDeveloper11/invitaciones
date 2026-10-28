@@ -456,23 +456,29 @@
               aria-label="Foto siguiente"
             >&#8250;</button>
 
-            <!-- Puntos -->
-            <div class="mt-12 flex justify-center gap-2">
+            <!-- Miniaturas: avanzan con el carrusel y la activa queda al centro -->
+            <div
+              x-ref="miniaturas"
+              class="relative mt-10 flex gap-2 overflow-x-auto px-[calc(50%-1.75rem)] py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
               <template x-for="(photo, i) in photos" :key="i">
                 <button
                   type="button"
                   @click="detener(); ir(i)"
-                  class="h-2 rounded-full transition-all duration-300"
-                  :class="activo === i ? 'w-6 bg-gold' : 'w-2 bg-gold/35'"
+                  class="aspect-[4/5] w-14 shrink-0 overflow-hidden rounded-sm border-2 transition-all duration-300"
+                  :class="activo === i ? 'border-gold opacity-100' : 'border-transparent opacity-50'"
                   :aria-label="`Ir a la foto ${i + 1}`"
-                ></button>
+                  :aria-current="activo === i"
+                >
+                  <img :src="photo" alt="" loading="lazy" decoding="async" class="h-full w-full object-cover" />
+                </button>
               </template>
             </div>
           </div>
 
           <!-- Esquinas de rosas sobre la galería -->
           <img src="/images/decoracion/esquina-galeria-sup.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute -left-6 -top-8 z-10 w-2/3" />
-          <img src="/images/decoracion/esquina-galeria-inf.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute bottom-16 -right-6 z-10 w-2/3 -scale-x-100" />
+          <img src="/images/decoracion/esquina-galeria-inf.webp" alt="" aria-hidden="true" loading="lazy" class="pointer-events-none absolute bottom-28 -right-6 z-10 w-2/3 -scale-x-100" />
 
             <!-- Visor a pantalla completa -->
             <div
