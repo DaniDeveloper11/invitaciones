@@ -180,11 +180,10 @@
             fetchpriority="high"
             decoding="async"
             onerror="this.style.display='none'"
-            class="absolute inset-0 h-full w-full object-cover object-[30%_50%]"
+            class="absolute inset-0 h-full w-full object-cover object-[30%_50%] [mask-image:linear-gradient(to_bottom,black_70%,transparent)]"
           />
-          <!-- Degradados para leer los textos y fundir la foto con el papel -->
+          <!-- Velo para leer "Mis XV Años"; abajo la máscara de la foto la funde con el papel -->
           <div class="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-paper/70 to-transparent"></div>
-          <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-paper via-paper/80 to-transparent"></div>
 
           <h2
             x-show="show"
@@ -195,7 +194,7 @@
             x-text="$store.event.hero.eyebrow"
           ></h2>
 
-          <div class="absolute inset-x-0 bottom-6">
+          <div class="absolute inset-x-0 bottom-0 z-10 translate-y-[45%]">
             <!-- Corona dorada: public/images/decoracion/corona.webp -->
             <img
               x-show="show"
@@ -218,7 +217,7 @@
           </div>
         </div>
 
-        <div class="px-6 pb-16">
+        <div class="px-6 pt-20 pb-16">
           <!-- Ornamentos dorados vectorizados: public/images/ornamentos/ -->
           <img src="/images/ornamentos/divisor-grande.svg" alt="" aria-hidden="true" x-reveal class="mx-auto mt-4 w-[85%]" />
           <p
