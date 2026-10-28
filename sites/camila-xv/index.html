@@ -164,92 +164,63 @@
       </template>
 
       <!--
-        Portada: arco de flores, "Mis XV Años", corona, nombre, foto en arco
-        y la frase de mensaje.texto. Las flores decorativas están en public/images/decoracion/.
+        Portada: foto a pantalla completa (public/images/hero.webp, vertical ~1450x1920px)
+        con "Mis XV Años" sobre el cielo y el nombre abajo, y la frase de mensaje.texto.
       -->
       <section
         x-data="{ show: false }"
         @sobre-abierto.window="setTimeout(() => (show = true), 100)"
-        class="relative w-full overflow-hidden px-6 pb-16 text-center"
+        class="relative w-full overflow-hidden text-center"
       >
-        <!-- public/images/decoracion/arco-rosas.webp — medio aro de rosas que enmarca "Mis XV Años" -->
-        <img
-          src="/images/decoracion/arco-rosas.webp"
-          alt=""
-          aria-hidden="true"
-          fetchpriority="high"
-          onerror="this.remove()"
-          class="pointer-events-none absolute inset-x-0 top-0 w-full transition-opacity duration-1000"
-          :class="show ? 'opacity-100' : 'opacity-0'"
-        />
+        <div class="relative h-[100svh] min-h-[560px] w-full">
+          <!-- object-[30%_50%]: en pantallas muy altas prioriza a Camila sobre la cola del caballo -->
+          <img
+            :src="$store.event.hero.imagen"
+            alt=""
+            fetchpriority="high"
+            decoding="async"
+            onerror="this.style.display='none'"
+            class="absolute inset-0 h-full w-full object-cover object-[30%_50%]"
+          />
+          <!-- Degradados para leer los textos y fundir la foto con el papel -->
+          <div class="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-paper/70 to-transparent"></div>
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-paper via-paper/80 to-transparent"></div>
 
-        <div class="relative pt-[30vw] min-[480px]:pt-36">
           <h2
             x-show="show"
             x-transition:enter="transition ease-out duration-1000"
             x-transition:enter-start="opacity-0 translate-y-4"
             x-transition:enter-end="opacity-100 translate-y-0"
-            class="whitespace-pre-line font-script text-6xl leading-[0.9] text-green"
+            class="absolute inset-x-0 top-[7%] whitespace-pre-line font-script text-6xl leading-[0.9] text-green"
             x-text="$store.event.hero.eyebrow"
           ></h2>
 
-          <!-- Corona dorada: public/images/decoracion/corona.webp -->
-          <img
-            x-show="show"
-            x-transition:enter="transition ease-out duration-1000 delay-300"
-            x-transition:enter-start="opacity-0 scale-90"
-            x-transition:enter-end="opacity-100 scale-100"
-            src="/images/decoracion/corona.webp"
-            alt=""
-            aria-hidden="true"
-            class="mx-auto mt-10 w-40"
-          />
-
-          <h1
-            x-show="show"
-            x-transition:enter="transition ease-out duration-1000 delay-500"
-            x-transition:enter-start="opacity-0 translate-y-6 blur-sm"
-            x-transition:enter-end="opacity-100 translate-y-0 blur-none"
-            class="mt-3 font-script text-7xl leading-tight text-gold"
-            x-text="$store.event.hero.titulo"
-          ></h1>
-
-          <!-- Foto en arco: public/images/hero.webp (vertical, ~900x1200px) -->
-          <div class="relative mx-auto mt-8 w-[78%] max-w-[300px]">
-            <!-- Ramitos de rosas que asoman por los lados de la foto -->
+          <div class="absolute inset-x-0 bottom-6">
+            <!-- Corona dorada: public/images/decoracion/corona.webp -->
             <img
-              src="/images/decoracion/rama-foto-1.webp"
+              x-show="show"
+              x-transition:enter="transition ease-out duration-1000 delay-300"
+              x-transition:enter-start="opacity-0 scale-90"
+              x-transition:enter-end="opacity-100 scale-100"
+              src="/images/decoracion/corona.webp"
               alt=""
               aria-hidden="true"
-              loading="lazy"
-              class="pointer-events-none absolute -left-[30%] -top-8 z-10 w-[55%]"
+              class="mx-auto w-28"
             />
-            <img
-              src="/images/decoracion/rama-foto-2.webp"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              class="pointer-events-none absolute -right-[30%] top-[55%] z-10 w-[55%] -scale-x-100"
-            />
-            <div
-              x-reveal.lg
-              class="relative aspect-[3/4] overflow-hidden rounded-t-full border-2 border-gold bg-gradient-to-b from-[#f3e3df] to-[#ead6cf] p-1.5"
-            >
-              <div class="h-full w-full overflow-hidden rounded-t-full">
-                <img
-                  :src="$store.event.hero.imagen"
-                  alt=""
-                  fetchpriority="high"
-                  decoding="async"
-                  onerror="this.style.display='none'"
-                  class="h-full w-full object-cover"
-                />
-              </div>
-            </div>
+            <h1
+              x-show="show"
+              x-transition:enter="transition ease-out duration-1000 delay-500"
+              x-transition:enter-start="opacity-0 translate-y-6 blur-sm"
+              x-transition:enter-end="opacity-100 translate-y-0 blur-none"
+              class="mt-1 font-script text-7xl leading-tight text-gold"
+              x-text="$store.event.hero.titulo"
+            ></h1>
           </div>
+        </div>
 
+        <div class="px-6 pb-16">
           <!-- Ornamentos dorados vectorizados: public/images/ornamentos/ -->
-          <img src="/images/ornamentos/divisor-grande.svg" alt="" aria-hidden="true" x-reveal class="mx-auto mt-10 w-[85%]" />
+          <img src="/images/ornamentos/divisor-grande.svg" alt="" aria-hidden="true" x-reveal class="mx-auto mt-4 w-[85%]" />
           <p
             x-show="$store.event.mensaje.texto"
             x-reveal.delay-150

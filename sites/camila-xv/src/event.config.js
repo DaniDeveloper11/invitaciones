@@ -11,7 +11,7 @@ export default {
   hero: {
     eyebrow: 'Mis\nXV Años',
     titulo: 'Camila',
-    // Foto vertical dentro del arco: public/images/hero.webp (~900x1200px)
+    // Foto de portada a pantalla completa: public/images/hero.webp (vertical, ~1450x1920px)
     imagen: 'images/hero.webp',
   },
 
