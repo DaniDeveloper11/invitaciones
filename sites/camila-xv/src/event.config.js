@@ -158,7 +158,7 @@ export default {
     // Carrusel de fotos destacadas (después de misa y recepción). Fotos
     // verticales 4:5 en public/images/gallery/1.webp, 2.webp, …; cambia el
     // número al total de fotos. Con 0 la sección desaparece.
-    fotos: photos('gallery', 8),
+    fotos: photos('gallery', 34),
   },
 
   rsvp: {
