@@ -142,7 +142,7 @@ export default {
     nota: 'Momentos que atesoramos con amor en el corazón.',
     // Fotos verticales 4:5 en public/images/gallery/1.webp, 2.webp, ...
     // (cambia el número al total). Con 0 la sección desaparece.
-    fotos: photos('gallery', 4),
+    fotos: photos('gallery', 6),
   },
 
   rsvp: {
