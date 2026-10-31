@@ -61,7 +61,7 @@ export default {
       icono: 'wine_bar',
       eyebrow: 'Fiesta y Brindis',
       titulo: 'Recepción',
-      hora: '8:00 P.M.',
+      hora: '7:00 P.M.',
       lugar: 'Salón de eventos "El 8"',
       direccion: ' Allende 118, Centro, 46560 San Juanito de Escobedo, Jal.',
       mapsUrl: 'https://maps.app.goo.gl/Js53w7gb3ounfw6d7/',
@@ -80,9 +80,9 @@ export default {
       icono: 'face_retouching_natural',
     },
     { hora: '5:00 P.M.', titulo: 'Misa de acción de gracias', icono: 'church' },
-    { hora: '8:00 P.M.', titulo: 'Recepción', icono: 'wine_bar' },
+    { hora: '7:00 P.M.', titulo: 'Recepción', icono: 'wine_bar' },
+    { hora: '8:00 P.M.', titulo: 'Cena', icono: 'restaurant' },
     { hora: '9:00 P.M.', titulo: 'Vals', icono: 'music_note' },
-    { hora: '9:30 P.M.', titulo: 'Cena', icono: 'restaurant' },
     { hora: '10:30 P.M.', titulo: '¡A bailar!', icono: 'celebration' },
   ],
 
@@ -90,9 +90,9 @@ export default {
     // Deja `titulo` vacío para ocultar toda la sección.
     eyebrow: 'Código de Vestimenta',
     titulo: 'Vaquero Formal',
-    subtitulo: 'Para una noche especial',
-    // Prendas a los lados de la ilustración (public/images/deco/dresscode-pareja.webp):
-    // el primer grupo va a la izquierda y el segundo a la derecha. `icono`:
+    subtitulo: 'Opcional',
+    // Prendas en dos columnas: el primer grupo va a la izquierda y el
+    // segundo a la derecha. `icono`:
     // sombrero, saco, monio, camisa, bota, vestido, joya o bolsa
     // (definidos en src/componentes.js).
     grupos: [

@@ -537,17 +537,10 @@
               <span class="h-px w-6 bg-cuero/40"></span>
             </div>
 
-            <!-- Prendas a los lados de la ilustración: grupos[0] izquierda, grupos[1] derecha -->
-            <div x-show="grupos?.length" class="relative mt-5 grid grid-cols-[1fr_8.5rem_1fr] items-start gap-1">
-              <img
-                src="/images/deco/dresscode-pareja.webp"
-                alt="Ejemplo de vestimenta vaquera formal para ellos y ellas"
-                loading="lazy"
-                decoding="async"
-                class="order-2 w-full self-center drop-shadow-md"
-              />
-              <template x-for="(grupo, g) in (grupos || []).slice(0, 2)" :key="grupo.titulo">
-                <div :class="g === 0 ? 'order-1' : 'order-3'">
+            <!-- Prendas en dos columnas: grupos[0] izquierda, grupos[1] derecha -->
+            <div x-show="grupos?.length" class="relative mt-5 grid grid-cols-2 items-start gap-3">
+              <template x-for="grupo in (grupos || []).slice(0, 2)" :key="grupo.titulo">
+                <div>
                   <p class="mb-1 font-script text-[30px] leading-none text-menta" x-text="grupo.titulo"></p>
                   <ul>
                     <template x-for="(prenda, i) in grupo.prendas" :key="prenda.texto">
