@@ -59,6 +59,9 @@ export default {
     modo: 'whatsapp',
     // Sólo con pases: fecha límite para confirmar (hasta el final de ese día).
     // cierra: '2026-11-20',
+    // Sólo con pases: cómo se nombra el evento en los mensajes de WhatsApp
+    // ("te invitamos a celebrar los XV años de Ana"); vacío usa `titulo`.
+    // evento: 'la boda de Ana y Luis',
     titulo: 'Confirma tu asistencia',
     // nota: '',   (por defecto, un texto según el modo)
     // Código de país + número, sin "+", espacios ni guiones (ej. 523312345678).

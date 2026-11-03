@@ -178,3 +178,17 @@ export function leerSitio(slug) {
     url: url.endsWith('/') ? url : `${url}/`,
   }
 }
+
+/**
+ * La configuración completa de sites/<slug>/src/event.config.js (para los
+ * mensajes de WhatsApp). Vite la carga; de @invitaciones/core sólo usa photos y asset.
+ */
+export async function cargarEvento(dir) {
+  const { runnerImport } = await import('vite')
+  const { module } = await runnerImport(path.join(dir, 'src', 'event.config.js'), {
+    configFile: false,
+    logLevel: 'silent',
+    resolve: { alias: { '@invitaciones/core': path.join(root, 'packages', 'core', 'src', 'event.js') } },
+  })
+  return module.default
+}

@@ -9,7 +9,8 @@
     ".": "./src/index.js",
     "./style.css": "./src/style.css",
     "./vite": "./vite.js",
-    "./fotos-config": "./fotos-config.js"
+    "./fotos-config": "./fotos-config.js",
+    "./rsvp-mensajes": "./src/rsvp-mensajes.js"
   },
   "files": [
     "src",

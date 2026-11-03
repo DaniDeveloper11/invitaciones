@@ -5,6 +5,7 @@
 // pendientes, permite agregar, editar y borrar pases, y descarga la lista en CSV.
 // Mismo token que el panel de fotos.
 import { crearApi, formatearFechaHora, tokenAdmin } from '../fotos/api.js'
+import { textoInvitacion, textoRecordatorio } from '../rsvp-mensajes.js'
 
 const CADA_MS = 60_000
 
@@ -164,12 +165,6 @@ export function rsvpAdmin(event) {
 
     // ── WhatsApp (sin teléfono, WhatsApp pide elegir el contacto) ─────────
 
-    get limite() {
-      if (!this.cierraEn) return ''
-      const fecha = new Date(new Date(this.cierraEn).getTime() - 1)
-      return ` antes del ${new Intl.DateTimeFormat(config.locale, { day: 'numeric', month: 'long' }).format(fecha)}`
-    },
-
     whatsapp(pase, texto) {
       return `https://wa.me/${pase.telefono ?? ''}?text=${encodeURIComponent(texto)}`
     },
@@ -179,31 +174,13 @@ export function rsvpAdmin(event) {
       return !pase.enviada_en && this.estadoPase(pase) === 'pendiente'
     },
 
-    /** La primera invitación: a quién incluye el pase y el enlace para confirmar. */
+    /** La primera invitación: fecha, misa y recepción, a quién incluye y el enlace. */
     invitacion(pase) {
-      const nombres = pase.personas.map((p) =>
-        p.libre ? (p.etiqueta?.toLowerCase() ?? 'un acompañante') : p.nino ? `${p.nombre} (niño/a)` : p.nombre,
-      )
-      const quienes = nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0]
-      return this.whatsapp(
-        pase,
-        [
-          `¡Hola, ${pase.nombre}! 💌`,
-          `Te compartimos la invitación a ${event.titulo}.`,
-          quienes && `Pase para: ${quienes}.`,
-          `Confirma tu asistencia aquí${this.limite}:`,
-          this.enlace(pase),
-        ]
-          .filter(Boolean)
-          .join('\n'),
-      )
+      return this.whatsapp(pase, textoInvitacion(event, { pase, enlace: this.enlace(pase), cierraEn: this.cierraEn }))
     },
 
     recordatorio(pase) {
-      return this.whatsapp(
-        pase,
-        `¡Hola, ${pase.nombre}! 💌 Te recordamos confirmar tu asistencia a ${event.titulo}${this.limite}:\n${this.enlace(pase)}`,
-      )
+      return this.whatsapp(pase, textoRecordatorio(event, { pase, enlace: this.enlace(pase), cierraEn: this.cierraEn }))
     },
 
     textoEnviada(pase) {

@@ -37,7 +37,9 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { rsvpConPases } from '@invitaciones/core/fotos-config'
+import { quienesVan, textoInvitacion } from '@invitaciones/core/rsvp-mensajes'
 import {
+  cargarEvento,
   DIA_MS,
   SLUG_VALIDO,
   codigoAleatorio,
@@ -68,6 +70,7 @@ if (!slug || !SLUG_VALIDO.test(slug) || !archivoCsv) {
 if (!existsSync(archivoCsv)) salir(`No existe ${archivoCsv}`)
 
 const sitio = leerSitio(slug)
+const configEvento = await cargarEvento(sitio.dir)
 const nombreEvento = opciones.nombre || sitio.titulo || slug
 
 // ── Fecha límite ────────────────────────────────────────────────────────────
@@ -218,32 +221,20 @@ const personas = d1.consultar(
 )
 const porPase = Map.groupBy(personas, (p) => p.pase_id)
 
-const describir = (p) =>
-  p.es_libre ? (p.etiqueta?.toLowerCase() ?? 'un acompañante') : p.es_nino ? `${p.nombre} (niño/a)` : p.nombre
-const lista = (nombres) => (nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0])
-const fechaLimite = cierraFinal
-  ? new Intl.DateTimeFormat('es-MX', { timeZone: 'America/Mexico_City', dateStyle: 'long' }).format(
-      new Date(cierraFinal.getTime() - 1),
-    )
-  : null
+const aPersona = (p) => ({ nombre: p.nombre, nino: Boolean(p.es_nino), libre: Boolean(p.es_libre), etiqueta: p.etiqueta })
 
 const csvCampo = (v) => (/[",\n]/.test(v) ? `"${v.replaceAll('"', '""')}"` : v)
 const lineas = [['pase', 'personas', 'telefono', 'enlace', 'whatsapp']]
 for (const pase of pases) {
   const enlace = `${sitio.url}?i=${pase.codigo}`
-  // Un pase vacío (se completa en el panel) no dice para quién es.
-  const quienes = lista((porPase.get(pase.id) ?? []).map(describir)) ?? ''
-  const mensaje = [
-    `¡Hola, ${pase.nombre}! 💌`,
-    `Te compartimos la invitación a ${nombreEvento}.`,
-    quienes && `Pase para: ${quienes}.`,
-    `Confirma tu asistencia aquí${fechaLimite ? ` antes del ${fechaLimite}` : ''}:`,
+  const personasPase = (porPase.get(pase.id) ?? []).map(aPersona)
+  const mensaje = textoInvitacion(configEvento, {
+    pase: { nombre: pase.nombre, personas: personasPase },
     enlace,
-  ]
-    .filter(Boolean)
-    .join('\n')
+    cierraEn: cierraFinal?.toISOString(),
+  })
   const whatsapp = `https://wa.me/${pase.telefono ?? ''}?text=${encodeURIComponent(mensaje)}`
-  lineas.push([pase.nombre, quienes, pase.telefono ?? '', enlace, whatsapp])
+  lineas.push([pase.nombre, quienesVan(personasPase), pase.telefono ?? '', enlace, whatsapp])
 }
 
 // En --local con otro nombre: una prueba nunca pisa los enlaces reales.

@@ -183,6 +183,8 @@ export default {
     modo: 'pases',
     // Sólo con pases: fecha límite para confirmar (hasta el final de ese día).
     cierra: '2026-12-01',
+    // Cómo se nombra el evento en los mensajes de WhatsApp.
+    evento: 'los XV años de Camila',
     titulo: 'Confirmar asistencia',
     nota: 'Por favor confirma tu asistencia antes del 1 de diciembre',
     // Con una sola opción se muestra un botón con este texto.
