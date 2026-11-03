@@ -2,7 +2,8 @@
 //
 // Muestra todos los pases con quién asiste y los totales (adultos y niños),
 // manda cada invitación por WhatsApp (y guarda que ya se envió), recuerda a los
-// pendientes, permite agregar, editar y borrar pases, y descarga la lista en CSV.
+// pendientes, permite agregar, editar, desactivar y borrar pases (y desactivar
+// personas), y descarga la lista en CSV.
 // Mismo token que el panel de fotos.
 import { crearApi, formatearFechaHora, tokenAdmin } from '../fotos/api.js'
 import { textoInvitacion, textoRecordatorio } from '../rsvp-mensajes.js'
@@ -17,6 +18,7 @@ const filaPersona = (p = {}) => ({
   nino: Boolean(p.nino),
   libre: Boolean(p.libre),
   etiqueta: p.etiqueta ?? '',
+  activa: p.activa !== false, // sólo se muestra; se cambia fuera del editor
   clave: ++claves,
 })
 
@@ -41,7 +43,7 @@ export function rsvpAdmin(event) {
     totales: null,
     abierta: true,
     cierraEn: null,
-    filtro: 'todos', // todos · van · no_van · pendiente · sin_enviar
+    filtro: 'todos', // todos · van · no_van · pendiente · sin_enviar · desactivado
     busqueda: '',
     copiado: null, // id del pase cuyo enlace se acaba de copiar
     actualizando: false,
@@ -92,16 +94,24 @@ export function rsvpAdmin(event) {
 
     // ── Resumen ───────────────────────────────────────────────────────────
 
-    /** van · no_van · pendiente */
+    /** Las personas que siguen invitadas (las desactivadas no cuentan). */
+    activas(pase) {
+      return pase.personas.filter((p) => p.activa !== false)
+    },
+
+    /** van · no_van · pendiente · desactivado */
     estadoPase(pase) {
+      if (pase.activo === false) return 'desactivado'
       if (!pase.respondido_en) return 'pendiente'
-      return pase.personas.some((p) => p.asiste) ? 'van' : 'no_van'
+      return this.activas(pase).some((p) => p.asiste) ? 'van' : 'no_van'
     },
 
     get conteo() {
-      const conteo = { todos: this.pases.length, van: 0, no_van: 0, pendiente: 0, sin_enviar: 0 }
+      const conteo = { todos: 0, van: 0, no_van: 0, pendiente: 0, sin_enviar: 0, desactivado: 0 }
       for (const pase of this.pases) {
-        conteo[this.estadoPase(pase)]++
+        const estado = this.estadoPase(pase)
+        conteo[estado]++
+        if (estado !== 'desactivado') conteo.todos++
         if (this.porEnviar(pase)) conteo.sin_enviar++
       }
       return conteo
@@ -115,6 +125,7 @@ export function rsvpAdmin(event) {
         ['no_van', `No van (${c.no_van})`],
         ['pendiente', `Pendientes (${c.pendiente})`],
         ['sin_enviar', `Sin enviar (${c.sin_enviar})`],
+        ['desactivado', `Desactivados (${c.desactivado})`],
       ]
     },
 
@@ -122,7 +133,8 @@ export function rsvpAdmin(event) {
       const q = normalizar(this.busqueda.trim())
       return this.pases.filter(
         (pase) =>
-          (this.filtro === 'todos' ||
+          // "Todos" son los invitados: los desactivados tienen su propio filtro.
+          ((this.filtro === 'todos' && this.estadoPase(pase) !== 'desactivado') ||
             this.estadoPase(pase) === this.filtro ||
             (this.filtro === 'sin_enviar' && this.porEnviar(pase))) &&
           (!q || normalizar([pase.nombre, ...pase.personas.map((p) => p.nombre)].join(' ')).includes(q)),
@@ -142,11 +154,13 @@ export function rsvpAdmin(event) {
     },
 
     resumenPase(pase) {
-      const van = pase.personas.filter((p) => p.asiste).length
+      const personas = this.activas(pase)
+      const van = personas.filter((p) => p.asiste).length
       const estado = this.estadoPase(pase)
-      if (estado === 'pendiente') return `Sin responder · ${pase.personas.length} en el pase`
-      if (estado === 'no_van') return pase.personas.length > 1 ? 'No asistirán' : 'No asistirá'
-      return `Asisten ${van} de ${pase.personas.length}`
+      if (estado === 'desactivado') return 'Invitación desactivada: su enlace ya no funciona'
+      if (estado === 'pendiente') return `Sin responder · ${personas.length} en el pase`
+      if (estado === 'no_van') return personas.length > 1 ? 'No asistirán' : 'No asistirá'
+      return `Asisten ${van} de ${personas.length}`
     },
 
     enlace(pase) {
@@ -176,11 +190,13 @@ export function rsvpAdmin(event) {
 
     /** La primera invitación: fecha, misa y recepción, a quién incluye y el enlace. */
     invitacion(pase) {
-      return this.whatsapp(pase, textoInvitacion(event, { pase, enlace: this.enlace(pase), cierraEn: this.cierraEn }))
+      const datos = { pase: { ...pase, personas: this.activas(pase) }, enlace: this.enlace(pase), cierraEn: this.cierraEn }
+      return this.whatsapp(pase, textoInvitacion(event, datos))
     },
 
     recordatorio(pase) {
-      return this.whatsapp(pase, textoRecordatorio(event, { pase, enlace: this.enlace(pase), cierraEn: this.cierraEn }))
+      const datos = { pase: { ...pase, personas: this.activas(pase) }, enlace: this.enlace(pase), cierraEn: this.cierraEn }
+      return this.whatsapp(pase, textoRecordatorio(event, datos))
     },
 
     textoEnviada(pase) {
@@ -209,6 +225,42 @@ export function rsvpAdmin(event) {
       } catch (e) {
         pase.enviada_en = antes
         this.error = `No se pudo guardar el envío de ${pase.nombre}: ${e.message}`
+      }
+    },
+
+    // ── Desactivar y habilitar (no se borra nada: conservan su respuesta) ──
+
+    /** Desactiva el pase (su enlace deja de servir) o lo vuelve a habilitar. */
+    async activarPase(pase, activo) {
+      pase.activo = activo
+      try {
+        await api.pedir(`/admin/rsvp/${pase.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ activo }),
+        })
+        this.error = ''
+        await this.cargar() // los totales cambian
+      } catch (e) {
+        pase.activo = !activo
+        this.error = `No se pudo ${activo ? 'habilitar' : 'desactivar'} a ${pase.nombre}: ${e.message}`
+      }
+    },
+
+    /** Quita a una persona del pase del invitado o la vuelve a agregar. */
+    async activarPersona(pase, persona, activa) {
+      persona.activa = activa
+      try {
+        await api.pedir(`/admin/rsvp/${pase.id}/personas/${persona.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ activa }),
+        })
+        this.error = ''
+        await this.cargar()
+      } catch (e) {
+        persona.activa = !activa
+        this.error = `No se pudo ${activa ? 'habilitar' : 'desactivar'} a ${this.nombrePersona(persona)}: ${e.message}`
       }
     },
 
@@ -291,13 +343,14 @@ export function rsvpAdmin(event) {
         const t = String(v ?? '')
         return /[",\n]/.test(t) ? `"${t.replaceAll('"', '""')}"` : t
       }
-      const filas = [['pase', 'persona', 'tipo', 'asiste', 'mensaje', 'telefono', 'ultima_respuesta']]
+      const filas = [['pase', 'persona', 'tipo', 'invitado', 'asiste', 'mensaje', 'telefono', 'ultima_respuesta']]
       for (const pase of this.pases) {
         for (const p of pase.personas) {
           filas.push([
             pase.nombre,
             this.nombrePersona(p),
             [p.nino ? 'niño/a' : 'adulto', p.libre && (p.etiqueta?.toLowerCase() || 'acompañante')].filter(Boolean).join(', '),
+            pase.activo === false ? 'no (pase desactivado)' : p.activa === false ? 'no (desactivada)' : 'sí',
             p.asiste === null ? 'sin responder' : p.asiste ? 'sí' : 'no',
             pase.mensaje,
             pase.telefono,

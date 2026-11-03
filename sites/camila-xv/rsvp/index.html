@@ -110,7 +110,7 @@
           <!-- Pases -->
           <ul class="mt-6 space-y-3">
             <template x-for="pase in lista" :key="pase.id">
-              <li class="border border-ink/15 p-4">
+              <li class="border border-ink/15 p-4" :class="estadoPase(pase) === 'desactivado' && 'border-dashed bg-ink/5'">
                 <div class="flex items-start justify-between gap-3">
                   <div>
                     <p class="font-serif text-xl" x-text="pase.nombre"></p>
@@ -128,18 +128,30 @@
                       'bg-ink text-paper': estadoPase(pase) === 'van',
                       'bg-ink/10 text-ink/70': estadoPase(pase) === 'no_van',
                       'border border-ink/30 text-ink/60': estadoPase(pase) === 'pendiente',
+                      'border border-dashed border-ink/30 text-ink/50 line-through': estadoPase(pase) === 'desactivado',
                     }"
-                    x-text="{ van: 'Confirmado', no_van: 'No van', pendiente: 'Pendiente' }[estadoPase(pase)]"
+                    x-text="{ van: 'Confirmado', no_van: 'No van', pendiente: 'Pendiente', desactivado: 'Desactivado' }[estadoPase(pase)]"
                   ></span>
                 </div>
 
                 <ul class="mt-3 space-y-1 text-sm">
                   <template x-for="persona in pase.personas" :key="persona.id">
-                    <li class="flex items-center gap-2" :class="persona.asiste === false && 'text-ink/40 line-through'">
-                      <span class="w-4 text-center" x-text="persona.asiste === null ? '·' : persona.asiste ? '✓' : '✗'"></span>
-                      <span x-text="nombrePersona(persona)"></span>
+                    <li
+                      class="flex items-center gap-2"
+                      :class="persona.activa === false ? 'text-ink/30' : persona.asiste === false && 'text-ink/40 line-through'"
+                    >
+                      <span class="w-4 text-center" x-text="persona.activa === false ? '–' : persona.asiste === null ? '·' : persona.asiste ? '✓' : '✗'"></span>
+                      <span :class="persona.activa === false && 'line-through'" x-text="nombrePersona(persona)"></span>
                       <span x-show="persona.nino" class="text-[10px] uppercase tracking-[0.15em] text-ink/50">niño/a</span>
                       <span x-show="persona.libre" class="text-[10px] uppercase tracking-[0.15em] text-ink/50">acompañante</span>
+                      <span x-show="persona.activa === false" class="text-[10px] uppercase tracking-[0.15em] text-ink/50">desactivada</span>
+                      <button
+                        type="button"
+                        x-show="estadoPase(pase) !== 'desactivado'"
+                        @click="activarPersona(pase, persona, persona.activa === false)"
+                        class="ml-auto text-[10px] uppercase tracking-[0.15em] text-ink/50 underline hover:text-ink"
+                        x-text="persona.activa === false ? 'Habilitar' : 'Desactivar'"
+                      ></button>
                     </li>
                   </template>
                 </ul>
@@ -149,6 +161,7 @@
                 <div class="mt-4 flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.15em]">
                   <button
                     type="button"
+                    x-show="estadoPase(pase) !== 'desactivado'"
                     @click="copiar(pase)"
                     class="border border-ink/20 px-3 py-1.5 uppercase hover:border-ink/60"
                     x-text="copiado === pase.id ? '¡Copiado!' : 'Copiar enlace'"
@@ -179,6 +192,13 @@
                   >
                     Recordar por WhatsApp
                   </a>
+                  <button
+                    type="button"
+                    @click="activarPase(pase, estadoPase(pase) === 'desactivado')"
+                    class="border px-3 py-1.5 uppercase"
+                    :class="estadoPase(pase) === 'desactivado' ? 'border-ink bg-ink text-paper' : 'border-ink/20 text-ink/60 hover:border-ink/60'"
+                    x-text="estadoPase(pase) === 'desactivado' ? 'Habilitar invitación' : 'Desactivar invitación'"
+                  ></button>
                 </div>
               </li>
             </template>
@@ -263,6 +283,7 @@
                       <div class="mt-2 flex gap-5 text-sm text-ink/70">
                         <label class="flex items-center gap-2"><input x-model="persona.nino" type="checkbox" class="accent-ink" /> Niño/a</label>
                         <label class="flex items-center gap-2"><input x-model="persona.libre" type="checkbox" class="accent-ink" /> Acompañante</label>
+                        <span x-show="!persona.activa" class="ml-auto self-center text-[10px] uppercase tracking-[0.15em] text-ink/50">desactivada</span>
                       </div>
                     </li>
                   </template>
