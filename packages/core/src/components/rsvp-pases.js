@@ -11,7 +11,7 @@ export function rsvpPases(config) {
   let api
 
   return {
-    estado: 'cargando', // cargando · sin_enlace · listo · error
+    estado: 'cargando', // cargando · sin_enlace · desactivado · listo · error
     error: '',
     codigo: '',
     pase: null,
@@ -71,6 +71,11 @@ export function rsvpPases(config) {
         this.codigo = ''
         this.estado = 'sin_enlace'
         this.error = 'Ese enlace de invitación no es válido.'
+      } else if (e.codigo === 'desactivado') {
+        // Se guarda el código: si los festejados la vuelven a habilitar, el enlace sirve.
+        this.pase = null
+        this.estado = 'desactivado'
+        this.error = e.message
       } else if (this.pase) {
         // Ya había pase cargado: se queda el formulario y sólo se avisa.
         this.estado = 'listo'

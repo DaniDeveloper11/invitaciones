@@ -484,6 +484,8 @@
                   </template>
                 </div>
 
+                <p x-show="estado === 'desactivado'" class="text-sm text-muted max-w-xs mx-auto text-center" x-text="error"></p>
+
                 <div x-show="estado === 'error'" class="text-center">
                   <p class="text-sm text-muted mb-6" x-text="error"></p>
                   <button

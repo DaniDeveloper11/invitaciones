@@ -212,12 +212,15 @@ if (nuevos.length) {
   }
 }
 
-// ── Enlaces (todos los pases, no sólo los nuevos) ───────────────────────────
+// ── Enlaces (todos los pases, no sólo los nuevos; sin los desactivados) ─────
 
-const pases = d1.consultar(`SELECT id, nombre, codigo, telefono FROM pases WHERE slug = ${sql(slug)} ORDER BY id`)
+const pases = d1.consultar(
+  `SELECT id, nombre, codigo, telefono FROM pases WHERE slug = ${sql(slug)} AND desactivado_en IS NULL ORDER BY id`,
+)
 const personas = d1.consultar(
   `SELECT personas.pase_id, personas.nombre, personas.es_nino, personas.es_libre, personas.etiqueta FROM personas
-   JOIN pases ON pases.id = personas.pase_id WHERE pases.slug = ${sql(slug)} ORDER BY personas.pase_id, personas.orden`,
+   JOIN pases ON pases.id = personas.pase_id WHERE pases.slug = ${sql(slug)} AND personas.desactivada_en IS NULL
+   ORDER BY personas.pase_id, personas.orden`,
 )
 const porPase = Map.groupBy(personas, (p) => p.pase_id)
 
@@ -254,7 +257,7 @@ console.log(`
 
   Pases nuevos:  ${nuevos.length}  (${plural(personasNuevas, 'persona')})
   Ya existían:   ${repetidos.length}${repetidos.length ? '  (sin cambios: sus enlaces ya se enviaron)' : ''}
-  Total:         ${plural(pases.length, 'pase')} · ${plural(personas.length, 'persona')}
+  Activos:       ${plural(pases.length, 'pase')} · ${plural(personas.length, 'persona')}
   Fecha límite:  ${cierraFinal ? formatoMx.format(new Date(cierraFinal.getTime() - 1)) : 'sin límite (usa --cierra o rsvp.cierra)'}
 
   Enlaces y mensajes de WhatsApp: ${path.relative(root, salida)}
