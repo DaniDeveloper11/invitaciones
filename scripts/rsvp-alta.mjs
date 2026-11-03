@@ -7,7 +7,9 @@
 //
 // El CSV lleva una fila por persona; las filas con el mismo `pase` forman un
 // pase (un enlace). `nino` marca a los niños (sí, x, 1). Un nombre que empieza
-// con "+" ("+ acompañante") es un lugar libre: el nombre lo escribe el invitado.
+// con "+" ("+ acompañante") es un lugar libre: el nombre lo escribe el invitado;
+// lo que sigue al "+" ("+ Esposo") se le muestra como etiqueta. Una fila sin
+// nombre crea el pase vacío, para completarlo después en el panel.
 // El teléfono basta en una fila del pase (10 dígitos → se antepone 52).
 //
 //   pase,nombre,nino,telefono
@@ -121,7 +123,7 @@ filas.forEach((fila, i) => {
   const valor = (nombre) => (col(nombre) === -1 ? '' : (fila[col(nombre)] ?? '').trim())
   const pase = valor('pase')
   const nombre = valor('nombre')
-  if (!pase || !nombre) return errores.push(`línea ${linea}: falta el pase o el nombre`)
+  if (!pase) return errores.push(`línea ${linea}: falta el pase`)
   if (pase.length > MAX_NOMBRE || nombre.length > MAX_NOMBRE) {
     return errores.push(`línea ${linea}: nombre de más de ${MAX_NOMBRE} caracteres`)
   }
@@ -134,13 +136,17 @@ filas.forEach((fila, i) => {
 
   const datos = pasesCsv.get(pase) ?? { telefono: '', personas: [] }
   if (telefono) datos.telefono ||= telefono
+  pasesCsv.set(pase, datos)
+  if (!nombre) return
   const libre = nombre.startsWith('+')
+  const etiqueta = libre ? nombre.slice(1).trim() : ''
   datos.personas.push({
     nombre: libre ? null : nombre,
     nino: /^(s[ií]|x|1|true|niñ[oa])$/i.test(valor('nino')),
     libre,
+    // "+ acompañante" es el lugar libre de siempre: sin etiqueta.
+    etiqueta: /^acompañante$/i.test(etiqueta) ? '' : etiqueta,
   })
-  pasesCsv.set(pase, datos)
 })
 
 if (errores.length) salir(`Revisa ${archivoCsv}:\n  ${errores.join('\n  ')}`)
@@ -187,7 +193,7 @@ if (nuevos.length) {
       `INSERT INTO pases (slug, codigo, nombre, telefono) VALUES (${[slug, codigo, nombre, telefono || null].map(sql).join(', ')});`,
       ...personas.map(
         (p, i) =>
-          `INSERT INTO personas (pase_id, orden, nombre, es_nino, es_libre) VALUES (${paseId}, ${i + 1}, ${sql(p.nombre)}, ${p.nino ? 1 : 0}, ${p.libre ? 1 : 0});`,
+          `INSERT INTO personas (pase_id, orden, nombre, es_nino, es_libre, etiqueta) VALUES (${paseId}, ${i + 1}, ${sql(p.nombre)}, ${p.nino ? 1 : 0}, ${p.libre ? 1 : 0}, ${sql(p.etiqueta || null)});`,
       ),
     ]
   })
@@ -207,12 +213,13 @@ if (nuevos.length) {
 
 const pases = d1.consultar(`SELECT id, nombre, codigo, telefono FROM pases WHERE slug = ${sql(slug)} ORDER BY id`)
 const personas = d1.consultar(
-  `SELECT personas.pase_id, personas.nombre, personas.es_nino, personas.es_libre FROM personas
+  `SELECT personas.pase_id, personas.nombre, personas.es_nino, personas.es_libre, personas.etiqueta FROM personas
    JOIN pases ON pases.id = personas.pase_id WHERE pases.slug = ${sql(slug)} ORDER BY personas.pase_id, personas.orden`,
 )
 const porPase = Map.groupBy(personas, (p) => p.pase_id)
 
-const describir = (p) => (p.es_libre ? 'un acompañante' : p.es_nino ? `${p.nombre} (niño/a)` : p.nombre)
+const describir = (p) =>
+  p.es_libre ? (p.etiqueta?.toLowerCase() ?? 'un acompañante') : p.es_nino ? `${p.nombre} (niño/a)` : p.nombre
 const lista = (nombres) => (nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0])
 const fechaLimite = cierraFinal
   ? new Intl.DateTimeFormat('es-MX', { timeZone: 'America/Mexico_City', dateStyle: 'long' }).format(
@@ -224,14 +231,17 @@ const csvCampo = (v) => (/[",\n]/.test(v) ? `"${v.replaceAll('"', '""')}"` : v)
 const lineas = [['pase', 'personas', 'telefono', 'enlace', 'whatsapp']]
 for (const pase of pases) {
   const enlace = `${sitio.url}?i=${pase.codigo}`
-  const quienes = lista((porPase.get(pase.id) ?? []).map(describir))
+  // Un pase vacío (se completa en el panel) no dice para quién es.
+  const quienes = lista((porPase.get(pase.id) ?? []).map(describir)) ?? ''
   const mensaje = [
     `¡Hola, ${pase.nombre}! 💌`,
     `Te compartimos la invitación a ${nombreEvento}.`,
-    `Pase para: ${quienes}.`,
+    quienes && `Pase para: ${quienes}.`,
     `Confirma tu asistencia aquí${fechaLimite ? ` antes del ${fechaLimite}` : ''}:`,
     enlace,
-  ].join('\n')
+  ]
+    .filter(Boolean)
+    .join('\n')
   const whatsapp = `https://wa.me/${pase.telefono ?? ''}?text=${encodeURIComponent(mensaje)}`
   lineas.push([pase.nombre, quienes, pase.telefono ?? '', enlace, whatsapp])
 }

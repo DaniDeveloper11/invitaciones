@@ -15,6 +15,7 @@ const filaPersona = (p = {}) => ({
   nombre: p.nombre ?? '',
   nino: Boolean(p.nino),
   libre: Boolean(p.libre),
+  etiqueta: p.etiqueta ?? '',
   clave: ++claves,
 })
 
@@ -136,7 +137,7 @@ export function rsvpAdmin(event) {
     // ── Cada pase ─────────────────────────────────────────────────────────
 
     nombrePersona(persona) {
-      return persona.nombre || 'Acompañante'
+      return persona.nombre || persona.etiqueta || 'Acompañante'
     },
 
     resumenPase(pase) {
@@ -181,7 +182,7 @@ export function rsvpAdmin(event) {
     /** La primera invitación: a quién incluye el pase y el enlace para confirmar. */
     invitacion(pase) {
       const nombres = pase.personas.map((p) =>
-        p.libre ? 'un acompañante' : p.nino ? `${p.nombre} (niño/a)` : p.nombre,
+        p.libre ? (p.etiqueta?.toLowerCase() ?? 'un acompañante') : p.nino ? `${p.nombre} (niño/a)` : p.nombre,
       )
       const quienes = nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0]
       return this.whatsapp(
@@ -189,10 +190,12 @@ export function rsvpAdmin(event) {
         [
           `¡Hola, ${pase.nombre}! 💌`,
           `Te compartimos la invitación a ${event.titulo}.`,
-          `Pase para: ${quienes}.`,
+          quienes && `Pase para: ${quienes}.`,
           `Confirma tu asistencia aquí${this.limite}:`,
           this.enlace(pase),
-        ].join('\n'),
+        ]
+          .filter(Boolean)
+          .join('\n'),
       )
     },
 
@@ -270,7 +273,7 @@ export function rsvpAdmin(event) {
           body: JSON.stringify({
             nombre,
             telefono,
-            personas: personas.map(({ id, nombre, nino, libre }) => ({ id, nombre, nino, libre })),
+            personas: personas.map(({ id, nombre, nino, libre, etiqueta }) => ({ id, nombre, nino, libre, etiqueta })),
           }),
         })
         if (!id) {
@@ -317,7 +320,7 @@ export function rsvpAdmin(event) {
           filas.push([
             pase.nombre,
             this.nombrePersona(p),
-            [p.nino ? 'niño/a' : 'adulto', p.libre && 'acompañante'].filter(Boolean).join(', '),
+            [p.nino ? 'niño/a' : 'adulto', p.libre && (p.etiqueta?.toLowerCase() || 'acompañante')].filter(Boolean).join(', '),
             p.asiste === null ? 'sin responder' : p.asiste ? 'sí' : 'no',
             pase.mensaje,
             pase.telefono,

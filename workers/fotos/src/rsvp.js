@@ -1,8 +1,8 @@
 // Confirmación de asistencia (RSVP) con pases.
 //
 // Los festejados definen la lista: cada pase ("Familia Pérez") tiene sus
-// personas, marcadas como adulto o niño, y quizá lugares libres ("+ acompañante")
-// cuyo nombre escribe el invitado. El pase confirma con su código (X-Pase)
+// personas, marcadas como adulto o niño, y quizá lugares libres ("+ acompañante",
+// "+ Esposo": la etiqueta dice a quién se espera) cuyo nombre escribe el invitado. El pase confirma con su código (X-Pase)
 // marcando quién asiste; puede cambiarlo hasta la fecha límite del evento.
 import { HttpError, json } from './http.js'
 import { exigirAdmin } from './auth.js'
@@ -43,6 +43,7 @@ const aPersona = (p) => ({
   nombre: p.nombre,
   nino: Boolean(p.es_nino),
   libre: Boolean(p.es_libre),
+  etiqueta: p.etiqueta,
   asiste: p.asiste === null ? null : Boolean(p.asiste),
 })
 
@@ -217,7 +218,7 @@ function normalizarTelefono(valor) {
 const texto = (valor) => (typeof valor === 'string' ? valor.trim().slice(0, MAX_NOMBRE) : '')
 
 /**
- * Valida { nombre, telefono?, personas: [{ id?, nombre?, nino, libre }] }. Las
+ * Valida { nombre, telefono?, personas: [{ id?, nombre?, nino, libre, etiqueta? }] }. Las
  * personas van en el orden de la lista; las que traen id ya existían.
  */
 function leerPase(body) {
@@ -240,6 +241,7 @@ function leerPase(body) {
       nombre: nombrePersona || null,
       nino: p?.nino ? 1 : 0,
       libre: libre ? 1 : 0,
+      etiqueta: (libre && texto(p?.etiqueta)) || null,
     }
   })
   return { nombre, telefono: normalizarTelefono(body.telefono), personas }
@@ -254,13 +256,9 @@ async function exigirNombreLibre(env, evento, nombre, id = 0) {
 }
 
 const insertarPersona = (env, paseId, p) =>
-  env.DB.prepare('INSERT INTO personas (pase_id, orden, nombre, es_nino, es_libre) VALUES (?, ?, ?, ?, ?)').bind(
-    paseId,
-    p.orden,
-    p.nombre,
-    p.nino,
-    p.libre,
-  )
+  env.DB.prepare(
+    'INSERT INTO personas (pase_id, orden, nombre, es_nino, es_libre, etiqueta) VALUES (?, ?, ?, ?, ?, ?)',
+  ).bind(paseId, p.orden, p.nombre, p.nino, p.libre, p.etiqueta)
 
 /** POST /v1/:slug/admin/rsvp — un pase nuevo con su propio enlace. */
 export async function crearPase({ request, env, evento }) {
@@ -282,9 +280,9 @@ export async function crearPase({ request, env, evento }) {
     ),
     ...datos.personas.map((p) =>
       env.DB.prepare(
-        `INSERT INTO personas (pase_id, orden, nombre, es_nino, es_libre)
-         VALUES ((SELECT id FROM pases WHERE slug = ? AND codigo = ?), ?, ?, ?, ?)`,
-      ).bind(evento.slug, codigo, p.orden, p.nombre, p.nino, p.libre),
+        `INSERT INTO personas (pase_id, orden, nombre, es_nino, es_libre, etiqueta)
+         VALUES ((SELECT id FROM pases WHERE slug = ? AND codigo = ?), ?, ?, ?, ?, ?)`,
+      ).bind(evento.slug, codigo, p.orden, p.nombre, p.nino, p.libre, p.etiqueta),
     ),
     env.DB.prepare('SELECT id FROM pases WHERE slug = ? AND codigo = ?').bind(evento.slug, codigo),
   ])
@@ -321,13 +319,9 @@ export async function editarPase({ request, env, evento, params }) {
     ...datos.personas.map((p) =>
       p.id === null
         ? insertarPersona(env, pase.id, p)
-        : env.DB.prepare('UPDATE personas SET orden = ?, nombre = ?, es_nino = ?, es_libre = ? WHERE id = ?').bind(
-            p.orden,
-            p.nombre,
-            p.nino,
-            p.libre,
-            p.id,
-          ),
+        : env.DB.prepare(
+            'UPDATE personas SET orden = ?, nombre = ?, es_nino = ?, es_libre = ?, etiqueta = ? WHERE id = ?',
+          ).bind(p.orden, p.nombre, p.nino, p.libre, p.etiqueta, p.id),
     ),
   ])
   return json({ id: pase.id })

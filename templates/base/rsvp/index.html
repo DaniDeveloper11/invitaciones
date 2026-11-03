@@ -231,11 +231,21 @@
                     <li class="border border-ink/15 p-3">
                       <div class="flex gap-2">
                         <input
+                          x-show="!persona.libre"
                           x-model="persona.nombre"
                           type="text"
                           maxlength="80"
-                          :placeholder="persona.libre ? 'Lo escribe el invitado' : 'Nombre'"
+                          placeholder="Nombre"
                           :aria-label="`Nombre de la persona ${i + 1}`"
+                          class="min-w-0 flex-1 border border-ink/20 bg-transparent px-3 py-2 text-base focus:border-ink/60 focus:outline-none"
+                        />
+                        <input
+                          x-show="persona.libre"
+                          x-model="persona.etiqueta"
+                          type="text"
+                          maxlength="80"
+                          placeholder="Acompañante (o: Esposo, Niña…)"
+                          :aria-label="`Quién se espera en el lugar ${i + 1}`"
                           class="min-w-0 flex-1 border border-ink/20 bg-transparent px-3 py-2 text-base focus:border-ink/60 focus:outline-none"
                         />
                         <button
@@ -263,7 +273,7 @@
                     + Acompañante
                   </button>
                 </div>
-                <p class="mt-2 text-xs text-ink/50">Acompañante: un lugar libre cuyo nombre escribe el invitado al confirmar.</p>
+                <p class="mt-2 text-xs text-ink/50">Acompañante: un lugar libre cuyo nombre escribe el invitado al confirmar; la etiqueta (Esposo, Niña…) le dice a quién se espera.</p>
                 <p x-show="editor.respondido" class="mt-2 text-xs text-ink/50">
                   Este pase ya respondió: quien agregues quedará sin responder hasta que vuelvan a confirmar.
                 </p>

@@ -507,7 +507,7 @@
                           <li class="border border-paper/20 px-4 py-3">
                             <label class="flex items-center gap-3 cursor-pointer">
                               <input type="checkbox" x-model="persona.asiste" class="size-4 accent-paper" />
-                              <span class="flex-1 text-sm" x-text="persona.libre ? 'Acompañante' : persona.nombre"></span>
+                              <span class="flex-1 text-sm" x-text="persona.libre ? persona.etiqueta || 'Acompañante' : persona.nombre"></span>
                               <span x-show="persona.nino" class="text-[10px] uppercase tracking-[0.2em] text-muted">Niño/a</span>
                             </label>
                             <input
@@ -516,7 +516,7 @@
                               @input="error = ''"
                               type="text"
                               maxlength="80"
-                              placeholder="Nombre de tu acompañante"
+                              :placeholder="persona.etiqueta ? `Nombre (${persona.etiqueta.toLowerCase()})` : 'Nombre de tu acompañante'"
                               class="mt-3 w-full bg-transparent border-b border-paper/30 py-1.5 text-sm placeholder:text-muted focus:outline-none focus:border-paper"
                             />
                           </li>
