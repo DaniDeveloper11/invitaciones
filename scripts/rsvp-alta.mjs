@@ -37,7 +37,7 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { rsvpConPases } from '@invitaciones/core/fotos-config'
-import { quienesVan, textoInvitacion } from '@invitaciones/core/rsvp-mensajes'
+import { enlaceWhatsapp, quienesVan, textoInvitacion } from '@invitaciones/core/rsvp-mensajes'
 import {
   cargarEvento,
   DIA_MS,
@@ -236,7 +236,7 @@ for (const pase of pases) {
     enlace,
     cierraEn: cierraFinal?.toISOString(),
   })
-  const whatsapp = `https://wa.me/${pase.telefono ?? ''}?text=${encodeURIComponent(mensaje)}`
+  const whatsapp = enlaceWhatsapp(pase.telefono, mensaje)
   lineas.push([pase.nombre, quienesVan(personasPase), pase.telefono ?? '', enlace, whatsapp])
 }
 

@@ -29,6 +29,16 @@ function fechaLimite(event, cierraEn) {
   )
 }
 
+/**
+ * Enlace que abre WhatsApp con el mensaje escrito (sin teléfono, WhatsApp pide
+ * elegir el contacto). No usa wa.me: su redirección rompe los emojis (llegan
+ * como "�"); api.whatsapp.com/send los conserva.
+ */
+export function enlaceWhatsapp(telefono, texto) {
+  const numero = String(telefono ?? '').replace(/\D/g, '')
+  return `https://api.whatsapp.com/send?${numero ? `phone=${numero}&` : ''}text=${encodeURIComponent(texto)}`
+}
+
 /** "Leticia Ascencio, esposo, niña y niño" — personas como las da la API. */
 export function quienesVan(personas) {
   const nombres = personas.map((p) =>

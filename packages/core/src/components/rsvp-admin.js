@@ -6,7 +6,7 @@
 // personas), y descarga la lista en CSV.
 // Mismo token que el panel de fotos.
 import { crearApi, formatearFechaHora, tokenAdmin } from '../fotos/api.js'
-import { textoInvitacion, textoRecordatorio } from '../rsvp-mensajes.js'
+import { enlaceWhatsapp, textoInvitacion, textoRecordatorio } from '../rsvp-mensajes.js'
 
 const CADA_MS = 60_000
 
@@ -180,7 +180,7 @@ export function rsvpAdmin(event) {
     // ── WhatsApp (sin teléfono, WhatsApp pide elegir el contacto) ─────────
 
     whatsapp(pase, texto) {
-      return `https://wa.me/${pase.telefono ?? ''}?text=${encodeURIComponent(texto)}`
+      return enlaceWhatsapp(pase.telefono, texto)
     },
 
     /** Nadie le ha mandado la invitación y aún puede confirmar. */
