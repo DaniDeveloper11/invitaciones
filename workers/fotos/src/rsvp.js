@@ -4,6 +4,8 @@
 // personas, marcadas como adulto o niño, y quizá lugares libres ("+ acompañante",
 // "+ Esposo": la etiqueta dice a quién se espera) cuyo nombre escribe el invitado. El pase confirma con su código (X-Pase)
 // marcando quién asiste; puede cambiarlo hasta la fecha límite del evento.
+// Un pase o una persona desactivados no se borran: el invitado deja de verlos
+// y no cuentan en los totales hasta que se vuelvan a habilitar.
 import { HttpError, json } from './http.js'
 import { exigirAdmin } from './auth.js'
 
@@ -35,6 +37,9 @@ async function exigirPase({ env, request, evento }) {
     codigo &&
     (await env.DB.prepare('SELECT * FROM pases WHERE slug = ? AND codigo = ?').bind(evento.slug, codigo).first())
   if (!pase) throw new HttpError(403, 'Este enlace de invitación no es válido', { codigo: 'sin_acceso' })
+  if (pase.desactivado_en) {
+    throw new HttpError(403, 'Esta invitación ya no está disponible', { codigo: 'desactivado' })
+  }
   return pase
 }
 
@@ -44,11 +49,15 @@ const aPersona = (p) => ({
   nino: Boolean(p.es_nino),
   libre: Boolean(p.es_libre),
   etiqueta: p.etiqueta,
+  activa: !p.desactivada_en,
   asiste: p.asiste === null ? null : Boolean(p.asiste),
 })
 
-async function personasDe(env, paseId) {
-  const { results } = await env.DB.prepare('SELECT * FROM personas WHERE pase_id = ? ORDER BY orden')
+/** Las personas del pase; al invitado sólo le tocan las activas. */
+async function personasDe(env, paseId, { activas = false } = {}) {
+  const { results } = await env.DB.prepare(
+    `SELECT * FROM personas WHERE pase_id = ?${activas ? ' AND desactivada_en IS NULL' : ''} ORDER BY orden`,
+  )
     .bind(paseId)
     .all()
   return results
@@ -76,13 +85,13 @@ function respuestaInvitado(evento, pase, personas) {
 /** GET /v1/:slug/rsvp — el pase, sus personas y su respuesta. */
 export async function verPase(ctx) {
   const pase = await exigirPase(ctx)
-  return respuestaInvitado(ctx.evento, pase, await personasDe(ctx.env, pase.id))
+  return respuestaInvitado(ctx.evento, pase, await personasDe(ctx.env, pase.id, { activas: true }))
 }
 
 /**
  * PUT /v1/:slug/rsvp — reemplaza la respuesta completa del pase:
  *   { personas: [{ id, asiste, nombre? }], mensaje? }
- * Debe traer a todas las personas del pase, una vez cada una. `nombre` sólo
+ * Debe traer a todas las personas activas del pase, una vez cada una. `nombre` sólo
  * cuenta en lugares libres, y es obligatorio si ese lugar asiste.
  */
 export async function responderPase(ctx) {
@@ -95,7 +104,7 @@ export async function responderPase(ctx) {
   const body = await request.json().catch(() => null)
   if (!Array.isArray(body?.personas)) throw new HttpError(400, 'Falta la lista de personas')
 
-  const personas = await personasDe(env, pase.id)
+  const personas = await personasDe(env, pase.id, { activas: true })
   const enviadas = new Map(body.personas.map((p) => [Number(p?.id), p]))
   if (enviadas.size !== body.personas.length || enviadas.size !== personas.length) {
     throw new HttpError(400, 'La respuesta debe incluir a cada persona del pase una vez')
@@ -136,7 +145,7 @@ export async function responderPase(ctx) {
   ])
 
   const actualizado = await env.DB.prepare('SELECT * FROM pases WHERE id = ?').bind(pase.id).first()
-  return respuestaInvitado(evento, actualizado, await personasDe(env, pase.id))
+  return respuestaInvitado(evento, actualizado, await personasDe(env, pase.id, { activas: true }))
 }
 
 /** GET /v1/:slug/admin/rsvp — todos los pases con sus personas y los totales. */
@@ -152,14 +161,18 @@ export async function listarRsvp({ request, env, evento }) {
   ])
 
   const porPase = Map.groupBy(personas, (p) => p.pase_id)
+  // Los totales sólo cuentan a quien sigue invitado.
+  const activos = pases.filter((p) => !p.desactivado_en)
+  const pasesActivos = new Set(activos.map((p) => p.id))
+  const invitadas = personas.filter((p) => pasesActivos.has(p.pase_id) && !p.desactivada_en)
   const totales = {
-    pases: pases.length,
-    pases_respondidos: pases.filter((p) => p.respondido_en).length,
-    personas: personas.length,
-    adultos: personas.filter((p) => p.asiste === 1 && !p.es_nino).length,
-    ninos: personas.filter((p) => p.asiste === 1 && p.es_nino).length,
-    no_asisten: personas.filter((p) => p.asiste === 0).length,
-    sin_responder: personas.filter((p) => p.asiste === null).length,
+    pases: activos.length,
+    pases_respondidos: activos.filter((p) => p.respondido_en).length,
+    personas: invitadas.length,
+    adultos: invitadas.filter((p) => p.asiste === 1 && !p.es_nino).length,
+    ninos: invitadas.filter((p) => p.asiste === 1 && p.es_nino).length,
+    no_asisten: invitadas.filter((p) => p.asiste === 0).length,
+    sin_responder: invitadas.filter((p) => p.asiste === null).length,
   }
 
   return json({
@@ -171,28 +184,64 @@ export async function listarRsvp({ request, env, evento }) {
       codigo: p.codigo,
       telefono: p.telefono,
       enviada_en: p.enviada_en,
+      activo: !p.desactivado_en,
       ...aPase(p, porPase.get(p.id) ?? []),
     })),
   })
 }
 
 /**
- * PATCH /v1/:slug/admin/rsvp/:id — { enviada: true | false }. Guarda la primera
- * vez que se envió (reenviar no la cambia); false la desmarca.
+ * PATCH /v1/:slug/admin/rsvp/:id — { enviada?: boolean, activo?: boolean }.
+ * `enviada` guarda la primera vez que se envió (reenviar no la cambia); false
+ * la desmarca. `activo: false` desactiva el pase (su enlace deja de servir) y
+ * true lo vuelve a habilitar con su respuesta.
  */
-export async function marcarEnviada({ request, env, evento, params }) {
+export async function cambiarPase({ request, env, evento, params }) {
   await exigirAdmin(evento, request)
   const body = await request.json().catch(() => null)
-  if (typeof body?.enviada !== 'boolean') throw new HttpError(400, 'Indica si la invitación se envió')
+  const { enviada, activo } = body ?? {}
+  if (typeof enviada !== 'boolean' && typeof activo !== 'boolean') {
+    throw new HttpError(400, 'Indica si la invitación se envió o si está activa')
+  }
 
+  const cambios = []
+  const valores = []
+  const ahora = new Date().toISOString()
+  if (typeof enviada === 'boolean') {
+    cambios.push(`enviada_en = ${enviada ? 'COALESCE(enviada_en, ?)' : 'NULL'}`)
+    if (enviada) valores.push(ahora)
+  }
+  if (typeof activo === 'boolean') {
+    cambios.push(`desactivado_en = ${activo ? 'NULL' : 'COALESCE(desactivado_en, ?)'}`)
+    if (!activo) valores.push(ahora)
+  }
   const pase = await env.DB.prepare(
-    `UPDATE pases SET enviada_en = ${body.enviada ? 'COALESCE(enviada_en, ?)' : 'NULL'}
-     WHERE id = ? AND slug = ? RETURNING id, enviada_en`,
+    `UPDATE pases SET ${cambios.join(', ')} WHERE id = ? AND slug = ? RETURNING id, enviada_en, desactivado_en`,
   )
-    .bind(...(body.enviada ? [new Date().toISOString()] : []), Number(params[0]), evento.slug)
+    .bind(...valores, Number(params[0]), evento.slug)
     .first()
   if (!pase) throw new HttpError(404, 'Pase no encontrado')
-  return json(pase)
+  return json({ id: pase.id, enviada_en: pase.enviada_en, activo: !pase.desactivado_en })
+}
+
+/**
+ * PATCH /v1/:slug/admin/rsvp/:id/personas/:persona — { activa: boolean }.
+ * Una persona desactivada desaparece del pase del invitado y conserva su respuesta.
+ */
+export async function activarPersona({ request, env, evento, params }) {
+  await exigirAdmin(evento, request)
+  const body = await request.json().catch(() => null)
+  if (typeof body?.activa !== 'boolean') throw new HttpError(400, 'Indica si la persona está activa')
+
+  const persona = await env.DB.prepare(
+    `UPDATE personas SET desactivada_en = ${body.activa ? 'NULL' : 'COALESCE(desactivada_en, ?)'}
+     WHERE id = ? AND pase_id = (SELECT id FROM pases WHERE id = ? AND slug = ?)
+     RETURNING id, desactivada_en`,
+  )
+    .bind(...(body.activa ? [] : [new Date().toISOString()]), Number(params[1]), Number(params[0]), evento.slug)
+    .first()
+  if (!persona) throw new HttpError(404, 'Persona no encontrada')
+  return json({ id: persona.id, activa: !persona.desactivada_en })
 }
 
 // ── Lista de invitados (festejados) ──────────────────────────────────────────
