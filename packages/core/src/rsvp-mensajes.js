@@ -56,6 +56,9 @@ export function quienesVan(personas) {
   return nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : (nombres[0] ?? '')
 }
 
+/** Por si Messenger abre el enlace sin el ?i=: la invitación pide el código. */
+const lineaCodigo = (pase) => (pase.codigo ? [`🔑 Si el enlace no abre tu pase, escribe este código: *${pase.codigo}*`] : [])
+
 /** La primera invitación: fecha, misa y recepción, a quién incluye y el enlace. */
 export function textoInvitacion(event, { pase, enlace, cierraEn }) {
   const fecha = fechaEvento(event)
@@ -72,6 +75,7 @@ export function textoInvitacion(event, { pase, enlace, cierraEn }) {
     [
       `⚠️ *Es muy importante que confirmes tu asistencia${limite ? ` antes del ${limite}` : ''}* 🙏`,
       `👉 Confirma aquí: ${enlace}`,
+      ...lineaCodigo(pase),
     ],
     ['¡Te esperamos! 💖'],
   ]
@@ -90,5 +94,6 @@ export function textoRecordatorio(event, { pase, enlace, cierraEn }) {
     `⏰ Aún no recibimos tu confirmación para *${nombreEvento(event)}*${fecha ? ` (📅 ${fecha})` : ''}.`,
     limite ? `⚠️ Tienes hasta el *${limite}* para confirmar 🙏` : '⚠️ Por favor confírmanos tu asistencia 🙏',
     `👉 ${enlace}`,
+    ...lineaCodigo(pase),
   ].join('\n')
 }

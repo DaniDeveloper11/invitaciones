@@ -232,7 +232,7 @@ for (const pase of pases) {
   const enlace = enlacePase(sitio.url, pase.codigo)
   const personasPase = (porPase.get(pase.id) ?? []).map(aPersona)
   const mensaje = textoInvitacion(configEvento, {
-    pase: { nombre: pase.nombre, personas: personasPase },
+    pase: { nombre: pase.nombre, codigo: pase.codigo, personas: personasPase },
     enlace,
     cierraEn: cierraFinal?.toISOString(),
   })
