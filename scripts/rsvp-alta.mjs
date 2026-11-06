@@ -37,7 +37,7 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { rsvpConPases } from '@invitaciones/core/fotos-config'
-import { enlaceWhatsapp, quienesVan, textoInvitacion } from '@invitaciones/core/rsvp-mensajes'
+import { enlacePase, enlaceWhatsapp, quienesVan, textoInvitacion } from '@invitaciones/core/rsvp-mensajes'
 import {
   cargarEvento,
   DIA_MS,
@@ -229,7 +229,7 @@ const aPersona = (p) => ({ nombre: p.nombre, nino: Boolean(p.es_nino), libre: Bo
 const csvCampo = (v) => (/[",\n]/.test(v) ? `"${v.replaceAll('"', '""')}"` : v)
 const lineas = [['pase', 'personas', 'telefono', 'enlace', 'whatsapp']]
 for (const pase of pases) {
-  const enlace = `${sitio.url}?i=${pase.codigo}`
+  const enlace = enlacePase(sitio.url, pase.codigo)
   const personasPase = (porPase.get(pase.id) ?? []).map(aPersona)
   const mensaje = textoInvitacion(configEvento, {
     pase: { nombre: pase.nombre, personas: personasPase },

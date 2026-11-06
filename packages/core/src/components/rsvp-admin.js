@@ -6,7 +6,7 @@
 // personas), y descarga la lista en CSV.
 // Mismo token que el panel de fotos.
 import { crearApi, formatearFechaHora, tokenAdmin } from '../fotos/api.js'
-import { enlaceWhatsapp, textoInvitacion, textoRecordatorio } from '../rsvp-mensajes.js'
+import { enlacePase, enlaceWhatsapp, textoInvitacion, textoRecordatorio } from '../rsvp-mensajes.js'
 
 const CADA_MS = 60_000
 
@@ -164,7 +164,7 @@ export function rsvpAdmin(event) {
     },
 
     enlace(pase) {
-      return `${inicio}?i=${pase.codigo}`
+      return enlacePase(inicio, pase.codigo)
     },
 
     async copiar(pase) {

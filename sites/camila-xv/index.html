@@ -885,6 +885,19 @@
 
                 <div x-show="estado === 'sin_enlace'" class="text-center">
                   <p class="text-sm text-ink/60 max-w-xs mx-auto" x-text="error || $store.event.rsvp.sinEnlace"></p>
+                  <form @submit.prevent="usarCodigo()" class="mt-6 flex gap-2 max-w-xs mx-auto">
+                    <input
+                      type="text"
+                      x-model="codigoEscrito"
+                      placeholder="Código de tu pase"
+                      aria-label="Código de tu pase"
+                      autocapitalize="characters"
+                      autocomplete="off"
+                      spellcheck="false"
+                      class="min-w-0 flex-1 border border-gold/50 bg-transparent px-4 py-3 text-sm uppercase tracking-widest text-ink placeholder:normal-case placeholder:tracking-normal placeholder:text-ink/40 focus:border-gold focus:outline-none"
+                    />
+                    <button type="submit" :disabled="!codigoEscrito.trim()" class="border border-gold bg-gold px-5 py-3 text-xs uppercase tracking-widest text-paper hover:bg-transparent hover:text-gold transition-colors disabled:opacity-50">Entrar</button>
+                  </form>
                   <template x-if="$store.event.rsvp.conWhatsapp">
                     <div x-data="rsvp" class="grid grid-cols-2 gap-3 text-left mt-8">
                       <template x-for="opcion in opciones" :key="opcion">

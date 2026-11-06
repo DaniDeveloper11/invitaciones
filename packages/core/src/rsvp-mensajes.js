@@ -30,6 +30,15 @@ function fechaLimite(event, cierraEn) {
 }
 
 /**
+ * Enlace personal del pase. `v` no lo lee nadie: Facebook guarda la vista previa
+ * de cada URL, y los enlaces que leyó cuando la página traía og:url abren sin el
+ * ?i=. Una URL distinta lo obliga a leerla de nuevo; súbelo si vuelve a pasar.
+ */
+export function enlacePase(inicio, codigo) {
+  return `${inicio}?i=${codigo}&v=2`
+}
+
+/**
  * Enlace que abre WhatsApp con el mensaje escrito (sin teléfono, WhatsApp pide
  * elegir el contacto). No usa wa.me: su redirección rompe los emojis (llegan
  * como "�"); api.whatsapp.com/send los conserva.

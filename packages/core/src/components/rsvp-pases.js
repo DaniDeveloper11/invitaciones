@@ -14,6 +14,7 @@ export function rsvpPases(config) {
     estado: 'cargando', // cargando · sin_enlace · desactivado · listo · error
     error: '',
     codigo: '',
+    codigoEscrito: '', // el que teclea quien llega sin enlace
     pase: null,
     abierta: true,
     cierraEn: null,
@@ -31,11 +32,27 @@ export function rsvpPases(config) {
         almacen.guardar(claveCodigo, enUrl.trim().toUpperCase())
         // Fuera de la barra de direcciones: si comparten la página, no va su código.
         url.searchParams.delete('i')
+        url.searchParams.delete('v')
         history.replaceState(history.state, '', url)
       }
       this.codigo = almacen.leer(claveCodigo)
       if (this.codigo) this.cargar()
       else this.estado = 'sin_enlace'
+    },
+
+    /**
+     * Sin enlace (Messenger a veces lo abre sin el ?i=): el invitado escribe el
+     * código de su pase, o pega el enlace completo.
+     */
+    usarCodigo() {
+      const texto = this.codigoEscrito.trim()
+      const enEnlace = texto.match(/[?&]i=([^&#\s]+)/)
+      const codigo = (enEnlace ? enEnlace[1] : texto).replace(/[^a-z0-9]/gi, '').toUpperCase()
+      if (!codigo) return
+      almacen.guardar(claveCodigo, codigo)
+      this.codigo = codigo
+      this.codigoEscrito = ''
+      this.cargar()
     },
 
     async cargar() {
@@ -70,7 +87,7 @@ export function rsvpPases(config) {
         almacen.guardar(claveCodigo, '')
         this.codigo = ''
         this.estado = 'sin_enlace'
-        this.error = 'Ese enlace de invitación no es válido.'
+        this.error = 'Ese código o enlace de invitación no es válido.'
       } else if (e.codigo === 'desactivado') {
         // Se guarda el código: si los festejados la vuelven a habilitar, el enlace sirve.
         this.pase = null

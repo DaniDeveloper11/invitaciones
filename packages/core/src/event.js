@@ -66,7 +66,7 @@ const DEFAULTS = {
     whatsapp: '',
     opciones: [],
     cierra: '', // fecha límite (sólo la lee `npm run rsvp:alta`)
-    sinEnlace: 'Para confirmar, abre el enlace personal que te enviamos.',
+    sinEnlace: 'Para confirmar, abre el enlace personal que te enviamos o escribe el código de tu pase.',
     gracias: '¡Gracias por confirmar!',
   },
   musica: {
