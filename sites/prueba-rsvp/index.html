@@ -14,10 +14,9 @@
       La imagen debe ser JPG o PNG de 1200x630 en public/images/og.jpg — WhatsApp
       descarta WebP y las imágenes pesadas (mantenla por debajo de 300 KB).
     -->
-    <link rel="canonical" href="%VITE_SITE_URL%" />
+    <!-- Sin og:url ni canonical: Messenger abriría esa URL fija y perdería el ?i= del pase. -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_MX" />
-    <meta property="og:url" content="%VITE_SITE_URL%" />
     <meta property="og:title" content="Boda de prueba" />
     <meta property="og:description" content="Boda de prueba" />
     <meta property="og:image" content="%VITE_SITE_URL%images/og.jpg" />

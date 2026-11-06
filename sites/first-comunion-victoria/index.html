@@ -16,11 +16,10 @@
       La dirección sale de VITE_SITE_URL (archivo .env): debe ser absoluta,
       empezar con https:// y terminar en "/". Cámbiala ahí, no aquí.
     -->
-    <link rel="canonical" href="%VITE_SITE_URL%" />
+    <!-- Sin og:url ni canonical: Messenger abriría esa URL fija y perdería el ?i= del pase. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Primera Comunión de Victoria" />
     <meta property="og:locale" content="es_MX" />
-    <meta property="og:url" content="%VITE_SITE_URL%" />
     <meta property="og:title" content="Victoria Vélez Aviña · Mi Primera Comunión" />
     <meta
       property="og:description"
