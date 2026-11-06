@@ -46,6 +46,7 @@ export function rsvpAdmin(event) {
     filtro: 'todos', // todos · van · no_van · pendiente · sin_enviar · desactivado
     busqueda: '',
     copiado: null, // id del pase cuyo enlace se acaba de copiar
+    compartido: null, // id del pase cuyo mensaje se copió para otra app
     actualizando: false,
     // Editor de un pase: null = cerrado; id null = pase nuevo.
     editor: null,
@@ -188,15 +189,50 @@ export function rsvpAdmin(event) {
       return !pase.enviada_en && this.estadoPase(pase) === 'pendiente'
     },
 
+    datosMensaje(pase) {
+      return { pase: { ...pase, personas: this.activas(pase) }, enlace: this.enlace(pase), cierraEn: this.cierraEn }
+    },
+
     /** La primera invitación: fecha, misa y recepción, a quién incluye y el enlace. */
     invitacion(pase) {
-      const datos = { pase: { ...pase, personas: this.activas(pase) }, enlace: this.enlace(pase), cierraEn: this.cierraEn }
-      return this.whatsapp(pase, textoInvitacion(event, datos))
+      return this.whatsapp(pase, textoInvitacion(event, this.datosMensaje(pase)))
     },
 
     recordatorio(pase) {
-      const datos = { pase: { ...pase, personas: this.activas(pase) }, enlace: this.enlace(pase), cierraEn: this.cierraEn }
-      return this.whatsapp(pase, textoRecordatorio(event, datos))
+      return this.whatsapp(pase, textoRecordatorio(event, this.datosMensaje(pase)))
+    },
+
+    // ── Otras apps (Messenger, Instagram) ─────────────────────────────────
+
+    /**
+     * Messenger e Instagram no abren un chat con el texto escrito, así que el
+     * mensaje se copia y, en el celular, se abre el menú de compartir con él.
+     * Si la app sólo toma el enlace, el texto ya está para pegarlo.
+     */
+    async compartir(pase, recordatorio = false) {
+      const texto = (recordatorio ? textoRecordatorio : textoInvitacion)(event, this.datosMensaje(pase))
+      // Sin await antes de share(): el navegador sólo lo abre justo tras el toque.
+      const copia = navigator.clipboard?.writeText(texto).then(
+        () => true,
+        () => false,
+      )
+      let enviado = false
+      if (navigator.share) {
+        try {
+          await navigator.share({ text: texto })
+          enviado = true
+        } catch (e) {
+          // Cerró el menú sin elegir app: no cuenta como enviada.
+          if (e.name === 'AbortError') return
+        }
+      }
+      if (await copia) {
+        this.compartido = pase.id
+        setTimeout(() => this.compartido === pase.id && (this.compartido = null), 4000)
+      } else if (!enviado) {
+        prompt('Copia el mensaje:', texto)
+      }
+      if (!recordatorio) this.marcarEnviada(pase, true)
     },
 
     textoEnviada(pase) {

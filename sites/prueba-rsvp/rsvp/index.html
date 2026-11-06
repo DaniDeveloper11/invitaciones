@@ -168,6 +168,14 @@
                   >
                     Enviar invitación
                   </a>
+                  <button
+                    type="button"
+                    x-show="porEnviar(pase) && abierta"
+                    @click="compartir(pase)"
+                    class="border border-ink/20 px-3 py-1.5 uppercase hover:border-ink/60"
+                  >
+                    Enviar por otra app
+                  </button>
                   <a
                     x-show="pase.enviada_en && estadoPase(pase) === 'pendiente' && abierta"
                     :href="recordatorio(pase)"
@@ -177,6 +185,17 @@
                   >
                     Recordar por WhatsApp
                   </a>
+                  <button
+                    type="button"
+                    x-show="pase.enviada_en && estadoPase(pase) === 'pendiente' && abierta"
+                    @click="compartir(pase, true)"
+                    class="border border-ink/20 px-3 py-1.5 uppercase hover:border-ink/60"
+                  >
+                    Recordar por otra app
+                  </button>
+                  <p x-show="compartido === pase.id" class="basis-full normal-case tracking-normal text-xs text-ink/60">
+                    ¡Mensaje copiado! Pégalo en el chat de Messenger o Instagram.
+                  </p>
                 </div>
               </li>
             </template>
